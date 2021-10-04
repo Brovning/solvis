@@ -1,0 +1,15 @@
+{
+    "id": "{6F809C50-0314-84A3-14AE-00E32121DCF3}",
+    "name": "Solvis",
+    "type": 3,
+    "vendor": "Solvis",
+    "aliases":
+	[
+		"Solvis"
+	],
+    "url": "https://github.com/Brovning/solvis",
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "SOL"
+}
