@@ -15,13 +15,13 @@ if (!defined('IMR_START_REGISTER'))
 {
 	define("IMR_START_REGISTER", 0);
 //	define("IMR_END_REGISTER", 3);
-	define("IMR_SIZE", 1);
-	define("IMR_RW", 2);
-	define("IMR_FUNCTION_CODE", 3);
-	define("IMR_NAME", 4);
-	define("IMR_DESCRIPTION", 5);
-	define("IMR_TYPE", 6);
-	define("IMR_UNITS", 7);
+//	define("IMR_SIZE", 1);
+//	define("IMR_RW", 1);
+	define("IMR_FUNCTION_CODE", 1);
+	define("IMR_NAME", 2);
+	define("IMR_DESCRIPTION", 3);
+	define("IMR_TYPE", 4);
+	define("IMR_UNITS", 5);
 }
 
 	class Solvis extends IPSModule
@@ -32,7 +32,6 @@ if (!defined('IMR_START_REGISTER'))
 		{
 			//Never delete this line!
 			parent::Create();
-
 
 			// *** Properties ***
 			$this->RegisterPropertyBoolean('active', 'true');
@@ -47,302 +46,6 @@ if (!defined('IMR_START_REGISTER'))
 			$this->RegisterPropertyBoolean('readI160', 'false');
 			$this->RegisterPropertyBoolean('readOnePhaseInverter', 'false');
 			$this->RegisterPropertyInteger('pollCycle', '60');
-
-			// *** Inverter - Erstelle deaktivierte Timer ***
-			// I11X model (Evt1, EvtVnd1, EvtVnd2, EvtVnd3)
-			$this->RegisterTimer("Update-I11X", 0, "\$instanceId = IPS_GetObjectIDByIdent(\"40120\", ".$this->InstanceID.");
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitArray = array(\"I_EVENT_GROUND_FAULT\", \"I_EVENT_DC_OVER_VOLT\", \"I_EVENT_AC_DISCONNECT\", \"I_EVENT_DC_DISCONNECT\", \"I_EVENT_GRID_DISCONNECT\", \"I_EVENT_CABINET_OPEN\", \"I_EVENT_MANUAL_SHUTDOWN\", \"I_EVENT_OVER_TEMP\", \"I_EVENT_OVER_FREQUENCY\", \"I_EVENT_UNDER_FREQUENCY\", \"I_EVENT_AC_OVER_VOLT\", \"I_EVENT_AC_UNDER_VOLT\", \"I_EVENT_BLOWN_STRING_FUSE\", \"I_EVENT_UNDER_TEMP\", \"I_EVENT_MEMORY_LOSS\", \"I_EVENT_HW_TEST_FAILURE\");
-
-for(\$i = 0; \$i < count(\$bitArray); \$i++)
-{
-	\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\$bitArray[\$i]), \$instanceId);
-    \$bitValue = (\$varValue >> \$i ) & 0x1;
-
-	if(GetValue(\$bitId) != \$bitValue)
-	{
-		SetValue(\$bitId, \$bitValue);
-	}
-}
-
-\$instanceId = IPS_GetObjectIDByIdent(\"40124\", ".$this->InstanceID.");
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitArray = array(\"INSULATION_FAULT\", \"GRID_ERROR\", \"AC_OVERCURRENT\", \"DC_OVERCURRENT\", \"OVER_TEMP\", \"POWER_LOW\", \"DC_LOW\", \"INTERMEDIATE_FAULT\", \"FREQUENCY_HIGH\", \"FREQUENCY_LOW\", \"AC_VOLTAGE_HIGH\", \"AC_VOLTAGE_LOW\", \"DIRECT_CURRENT\", \"RELAY_FAULT\", \"POWER_STAGE_FAULT\", \"CONTROL_FAULT\", \"GC_GRID_VOLT_ERR\", \"GC_GRID_FREQU_ERR\", \"ENERGY_TRANSFER_FAULT\", \"REF_POWER_SOURCE_AC\", \"ANTI_ISLANDING_FAULT\", \"FIXED_VOLTAGE_FAULT\", \"MEMORY_FAULT\", \"DISPLAY_FAULT\", \"COMMUNICATION_FAULT\", \"TEMP_SENSORS_FAULT\", \"DC_AC_BOARD_FAULT\", \"ENS_FAULT\", \"FAN_FAULT\", \"DEFECTIVE_FUSE\", \"OUTPUT_CHOKE_FAULT\", \"CONVERTER_RELAY_FAULT\");
-
-for(\$i = 0; \$i < count(\$bitArray); \$i++)
-{
-	\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\$bitArray[\$i]), \$instanceId);
-    \$bitValue = (\$varValue >> \$i ) & 0x1;
-
-	if(GetValue(\$bitId) != \$bitValue)
-	{
-		SetValue(\$bitId, \$bitValue);
-	}
-}
-
-\$instanceId = IPS_GetObjectIDByIdent(\"40126\", ".$this->InstanceID.");
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitArray = array(\"NO_SOLARNET_COMM\", \"INV_ADDRESS_FAULT\", \"NO_FEED_IN_24H\", \"PLUG_FAULT\", \"PHASE_ALLOC_FAULT\", \"GRID_CONDUCTOR_OPEN\", \"SOFTWARE_ISSUE\", \"POWER_DERATING\", \"JUMPER_INCORRECT\", \"INCOMPATIBLE_FEATURE\", \"VENTS_BLOCKED\", \"POWER_REDUCTION_ERROR\", \"ARC_DETECTED\", \"AFCI_SELF_TEST_FAILED\", \"CURRENT_SENSOR_ERROR\", \"DC_SWITCH_FAULT\", \"AFCI_DEFECTIVE\", \"AFCI_MANUAL_TEST_OK\", \"PS_PWR_SUPPLY_ISSUE\", \"AFCI_NO_COMM\", \"AFCI_MANUAL_TEST_FAILED\", \"AC_POLARITY_REVERSED\", \"FAULTY_AC_DEVICE\", \"FLASH_FAULT\", \"GENERAL_ERROR\", \"GROUNDING_ISSUE\", \"LIMITATION_FAULT\", \"OPEN_CONTACT\", \"OVERVOLTAGE_PROTECTION\", \"PROGRAM_STATUS\", \"SOLARNET_ISSUE\", \"SUPPLY_VOLTAGE_FAULT\");
-
-for(\$i = 0; \$i < count(\$bitArray); \$i++)
-{
-	\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\$bitArray[\$i]), \$instanceId);
-    \$bitValue = (\$varValue >> \$i ) & 0x1;
-
-	if(GetValue(\$bitId) != \$bitValue)
-	{
-		SetValue(\$bitId, \$bitValue);
-	}
-}
-
-\$instanceId = IPS_GetObjectIDByIdent(\"40128\", ".$this->InstanceID.");
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitArray = array(\"TIME_FAULT\", \"USB_FAULT\", \"DC_HIGH\", \"INIT_ERROR\");
-
-for(\$i = 0; \$i < count(\$bitArray); \$i++)
-{
-	\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\$bitArray[\$i]), \$instanceId);
-    \$bitValue = (\$varValue >> \$i ) & 0x1;
-
-	if(GetValue(\$bitId) != \$bitValue)
-	{
-		SetValue(\$bitId, \$bitValue);
-	}
-}
-
-function removeInvalidChars(\$input)
-{
-	return preg_replace( '/[^a-z0-9]/i', '', \$input);
-}");
-
-			// IC120 model
-			$this->RegisterTimer("Update-IC120", 0, "\$parentId = IPS_GetObjectIDByIdent(\"".$this->removeInvalidChars("IC120 Nameplate")."\", ".$this->InstanceID.");
-// Inverter - SF Variablen erstellen
-\$inverterModelRegister_array = array(array(40135, 40136), array(40137, 40138), array(40139, 40143), array(40140, 40143), array(40141, 40143), array(40142, 40143), array(40144, 40145), array(40146, 40150, \"cos()\"), array(40147, 40150, \"cos()\"), array(40148, 40150, \"cos()\"), array(40149, 40150, \"cos()\"), array(40151, 40152), array(40153, 40154), array(40155, 40156), array(40157, 40158));
-foreach(\$inverterModelRegister_array AS \$inverterModelRegister)
-{
-	\$instanceId = IPS_GetObjectIDByIdent(\$inverterModelRegister[0], \$parentId);
-	\$targetId = IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
-	\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-	\$sfValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", IPS_GetObjectIDByIdent(\$inverterModelRegister[1], \$parentId)));
-	\$newValue = \$sourceValue * pow(10, \$sfValue);
-
-	if(GetValue(\$targetId) != \$newValue)
-	{
-		SetValue(\$targetId, \$newValue);
-	}
-
-	if(isset(\$inverterModelRegister[2]) && \"cos()\" == \$inverterModelRegister[2])
-	{
-		\$targetId = IPS_GetObjectIDByIdent(\"Value_cos\", \$instanceId);
-		\$newValue = cos(\$newValue);
-
-		if(GetValue(\$targetId) != \$newValue)
-		{
-			SetValue(\$targetId, \$newValue);
-		}
-	}
-}");
-
-			// IC121 model
-			$this->RegisterTimer("Update-IC121", 0, "\$parentId = IPS_GetObjectIDByIdent(\"".$this->removeInvalidChars("IC121 Basic Settings")."\", ".$this->InstanceID.");
-// Inverter - SF Variablen erstellen
-\$inverterModelRegister_array = array(array(40162, 40182), array(40163, 40183), array(40164, 40184), array(40167, 40186), array(40168, 40187), array(40171, 40187), array(40173, 40189, \"cos()\"), array(40176, 40189, \"cos()\"));
-foreach(\$inverterModelRegister_array AS \$inverterModelRegister)
-{
-	\$instanceId = IPS_GetObjectIDByIdent(\$inverterModelRegister[0], \$parentId);
-	\$targetId = IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
-	\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-	\$sfValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", IPS_GetObjectIDByIdent(\$inverterModelRegister[1], \$parentId)));
-	\$newValue = \$sourceValue * pow(10, \$sfValue);
-
-	if(GetValue(\$targetId) != \$newValue)
-	{
-		SetValue(\$targetId, \$newValue);
-	}
-
-	if(isset(\$inverterModelRegister[2]) && \"cos()\" == \$inverterModelRegister[2])
-	{
-		\$targetId = IPS_GetObjectIDByIdent(\"Value_cos\", \$instanceId);
-		\$newValue = cos(\$newValue);
-
-		if(GetValue(\$targetId) != \$newValue)
-		{
-			SetValue(\$targetId, \$newValue);
-		}
-	}
-}");
-
-			// IC122 model (PVConn, StorConn, StActCtl, Tms)
-			$this->RegisterTimer("Update-IC122", 0, "\$parentId = IPS_GetObjectIDByIdent(\"".$this->removeInvalidChars("IC122 Extended Measurements & Status")."\", ".$this->InstanceID.");
-//PVConn
-\$instanceId = IPS_GetObjectIDByIdent(\"40194\", \$parentId);
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitArray = array(\"Connected\",  \"Responsive\", \"Operating\", \"Testing\");
-
-for(\$i = 0; \$i < count(\$bitArray); \$i++)
-{
-	\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\$bitArray[\$i]), \$instanceId);
-	\$bitValue = (\$varValue >> \$i ) & 0x1;
-
-	if(GetValue(\$bitId) != \$bitValue)
-	{
-		SetValue(\$bitId, \$bitValue);
-	}
-}
-
-//StorConn
-\$instanceId = IPS_GetObjectIDByIdent(\"40195\", \$parentId);
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitArray = array(\"Connected\",  \"Responsive\", \"Operating\", \"Testing\");
-
-for(\$i = 0; \$i < count(\$bitArray); \$i++)
-{
-	\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\$bitArray[\$i]), \$instanceId);
-	\$bitValue = (\$varValue >> \$i ) & 0x1;
-
-	if(GetValue(\$bitId) != \$bitValue)
-	{
-		SetValue(\$bitId, \$bitValue);
-	}
-}
-
-//StActCtl
-\$instanceId = IPS_GetObjectIDByIdent(\"40227\", \$parentId);
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitArray = array(\"FixedW - Leistungsreduktion\", \"FixedVAR - konstante Blindleistungs-Vorgabe\",  \"FixedPF - konstanter Power-Factor\");
-
-for(\$i = 0; \$i < count(\$bitArray); \$i++)
-{
-	\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\$bitArray[\$i]), \$instanceId);
-	\$bitValue = (\$varValue >> \$i ) & 0x1;
-
-	if(GetValue(\$bitId) != \$bitValue)
-	{
-		SetValue(\$bitId, \$bitValue);
-	}
-}
-
-//Tms
-\$instanceId = IPS_GetObjectIDByIdent(\"40233\", \$parentId);
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\"UTC\"), \$instanceId);
-\$bitValue = \$varValue + 946681200;
-
-if(GetValue(\$bitId) != \$bitValue)
-{
-	SetValue(\$bitId, \$bitValue);
-}
-
-function removeInvalidChars(\$input)
-{
-	return preg_replace( '/[^a-z0-9]/i', '', \$input);
-}");
-
-			// IC123 model
-			$this->RegisterTimer("Update-IC123", 0, "\$parentId = IPS_GetObjectIDByIdent(\"".$this->removeInvalidChars("IC123 Immediate Controls")."\", ".$this->InstanceID.");
-// Inverter - SF Variablen erstellen
-\$inverterModelRegister_array = array(array(40243, 40261), array(40248, 40262, \"cos()\"));
-foreach(\$inverterModelRegister_array AS \$inverterModelRegister)
-{
-	\$instanceId = IPS_GetObjectIDByIdent(\$inverterModelRegister[0], \$parentId);
-	\$targetId = IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
-	\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-	\$sfValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", IPS_GetObjectIDByIdent(\$inverterModelRegister[1], \$parentId)));
-	\$newValue = \$sourceValue * pow(10, \$sfValue);
-
-	if(GetValue(\$targetId) != \$newValue)
-	{
-		SetValue(\$targetId, \$newValue);
-	}
-
-	if(isset(\$inverterModelRegister[2]) && \"cos()\" == \$inverterModelRegister[2])
-	{
-		\$targetId = IPS_GetObjectIDByIdent(\"Value_cos\", \$instanceId);
-		\$newValue = cos(\$newValue);
-
-		if(GetValue(\$targetId) != \$newValue)
-		{
-			SetValue(\$targetId, \$newValue);
-		}
-	}
-}");
-
-			// IC124 model
-			$this->RegisterTimer("Update-IC124", 0, "\$parentId = IPS_GetObjectIDByIdent(\"".$this->removeInvalidChars("IC124 Basic Storage Control")."\", ".$this->InstanceID.");
-// Inverter - SF Variablen erstellen
-\$inverterModelRegister_array = array(array(40316, 40332), array(40317, 40333), array(40318, 40333), array(40321, 40335), array(40322, 40336), array(40323, 40337), array(40324, 40338), array(40326, 40339), array(40327, 40339));
-foreach(\$inverterModelRegister_array AS \$inverterModelRegister)
-{
-	\$instanceId = IPS_GetObjectIDByIdent(\$inverterModelRegister[0], \$parentId);
-	\$targetId = IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
-	\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-	\$sfValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", IPS_GetObjectIDByIdent(\$inverterModelRegister[1], \$parentId)));
-	\$newValue = \$sourceValue * pow(10, \$sfValue);
-
-	if(GetValue(\$targetId) != \$newValue)
-	{
-		SetValue(\$targetId, \$newValue);
-	}
-}");
-			// I160 model
-			$this->RegisterTimer("Update-I160", 0, "\$parentId = IPS_GetObjectIDByIdent(\"".$this->removeInvalidChars("I160 Multiple MPPT Inverter Extension")."\", ".$this->InstanceID.");
-// Inverter - SF Variablen erstellen
-\$inverterModelRegister_array = array(array(40283, 40266), array(40284, 40267), array(40285, 40268), array(40286, 40269), 
-array(40303, 40266), array(40304, 40267), array(40305, 40268), array(40306, 40269));
-foreach(\$inverterModelRegister_array AS \$inverterModelRegister)
-{
-	\$instanceId = IPS_GetObjectIDByIdent(\$inverterModelRegister[0], \$parentId);
-	\$targetId = IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
-	\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-	\$sfValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", IPS_GetObjectIDByIdent(\$inverterModelRegister[1], \$parentId)));
-	\$newValue = \$sourceValue * pow(10, \$sfValue);
-
-	if(GetValue(\$targetId) != \$newValue)
-	{
-		SetValue(\$targetId, \$newValue);
-	}
-}");
-
-			// *** SmartMeter - Erstelle deaktivierte Timer ***
-			// Evt
-			$this->RegisterTimer("SM_Update-Evt", 0, "\$instanceId = IPS_GetObjectIDByIdent(\"40194\".\"SmartMeter\", ".$this->InstanceID.");
-\$varId = IPS_GetObjectIDByIdent(\"Value\", \$instanceId);
-\$varValue = GetValue(\$varId);
-
-\$bitArray = array(\"LOW_VOLTAGE\", \"LOW_POWER\", \"LOW_EFFICIENCY\", \"CURRENT\", \"VOLTAGE\", \"POWER\", \"PR\", \"DISCONNECTED\", \"FUSE_FAULT\", \"COMBINER_FUSE_FAULT\", \"COMBINER_CABINET_OPEN\", \"TEMP\", \"GROUNDFAULT\", \"REVERSED_POLARITY\", \"INCOMPATIBLE\", \"COMM_ERROR\", \"INTERNAL_ERROR\", \"THEFT\", \"ARC_DETECTED\");
-
-for(\$i = 0; \$i < count(\$bitArray); \$i++)
-{
-	\$bitId = IPS_GetObjectIDByIdent(removeInvalidChars(\$bitArray[\$i]), \$instanceId);
-    \$bitValue = (\$varValue >> \$i ) & 0x1;
-
-	if(GetValue(\$bitId) != \$bitValue)
-	{
-		SetValue(\$bitId, \$bitValue);
-	}
-}
-
-function removeInvalidChars(\$input)
-{
-	return preg_replace( '/[^a-z0-9]/i', '', \$input);
-}");
 
 			// *** Erstelle Variablen-Profile ***
 			$this->checkProfiles();
@@ -387,19 +90,101 @@ function removeInvalidChars(\$input)
 			// Instanzen nur mit Konfigurierter IP erstellen
 			else
 			{
+				$this->checkProfiles();
+				list($gatewayId_Old, $interfaceId_Old) = $this->readOldModbusGateway();
+				list($gatewayId, $interfaceId) = $this->checkModbusGateway($hostIp, $hostPort, $hostmodbusDevice, $hostSwapWords);
 
+				$parentId = $this->InstanceID;
+
+				/* ****** Fronius Register **************************************************************************
+					HINWEIS! Diese Register gelten nur für Wechselrichter. Für Fronius String Controls und Energiezähler sind diese Register nicht relevant
+					************************************************************************************************** */
+				$modelRegister_array = array(
+					array(2049,"R","Zirkulation Betriebsart", "1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", ""),
+					array(3840,"R","Analog Out 1", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
+					array(3845,"R","Analog Out 2", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
+					array(3850,"R","Analog Out 3", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
+					array(3855,"R","Analog Out 4", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
+					array(3860,"R","Analog Out 5", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
+					array(3865,"R","Analog Out 6", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
+//					array(32768,"R","Unix Timestamp high -- --","","??",),
+//					array(32769,"R","Unix Timestamp low","","??",),
+//					array(32770,"R","Version SC2","","??",),
+//					array(32771,"R","Version NBG","","??",),
+					array(33024,"R","Temp S1","","int16", "°C"),
+					array(33025,"R","Temp S2","","int16", "°C"),
+					array(33026,"R","Temp S3","","int16", "°C"),
+					array(33027,"R","Temp S4","","int16", "°C"),
+					array(33028,"R","Temp S5","","int16", "°C"),
+					array(33029,"R","Temp S6","","int16", "°C"),
+					array(33030,"R","S7","","int16", "°C"),
+					array(33031,"R","Temp S8","","int16", "°C"),
+					array(33032,"R","Temp S9","","int16", "°C"),
+					array(33033,"R","Temp S10","","int16", "°C"),
+					array(33034,"R","Temp S11","","int16", "°C"),
+					array(33035,"R","Temp S12","","int16", "°C"),
+					array(33036,"R","Temp S13","","int16", "°C"),
+					array(33037,"R","Temp S14","","int16", "°C"),
+					array(33038,"R","Temp S15","","int16", "°C"),
+					array(33039,"R","Temp S16","","int16", "°C"),
+					array(33040,"R","Volumenstrom S17","","int16", "l/min"),
+					array(33041,"R","Volumenstrom S18","","int16", "l/min"),
+					array(33042,"R","Analog In 1","","int16", "V"),
+					array(33043,"R","Analog In 2","","int16", "V"),
+					array(33044,"R","Analog In 3","","int16", "V"),
+					array(33045,"R","DigIn Störungen ***","","",""),
+					array(33280,"R","Ausgang A1","","int16", "%"),
+					array(33281,"R","Ausgang A2","","int16", "%"),
+					array(33282,"R","Ausgang A3","","int16", "%"),
+					array(33283,"R","Ausgang A4","","int16", "%"),
+					array(33284,"R","Ausgang A5","","int16", "%"),
+					array(33285,"R","Ausgang A6","","int16", "%"),
+					array(33286,"R","Ausgang A7","","int16", "%"),
+					array(33287,"R","Ausgang A8","","int16", "%"),
+					array(33288,"R","Ausgang A9","","int16", "%"),
+					array(33289,"R","Ausgang A10","","int16", "%"),
+					array(33290,"R","Ausgang A11","","int16", "%"),
+					array(33291,"R","Ausgang A12","","int16", "%"),
+					array(33292,"R","Ausgang A13","","int16", "%"),
+					array(33293,"R","Ausgang A14","","int16", "%"),
+					array(33294,"R","Analog Out O1","","int16", "V"),
+					array(33295,"R","Analog Out O2","","int16", "V"),
+					array(33296,"R","Analog Out O3","","int16",""),
+					array(33297,"R","Analog Out O4","","int16",""),
+					array(33298,"R","Analog Out O5","","int16",""),
+					array(33299,"R","Analog Out O6","","int16",""),
+					array(33536,"R","Laufzeit Brennerstufe 1","","int16", "h"),
+					array(33537,"R","Brennerstarts Stufe 1","","int16", "h"),
+					array(33538,"R","Laufzeit Brennerstufe 2","","int16", "h"),
+					array(33539,"R","Wärmeerzeuger SX aktuelle Leistung W","","int16",""),
+					array(33540,"R","Ionisationsstrom mA","","int16","mA"),
+					array(33792,"R","Meldungen Anzahl","","int16",""),
+					array(33793,"R","Meldung 1 Code","","int16",""),
+					array(33794,"R","Meldung 1 UnixZeit H","","int16",""),
+					array(33795,"R","Meldung 1 UnixZeit L","","int16",""),
+					array(33796,"R","Meldung 1 Par 1","","int16",""),
+					array(33797,"R","Meldung 1 Par 2","","int16",""),
+				);
+
+				/*** Wechselrichter / Inverter ***/
+				$categoryId = $parentId;
+
+				// SmartMeter - Timer deaktivieren
+//					$this->SetTimerInterval("SM_Update-Evt", 0);
+
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 
 			}
 
 		}
 
-		private function createModbusInstances($inverterModelRegister_array, $parentId, $gatewayId, $pollCycle, $uniqueIdent = "")
+		private function createModbusInstances($modelRegister_array, $parentId, $gatewayId, $pollCycle, $uniqueIdent = "")
 		{
 			// Workaround für "InstanceInterface not available" Fehlermeldung beim Server-Start...
 			if (KR_READY == IPS_GetKernelRunlevel())
 			{
 				// Erstelle Modbus Instancen
-				foreach ($inverterModelRegister_array as $inverterModelRegister)
+				foreach ($modelRegister_array as $inverterModelRegister)
 				{
 					$datenTyp = $this->getModbusDatatype($inverterModelRegister[IMR_TYPE]);
 					if("continue" == $datenTyp)
@@ -469,6 +254,14 @@ function removeInvalidChars(\$input)
 						IPS_SetProperty($instanceId, "ReadAddress", $inverterModelRegister[IMR_START_REGISTER] + MODBUS_REGISTER_TO_ADDRESS_OFFSET);
 					}
 					if(6 == $inverterModelRegister[IMR_FUNCTION_CODE])
+					{
+						$ReadFunctionCode = 3;
+					}
+					else if("R" == $inverterModelRegister[IMR_FUNCTION_CODE])
+					{
+						$ReadFunctionCode = 3;
+					}
+					else if("RW" == $inverterModelRegister[IMR_FUNCTION_CODE])
 					{
 						$ReadFunctionCode = 3;
 					}
@@ -735,7 +528,7 @@ function removeInvalidChars(\$input)
 
 		private function checkProfiles()
 		{
-			$this->createVarProfile("SunSpec.ChaSt.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+/*			$this->createVarProfile("SunSpec.ChaSt.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
 					array('Name' => "OFF", 'Wert' => 1, "OFF: Energiespeicher nicht verfügbar"),
 					array('Name' => "EMPTY", 'Wert' => 2, "EMPTY: Energiespeicher vollständig entladen"),
@@ -791,7 +584,7 @@ function removeInvalidChars(\$input)
 					array('Name' => "AFCI", 'Wert' => 13, "AFCI Event (Arc-Erkennung)"),
 				)
 			);
-/*
+/-*
 			$this->createVarProfile(MODUL_PREFIX.".Emergency-Power.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "nicht unterstützt", 'Wert' => 0, "Notstrom wird nicht von Ihrem Gerät unterstützt", 'Farbe' => 16753920),
 					array('Name' => "aktiv", 'Wert' => 1, "Notstrom aktiv (Ausfall des Stromnetzes)", 'Farbe' => 65280),
@@ -815,7 +608,7 @@ function removeInvalidChars(\$input)
 				array('Name' => "Regelungsbypass", 'Wert' => 10, "Die gemessene Leistung wird nicht in die Batterie geladen, aus der Batterie entladen."),
 				)
 			);
-*/
+*-/
 			$this->createVarProfile(MODUL_PREFIX.".Ampere.Int", VARIABLETYPE_INTEGER, ' A');
 			$this->createVarProfile(MODUL_PREFIX.".AmpereHour.Float", VARIABLETYPE_FLOAT, ' Ah');
 			$this->createVarProfile(MODUL_PREFIX.".AmpereHour.Int", VARIABLETYPE_INTEGER, ' Ah');
@@ -834,6 +627,7 @@ function removeInvalidChars(\$input)
 			// Volt.Float: ~Volt
 			$this->createVarProfile(MODUL_PREFIX.".Volt.Int", VARIABLETYPE_INTEGER, ' V');
 			$this->createVarProfile(MODUL_PREFIX.".Watt.Int", VARIABLETYPE_INTEGER, ' W');
+*/
 		}
 
 		private function GetVariableValue($instanceIdent, $variableIdent = "Value")
