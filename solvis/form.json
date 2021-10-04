@@ -1,0 +1,82 @@
+{
+    "elements": [
+        {
+            "type": "Label",
+            "label": "Die Solvis Heizung muss Modbus TCP unterstützen!"
+        },
+        {
+            "type": "Label",
+            "label": "Im Konfigurationsmenü der Solvis Heizung muss unter dem Menüpunkt 'Modbus' die Datenausgabe über Modbus per 'TCP' und der Sunspec Model Type 'float' aktiviert werden."
+        },
+        {
+            "type": "Label",
+            "label": " "
+        },
+        {
+            "type": "CheckBox",
+            "caption": "Open",
+            "name": "active"
+        },
+        {
+            "type": "ValidationTextBox",
+            "caption": "IP",
+            "name": "hostIp",
+            "validate": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+        },
+        {
+            "type": "NumberSpinner",
+            "caption": "Port (Standard: 502)",
+            "name": "hostPort",
+            "digits": 0,
+            "minimum": 1,
+            "maximum": 65535
+        },
+        {
+            "type": "Label",
+            "label": ""
+        },
+        {
+            "type": "Label",
+            "label": "Geräte ID der Solvis Heizung (bspw.: ID=1)"
+        },
+        {
+            "type": "NumberSpinner",
+            "caption": "Geräte ID (Standard: 1)",
+            "name": "hostmodbusDevice",
+            "digits": 0,
+            "minimum": 1,
+            "maximum": 255
+        },
+        {
+            "type": "Label",
+            "label": " "
+        },
+        {
+            "type": "Label",
+            "label": "In welchem Zeitintervall sollen die Modbus-Werte abgefragt werden (Empfehlung: 10 Sekunden)?"
+        },
+	{
+            "type": "NumberSpinner",
+            "caption": "Abfrage-Intervall (in Sekunden)",
+            "name": "pollCycle",
+            "minimum": 1,
+            "maximum": 3600
+        },
+        {
+            "type": "Label",
+            "label": "Achtung: Die Berechnung der Wirkarbeit (Wh/kWh) wird exakter, je kleiner der Abfarge-Intervall gewählt wird.\nABER: Je kleiner der Abfrage-Intervall, um so höher die Systemlast und auch die Archiv-Größe bei aktiviertem Logging!"
+        }
+    ],
+    "status": [
+        {
+            "code": 200,
+            "icon": "error",
+            "caption": "IP oder Port sind nicht erreichtbar"
+        },
+        {
+            "code": 201,
+            "icon": "error",
+            "caption": "Archiv nicht gefunden"
+        }
+    ]
+}
