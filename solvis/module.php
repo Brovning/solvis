@@ -174,8 +174,66 @@ if (!defined('IMR_START_REGISTER'))
 
 				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 
-			}
 
+                if ($active) {
+                    // Erreichbarkeit von IP und Port pruefen
+                    $portOpen = false;
+                    $waitTimeoutInSeconds = 1;
+                    if ($fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)) {
+                        // It worked
+                        $portOpen = true;
+                        fclose($fp);
+    
+                        // Client Soket aktivieren
+                        if (false == IPS_GetProperty($interfaceId, "Open")) {
+                            IPS_SetProperty($interfaceId, "Open", true);
+                            IPS_ApplyChanges($interfaceId);
+                            //IPS_Sleep(100);
+                        }
+                        
+                        // aktiv
+                        $this->SetStatus(102);
+    
+                        $this->SendDebug("Module-Status", MODUL_PREFIX."-module activated", 0);
+                    } else {
+                        // IP oder Port nicht erreichbar
+                        $this->SetStatus(200);
+    
+                        $this->SendDebug("Module-Status", "ERROR: ".MODUL_PREFIX." with IP=".$hostIp." and Port=".$hostPort." cannot be reached!", 0);
+                    }
+                } else {
+                    // Client Soket deaktivieren
+                    if (true == IPS_GetProperty($interfaceId, "Open")) {
+                        IPS_SetProperty($interfaceId, "Open", false);
+                        IPS_ApplyChanges($interfaceId);
+                        //IPS_Sleep(100);
+                    }
+                    
+                    // Timer deaktivieren
+                    /*
+                                    $this->SetTimerInterval("Update-Autarkie-Eigenverbrauch", 0);
+                                    $this->SetTimerInterval("Update-EMS-Status", 0);
+                                    $this->SetTimerInterval("Update-WallBox_X_CTRL", 0);
+                                    $this->SetTimerInterval("Update-ValuesKw", 0);
+                                    $this->SetTimerInterval("Wh-Berechnung", 0);
+                                    $this->SetTimerInterval("HistoryCleanUp", 0);
+                    */
+                    // inaktiv
+                    $this->SetStatus(104);
+    
+                    $this->SendDebug("Module-Status", MODUL_PREFIX."-module deactivated", 0);
+                }
+    
+                // pruefen, ob sich ModBus-Gateway geaendert hat
+                if (0 != $gatewayId_Old && $gatewayId != $gatewayId_Old) {
+                    $this->deleteInstanceNotInUse($gatewayId_Old, MODBUS_ADDRESSES);
+                }
+
+                // pruefen, ob sich ClientSocket Interface geaendert hat
+                if (0 != $interfaceId_Old && $interfaceId != $interfaceId_Old) {
+                    $this->deleteInstanceNotInUse($interfaceId_Old, MODBUS_INSTANCES);
+                }
+            }
 		}
 
 		private function createModbusInstances($modelRegister_array, $parentId, $gatewayId, $pollCycle, $uniqueIdent = "")
