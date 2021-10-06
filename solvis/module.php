@@ -109,18 +109,27 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 				/* ****** Solvis Register ************************************************************************** */
 				$modelRegister_array = array(
-					array(2049,"R","Zirkulation Betriebsart", "1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_zirkulation"),
-					array(3840,"R","Analog Out 1", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
-					array(3845,"R","Analog Out 2", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
-					array(3850,"R","Analog Out 3", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
-					array(3855,"R","Analog Out 4", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
-					array(3860,"R","Analog Out 5", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
-					array(3865,"R","Analog Out 6", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
-					array(32768,"R","Unix Timestamp high","","int16","secs"),
-					array(32769,"R","Unix Timestamp low","","int16","secs"),
-					array(32770,"R","Version SC2","","int16",), // String is not supported by IP-Symcon Modbus-addresses
-					array(32771,"R","Version NBG","","int16",), // String is not supported by IP-Symcon Modbus-addresses
-				);
+//Solvis.Zirkulation
+					//"1 - Aus 2 - Puls 3 - Temp 4 - Warten"
+					array(2049,"R","Zirkulation Betriebsart", "","int16", ""),
+					
+					//Solvis.Betriebsart
+					//"Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog"
+					array(3840,"R","Analog Out 1", "","int16", ""),
+					array(3845,"R","Analog Out 2", "","int16", ""),
+					array(3850,"R","Analog Out 3", "","int16", ""),
+					array(3855,"R","Analog Out 4", "","int16", ""),
+					array(3860,"R","Analog Out 5", "","int16", ""),
+					array(3865,"R","Analog Out 6", "","int16", ""),
+					
+					
+					//noch nicht klar
+					array(32768,"R","Unix Timestamp high -- --","","??",),
+					array(32769,"R","Unix Timestamp low","","??",),
+					
+					
+					array(32770,"R","Version SC2/3","","",),
+					array(32771,"R","Version NBG","","",),				);
 
 				$categoryId = $parentId;
 				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
@@ -128,22 +137,23 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 				// Temperaturwerte S1 - S16 (division durch 10 nötig!!!)
 				$modelRegister_array =	array(
-					array(33024,"R","Temp S01","","uint16", "°C"),
-					array(33025,"R","Temp S02","","uint16", "°C"),
-					array(33026,"R","Temp S03","","uint16", "°C"),
-					array(33027,"R","Temp S04","","uint16", "°C"),
-					array(33028,"R","Temp S05","","uint16", "°C"),
-					array(33029,"R","Temp S06","","uint16", "°C"),
-					array(33030,"R","Temp S07","","uint16", "°C"),
-					array(33031,"R","Temp S08","","uint16", "°C"),
-					array(33032,"R","Temp S09","","uint16", "°C"),
-					array(33033,"R","Temp S10","","uint16", "°C"),
-					array(33034,"R","Temp S11","","uint16", "°C"),
-					array(33035,"R","Temp S12","","uint16", "°C"),
-					array(33036,"R","Temp S13","","uint16", "°C"),
-					array(33037,"R","Temp S14","","uint16", "°C"),
-					array(33038,"R","Temp S15","","uint16", "°C"),
-					array(33039,"R","Temp S16","","uint16", "°C"),
+					array(33024,"R","S01 Speicher oben","","uint16", "°C"),
+					array(33025,"R","S02 Warmwasser","","uint16", "°C"),
+					array(33026,"R","S03 Speicherreferenz","","uint16", "°C"),
+					array(33027,"R","S04 Heizungspuffer oben","","uint16", "°C"),
+					array(33028,"R","S05","","uint16", "°C"),
+					array(33029,"R","S06","","uint16", "°C"),
+					array(33030,"R","S07","","uint16", "°C"),
+					array(33031,"R","S08","","uint16", "°C"),
+					array(33032,"R","S09 Heizungspuffer unten","","uint16", "°C"),
+					array(33033,"R","S10 Aussentemperatur","","uint16", "°C"),
+					array(33034,"R","S11 Zirkulation","","uint16", "°C"),
+					array(33035,"R","S12 Vorlauf Heizkreis 1","","uint16", "°C"),
+					array(33036,"R","S13 Vorlauf Heizkreis 2","","uint16", "°C"),
+					array(33037,"R","S14 Vorlauf Heizkreis 3","","uint16", "°C"),
+					array(33038,"R","S15 Kaltwasser","","uint16", "°C"),
+					array(33039,"R","S16","","uint16", "°C"),
+
 				);
 
 				$categoryId = $parentId;
@@ -172,11 +182,11 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33043,"R","Analog In 2","","int16", "V"),
 					array(33044,"R","Analog In 3","","int16", "V"),
 // Datentyp?		array(33045,"R","DigIn Störungen","","",""),
-					array(33280,"R","Ausgang A01","","uint8", "%"),
+					array(33280,"R","A01 Pumpe Zirkulation","","uint8", "%"),
 					array(33281,"R","Ausgang A02","","uint8", "%"),
-					array(33282,"R","Ausgang A03","","uint8", "%"),
-					array(33283,"R","Ausgang A04","","uint8", "%"),
-					array(33284,"R","Ausgang A05","","uint8", "%"),
+					array(33282,"R","A03 Pumpe Heizkreis 1","","uint8", "%"),
+					array(33283,"R","A04 Pumpe Heizkreis 2","","uint8", "%"),
+					array(33284,"R","A05 Pumpe Heizkreis 3","","uint8", "%"),
 					array(33285,"R","Ausgang A06","","uint8", "%"),
 					array(33286,"R","Ausgang A07","","uint8", "%"),
 					array(33287,"R","Ausgang A08","","uint8", "%"),
