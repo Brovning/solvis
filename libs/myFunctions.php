@@ -36,7 +36,7 @@ if (!defined('MODBUS_ADDRESSES'))
 // Offset von Register (erster Wert 1) zu Adresse (erster Wert 0) ist -1
 if (!defined('MODBUS_REGISTER_TO_ADDRESS_OFFSET'))
 {
-	define("MODBUS_REGISTER_TO_ADDRESS_OFFSET", -1);
+	define("MODBUS_REGISTER_TO_ADDRESS_OFFSET", 0);
 }
 
 trait myFunctions
