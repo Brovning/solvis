@@ -5,7 +5,7 @@
 
 
 # Solvis
-IP-Symcon (IPS) Modul für Solvis Stromspeicher mit Modbus TCP Unterstützung (bspw. S10 mini, S10 E, S10 E Pro und Quattroporte).
+IP-Symcon (IPS) Modul für Solvis Heizungen mit Modbus TCP Unterstützung.
 
 
 ### Inhaltsverzeichnis
