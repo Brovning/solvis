@@ -100,15 +100,15 @@ if (!defined('IMR_START_REGISTER'))
 					HINWEIS! Diese Register gelten nur für Wechselrichter. Für Fronius String Controls und Energiezähler sind diese Register nicht relevant
 					************************************************************************************************** */
 				$modelRegister_array = array(
-					array(2049,"R","Zirkulation Betriebsart", "1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", ""),
-					array(3840,"R","Analog Out 1", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3845,"R","Analog Out 2", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3850,"R","Analog Out 3", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3855,"R","Analog Out 4", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3860,"R","Analog Out 5", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3865,"R","Analog Out 6", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-//					array(32768,"R","Unix Timestamp high -- --","","??",),
-//					array(32769,"R","Unix Timestamp low","","??",),
+					array(2049,"R","Zirkulation Betriebsart", "1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_zirkulation"),
+					array(3840,"R","Analog Out 1", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
+					array(3845,"R","Analog Out 2", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
+					array(3850,"R","Analog Out 3", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
+					array(3855,"R","Analog Out 4", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
+					array(3860,"R","Analog Out 5", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
+					array(3865,"R","Analog Out 6", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
+					array(32768,"R","Unix Timestamp high","int16","~UnixTimestamp"),
+					array(32769,"R","Unix Timestamp low","int16","~UnixTimestamp"),
 //					array(32770,"R","Version SC2","","??",),
 //					array(32771,"R","Version NBG","","??",),
 					array(33024,"R","Temp S1","","int16", "°C"),
@@ -132,7 +132,7 @@ if (!defined('IMR_START_REGISTER'))
 					array(33042,"R","Analog In 1","","int16", "V"),
 					array(33043,"R","Analog In 2","","int16", "V"),
 					array(33044,"R","Analog In 3","","int16", "V"),
-					array(33045,"R","DigIn Störungen ***","","",""),
+//					array(33045,"R","DigIn Störungen","","",""),
 					array(33280,"R","Ausgang A1","","int16", "%"),
 					array(33281,"R","Ausgang A2","","int16", "%"),
 					array(33282,"R","Ausgang A3","","int16", "%"),
@@ -160,10 +160,55 @@ if (!defined('IMR_START_REGISTER'))
 					array(33540,"R","Ionisationsstrom mA","","int16","mA"),
 					array(33792,"R","Meldungen Anzahl","","int16",""),
 					array(33793,"R","Meldung 1 Code","","int16",""),
-					array(33794,"R","Meldung 1 UnixZeit H","","int16",""),
-					array(33795,"R","Meldung 1 UnixZeit L","","int16",""),
+					array(33794,"R","Meldung 1 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33795,"R","Meldung 1 UnixZeit L","","int16","~UnixTimestamp"),
 					array(33796,"R","Meldung 1 Par 1","","int16",""),
 					array(33797,"R","Meldung 1 Par 2","","int16",""),
+					array(33798,"R","Meldung 2 Code","","int16",""),
+					array(33799,"R","Meldung 2 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33800,"R","Meldung 2 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33801,"R","Meldung 2 Par 1","","int16",""),
+					array(33802,"R","Meldung 2 Par 2","","int16",""),
+					array(33803,"R","Meldung 3 Code","","int16",""),
+					array(33804,"R","Meldung 3 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33805,"R","Meldung 3 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33806,"R","Meldung 3 Par 1","","int16",""),
+					array(33807,"R","Meldung 3 Par 2","","int16",""),
+					array(33808,"R","Meldung 4 Code","","int16",""),
+					array(33809,"R","Meldung 4 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33810,"R","Meldung 4 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33811,"R","Meldung 4 Par 1","","int16",""),
+					array(33812,"R","Meldung 4 Par 2","","int16",""),
+					array(33813,"R","Meldung 5 Code","","int16",""),
+					array(33814,"R","Meldung 5 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33815,"R","Meldung 5 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33816,"R","Meldung 5 Par 1","","int16",""),
+					array(33817,"R","Meldung 5 Par 2","","int16",""),
+					array(33818,"R","Meldung 6 Code","","int16",""),
+					array(33819,"R","Meldung 6 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33820,"R","Meldung 6 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33821,"R","Meldung 6 Par 1","","int16",""),
+					array(33822,"R","Meldung 6 Par 2","","int16",""),
+					array(33823,"R","Meldung 7 Code","","int16",""),
+					array(33824,"R","Meldung 7 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33825,"R","Meldung 7 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33826,"R","Meldung 7 Par 1","","int16",""),
+					array(33827,"R","Meldung 7 Par 2","","int16",""),
+					array(33828,"R","Meldung 8 Code","","int16",""),
+					array(33829,"R","Meldung 8 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33830,"R","Meldung 8 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33831,"R","Meldung 8 Par 1","","int16",""),
+					array(33832,"R","Meldung 8 Par 2","","int16",""),
+					array(33833,"R","Meldung 9 Code","","int16",""),
+					array(33834,"R","Meldung 9 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33835,"R","Meldung 9 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33836,"R","Meldung 9 Par 1","","int16",""),
+					array(33837,"R","Meldung 9 Par 2","","int16",""),
+					array(33838,"R","Meldung 10 Code","","int16",""),
+					array(33839,"R","Meldung 10 UnixZeit H","","int16","~UnixTimestamp"),
+					array(33840,"R","Meldung 10 UnixZeit L","","int16","~UnixTimestamp"),
+					array(33841,"R","Meldung 10 Par 1","","int16",""),
+					array(33842,"R","Meldung 10 Par 2","","int16",""),
 				);
 
 				/*** Wechselrichter / Inverter ***/
@@ -586,6 +631,46 @@ if (!defined('IMR_START_REGISTER'))
 
 		private function checkProfiles()
 		{
+			$this->createVarProfile(MODUL_PREFIX.".Temperature.Int", VARIABLETYPE_INTEGER, ' °C', 0, 0, 0, 0, 0, array(
+					array('Name' => "Kurzschluss", 'Wert' => -30, "Kurzschlussfehler", 'Farbe' => 16711680),
+					array('Name' => "Unterbrechung", 'Wert' => 220, "Unterbrechungsfehler", 'Farbe' => 16711680),
+				)
+			);
+
+			$this->createVarProfile(MODUL_PREFIX.".Betriebsart.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+					array('Name' => "Auto PWM", 'Wert' => 0, "Auto PWM", 'Farbe' => 65280),
+					array('Name' => "Hand PWM", 'Wert' => 1, "Hand PWM", 'Farbe' => 16773632),
+					array('Name' => "Auto analog", 'Wert' => 2, "Auto analog", 'Farbe' => 65280),
+					array('Name' => "Hand analog", 'Wert' => 3, "Hand analog", 'Farbe' => 16773632),
+					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
+				)
+			);
+
+			$this->createVarProfile(MODUL_PREFIX.".Zirkulation.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+					array('Name' => "Aus", 'Wert' => 1, "Aus"),
+					array('Name' => "Puls", 'Wert' => 2, "Puls"),
+					array('Name' => "Temp", 'Wert' => 3, "Temp"),
+					array('Name' => "Warten", 'Wert' => 4, "Warten"),
+					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
+				)
+			);
+
+			$this->createVarProfile(MODUL_PREFIX.".StatsHeizkreis.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+					array('Name' => "Aus", 'Wert' => 1, "Aus"),
+					array('Name' => "Automatik", 'Wert' => 2, "Automatik"),
+					array('Name' => "Tagbetrieb", 'Wert' => 3, "Tagbetrieb"),
+					array('Name' => "Absenkbetrieb", 'Wert' => 4, "Absenkbetrieb"),
+					array('Name' => "Standby", 'Wert' => 5, "Standby"),
+					array('Name' => "Eco", 'Wert' => 6, "Eco"),
+					array('Name' => "Urlaub", 'Wert' => 7, "Urlaub"),
+					array('Name' => "WW Vorrang", 'Wert' => 8, "WW Vorrang"),
+					array('Name' => "Frostschutz", 'Wert' => 9, "Frostschutz"),
+					array('Name' => "Pumpenschutz", 'Wert' => 10, "Pumpenschutz"),
+					array('Name' => "Estrich", 'Wert' => 11, "Estrich"),
+					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
+				)
+			);
+
 /*			$this->createVarProfile("SunSpec.ChaSt.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
 					array('Name' => "OFF", 'Wert' => 1, "OFF: Energiespeicher nicht verfügbar"),
