@@ -49,7 +49,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 	\$instanceId = IPS_GetObjectIDByIdent(\$modelRegister, \$parentId);
 	\$targetId = IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
 	\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-	\$sfValue = -10;
+	\$sfValue = -1;
 	\$newValue = \$sourceValue * pow(10, \$sfValue);
 
 	if(GetValue(\$targetId) != \$newValue)
@@ -195,7 +195,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33298,"R","Analog Out O5","","int16",""),
 					array(33299,"R","Analog Out O6","","int16",""),
 					array(33536,"R","Laufzeit Brennerstufe 1","","int16", "h"),
-					array(33537,"R","Brennerstarts Stufe 1","","int16", "h"),
+					array(33537,"R","Brennerstarts Stufe 1","","int16", ""),
 					array(33538,"R","Laufzeit Brennerstufe 2","","int16", "h"),
 					array(33539,"R","Wärmeerzeuger SX aktuelle Leistung W","","int16",""),
 					array(33540,"R","Ionisationsstrom mA","","int16","mA"),
@@ -264,8 +264,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
                     if (Sys_Ping($hostIp, $waitTimeoutInSeconds*1000) /*$fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)*/) {
                         // It worked
                         $portOpen = true;
-                        //fclose($fp); // nötig für fsockopen!
-    
+                        
                         // Client Soket aktivieren
                         if (false == IPS_GetProperty($interfaceId, "Open")) {
                             IPS_SetProperty($interfaceId, "Open", true);
@@ -283,7 +282,13 @@ foreach(\$modelRegister_array AS \$modelRegister)
     
                         $this->SendDebug("Module-Status", "ERROR: ".MODUL_PREFIX." with IP=".$hostIp." and Port=".$hostPort." cannot be reached!", 0);
                     }
-                } else {
+
+					// Close fsockopen
+					if(isset($fp))
+					{
+						fclose($fp); // nötig für fsockopen!
+					}
+			} else {
                     // Client Soket deaktivieren
                     if (true == IPS_GetProperty($interfaceId, "Open")) {
                         IPS_SetProperty($interfaceId, "Open", false);
