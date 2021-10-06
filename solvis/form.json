@@ -6,7 +6,7 @@
         },
         {
             "type": "Label",
-            "label": "Im Konfigurationsmenü der Solvis Heizung muss unter dem Menüpunkt 'Modbus' die Datenausgabe über Modbus per 'TCP' aktiviert werden."
+            "label": "Im Konfigurationsmenü der Solvis Heizung muss im SolvisControl2-Menü „Installateur=>Sonstiges=>Remote“ Modbus TCP aktiviert werden.\nDer Zugriff auf den Regler über Modbus wird zunächst im „nur lesen“ Modus aktiviert.\nDer schreibende Zugriff kann im Menü aktiviert werden.\nAußerdem ist es für jeden Heizkreis möglich, die Raumtemperaturen extern per Modbus vorzugeben."
         },
         {
             "type": "Label",
