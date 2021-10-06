@@ -109,20 +109,27 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 				/* ****** Solvis Register ************************************************************************** */
 				$modelRegister_array = array(
-					array(2049,"R","Zirkulation Betriebsart", "Zirkulation: 1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_Zirkulation"),
-					array(3840,"R","Analog Out 1", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3845,"R","Analog Out 2", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3850,"R","Analog Out 3", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3855,"R","Analog Out 4", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3860,"R","Analog Out 5", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3865,"R","Analog Out 6", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
+					//Solvis.Zirkulation
+					//"1 - Aus 2 - Puls 3 - Temp 4 - Warten"
+					array(2049,"R","Zirkulation Betriebsart", "","int16", ""),
+					
+					//Solvis.Betriebsart
+					//"Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog"
+					array(3840,"R","Analog Out 1", "","int16", ""),
+					array(3845,"R","Analog Out 2", "","int16", ""),
+					array(3850,"R","Analog Out 3", "","int16", ""),
+					array(3855,"R","Analog Out 4", "","int16", ""),
+					array(3860,"R","Analog Out 5", "","int16", ""),
+					array(3865,"R","Analog Out 6", "","int16", ""),
+					
 					
 					//noch nicht klar
-					array(32768,"R","Unix Timestamp high","","int16","secs"),
-					array(32769,"R","Unix Timestamp low","","int16","secs"),
-					array(32770,"R","Version SC2","","int16",), // String is not supported by IP-Symcon Modbus-addresses
-					array(32771,"R","Version NBG","","int16",), // String is not supported by IP-Symcon Modbus-addresses
-				);
+					array(32768,"R","Unix Timestamp high -- --","","??",),
+					array(32769,"R","Unix Timestamp low","","??",),
+					
+					
+					array(32770,"R","Version SC2/3","","",),
+					array(32771,"R","Version NBG","","",),				);
 
 				$categoryId = $parentId;
 				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
@@ -195,7 +202,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33298,"R","Analog Out O5","","int16",""),
 					array(33299,"R","Analog Out O6","","int16",""),
 					array(33536,"R","Laufzeit Brennerstufe 1","","int16", "h"),
-					array(33537,"R","Brennerstarts Stufe 1","","int16", "h"),
+					array(33537,"R","Brennerstarts Stufe 1","","int16", ""),
 					array(33538,"R","Laufzeit Brennerstufe 2","","int16", "h"),
 					array(33539,"R","Wärmeerzeuger SX aktuelle Leistung W","","int16",""),
 					array(33540,"R","Ionisationsstrom mA","","int16","mA"),
