@@ -262,7 +262,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
                     if (Sys_Ping($hostIp, $waitTimeoutInSeconds*1000) /*$fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)*/) {
                         // It worked
                         $portOpen = true;
-                        fclose($fp);
+                        //fclose($fp); // nötig für fsockopen!
     
                         // Client Soket aktivieren
                         if (false == IPS_GetProperty($interfaceId, "Open")) {
