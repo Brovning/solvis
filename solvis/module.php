@@ -128,15 +128,15 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 				// Temperaturwerte S1 - S16 (division durch 10 nötig!!!)
 				$modelRegister_array =	array(
-					array(33024,"R","Temp S1","","uint16", "°C"),
-					array(33025,"R","Temp S2","","uint16", "°C"),
-					array(33026,"R","Temp S3","","uint16", "°C"),
-					array(33027,"R","Temp S4","","uint16", "°C"),
-					array(33028,"R","Temp S5","","uint16", "°C"),
-					array(33029,"R","Temp S6","","uint16", "°C"),
-					array(33030,"R","S7","","uint16", "°C"),
-					array(33031,"R","Temp S8","","uint16", "°C"),
-					array(33032,"R","Temp S9","","uint16", "°C"),
+					array(33024,"R","Temp S01","","uint16", "°C"),
+					array(33025,"R","Temp S02","","uint16", "°C"),
+					array(33026,"R","Temp S03","","uint16", "°C"),
+					array(33027,"R","Temp S04","","uint16", "°C"),
+					array(33028,"R","Temp S05","","uint16", "°C"),
+					array(33029,"R","Temp S06","","uint16", "°C"),
+					array(33030,"R","Temp S07","","uint16", "°C"),
+					array(33031,"R","Temp S08","","uint16", "°C"),
+					array(33032,"R","Temp S09","","uint16", "°C"),
 					array(33033,"R","Temp S10","","uint16", "°C"),
 					array(33034,"R","Temp S11","","uint16", "°C"),
 					array(33035,"R","Temp S12","","uint16", "°C"),
@@ -198,51 +198,51 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33539,"R","Wärmeerzeuger SX aktuelle Leistung W","","int16",""),
 					array(33540,"R","Ionisationsstrom mA","","int16","mA"),
 					array(33792,"R","Meldungen Anzahl","","int16",""),
-					array(33793,"R","Meldung 1 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33794,"R","Meldung 1 UnixZeit H","","int16","secs"),
-					array(33795,"R","Meldung 1 UnixZeit L","","int16","secs"),
-					array(33796,"R","Meldung 1 Par 1","","int16",""),
-					array(33797,"R","Meldung 1 Par 2","","int16",""),
-					array(33798,"R","Meldung 2 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33799,"R","Meldung 2 UnixZeit H","","int16","secs"),
-					array(33800,"R","Meldung 2 UnixZeit L","","int16","secs"),
-					array(33801,"R","Meldung 2 Par 1","","int16",""),
-					array(33802,"R","Meldung 2 Par 2","","int16",""),
-					array(33803,"R","Meldung 3 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33804,"R","Meldung 3 UnixZeit H","","int16","secs"),
-					array(33805,"R","Meldung 3 UnixZeit L","","int16","secs"),
-					array(33806,"R","Meldung 3 Par 1","","int16",""),
-					array(33807,"R","Meldung 3 Par 2","","int16",""),
-					array(33808,"R","Meldung 4 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33809,"R","Meldung 4 UnixZeit H","","int16","secs"),
-					array(33810,"R","Meldung 4 UnixZeit L","","int16","secs"),
-					array(33811,"R","Meldung 4 Par 1","","int16",""),
-					array(33812,"R","Meldung 4 Par 2","","int16",""),
-					array(33813,"R","Meldung 5 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33814,"R","Meldung 5 UnixZeit H","","int16","secs"),
-					array(33815,"R","Meldung 5 UnixZeit L","","int16","secs"),
-					array(33816,"R","Meldung 5 Par 1","","int16",""),
-					array(33817,"R","Meldung 5 Par 2","","int16",""),
-					array(33818,"R","Meldung 6 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33819,"R","Meldung 6 UnixZeit H","","int16","secs"),
-					array(33820,"R","Meldung 6 UnixZeit L","","int16","secs"),
-					array(33821,"R","Meldung 6 Par 1","","int16",""),
-					array(33822,"R","Meldung 6 Par 2","","int16",""),
-					array(33823,"R","Meldung 7 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33824,"R","Meldung 7 UnixZeit H","","int16","secs"),
-					array(33825,"R","Meldung 7 UnixZeit L","","int16","secs"),
-					array(33826,"R","Meldung 7 Par 1","","int16",""),
-					array(33827,"R","Meldung 7 Par 2","","int16",""),
-					array(33828,"R","Meldung 8 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33829,"R","Meldung 8 UnixZeit H","","int16","secs"),
-					array(33830,"R","Meldung 8 UnixZeit L","","int16","secs"),
-					array(33831,"R","Meldung 8 Par 1","","int16",""),
-					array(33832,"R","Meldung 8 Par 2","","int16",""),
-					array(33833,"R","Meldung 9 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33834,"R","Meldung 9 UnixZeit H","","int16","secs"),
-					array(33835,"R","Meldung 9 UnixZeit L","","int16","secs"),
-					array(33836,"R","Meldung 9 Par 1","","int16",""),
-					array(33837,"R","Meldung 9 Par 2","","int16",""),
+					array(33793,"R","Meldung 01 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33794,"R","Meldung 01 UnixZeit H","","int16","secs"),
+					array(33795,"R","Meldung 01 UnixZeit L","","int16","secs"),
+					array(33796,"R","Meldung 01 Par 1","","int16",""),
+					array(33797,"R","Meldung 01 Par 2","","int16",""),
+					array(33798,"R","Meldung 02 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33799,"R","Meldung 02 UnixZeit H","","int16","secs"),
+					array(33800,"R","Meldung 02 UnixZeit L","","int16","secs"),
+					array(33801,"R","Meldung 02 Par 1","","int16",""),
+					array(33802,"R","Meldung 02 Par 2","","int16",""),
+					array(33803,"R","Meldung 03 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33804,"R","Meldung 03 UnixZeit H","","int16","secs"),
+					array(33805,"R","Meldung 03 UnixZeit L","","int16","secs"),
+					array(33806,"R","Meldung 03 Par 1","","int16",""),
+					array(33807,"R","Meldung 03 Par 2","","int16",""),
+					array(33808,"R","Meldung 04 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33809,"R","Meldung 04 UnixZeit H","","int16","secs"),
+					array(33810,"R","Meldung 04 UnixZeit L","","int16","secs"),
+					array(33811,"R","Meldung 04 Par 1","","int16",""),
+					array(33812,"R","Meldung 04 Par 2","","int16",""),
+					array(33813,"R","Meldung 05 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33814,"R","Meldung 05 UnixZeit H","","int16","secs"),
+					array(33815,"R","Meldung 05 UnixZeit L","","int16","secs"),
+					array(33816,"R","Meldung 05 Par 1","","int16",""),
+					array(33817,"R","Meldung 05 Par 2","","int16",""),
+					array(33818,"R","Meldung 06 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33819,"R","Meldung 06 UnixZeit H","","int16","secs"),
+					array(33820,"R","Meldung 06 UnixZeit L","","int16","secs"),
+					array(33821,"R","Meldung 06 Par 1","","int16",""),
+					array(33822,"R","Meldung 06 Par 2","","int16",""),
+					array(33823,"R","Meldung 07 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33824,"R","Meldung 07 UnixZeit H","","int16","secs"),
+					array(33825,"R","Meldung 07 UnixZeit L","","int16","secs"),
+					array(33826,"R","Meldung 07 Par 1","","int16",""),
+					array(33827,"R","Meldung 07 Par 2","","int16",""),
+					array(33828,"R","Meldung 08 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33829,"R","Meldung 08 UnixZeit H","","int16","secs"),
+					array(33830,"R","Meldung 08 UnixZeit L","","int16","secs"),
+					array(33831,"R","Meldung 08 Par 1","","int16",""),
+					array(33832,"R","Meldung 08 Par 2","","int16",""),
+					array(33833,"R","Meldung 09 Code","","int16","enumerated_StatsHeizkreis"),
+					array(33834,"R","Meldung 09 UnixZeit H","","int16","secs"),
+					array(33835,"R","Meldung 09 UnixZeit L","","int16","secs"),
+					array(33836,"R","Meldung 09 Par 1","","int16",""),
+					array(33837,"R","Meldung 09 Par 2","","int16",""),
 					array(33838,"R","Meldung 10 Code","","int16","enumerated_StatsHeizkreis"),
 					array(33839,"R","Meldung 10 UnixZeit H","","int16","secs"),
 					array(33840,"R","Meldung 10 UnixZeit L","","int16","secs"),
@@ -534,6 +534,10 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			{
 				$profile = MODUL_PREFIX.".Ampere.Int";
 			}
+			elseif ("ma" == strtolower($unit))
+			{
+				$profile = MODUL_PREFIX.".MilliAmpere.Int";
+			}
 			elseif (("ah" == strtolower($unit)
 					|| "vah" == strtolower($unit))
 				&& 7 == $datenTyp
@@ -563,6 +567,10 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			{
 				$profile = MODUL_PREFIX.".Watt.Int";
 			}
+			elseif ("h" == strtolower($unit))
+			{
+				$profile = MODUL_PREFIX.".Hours.Int";
+			}
 			elseif ("hz" == strtolower($unit) && 7 == $datenTyp)
 			{
 				$profile = "~Hertz";
@@ -570,6 +578,10 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			elseif ("hz" == strtolower($unit))
 			{
 				$profile = MODUL_PREFIX.".Hertz.Int";
+			}
+			elseif ("l/min" == strtolower($unit))
+			{
+				$profile = MODUL_PREFIX.".Volumenstrom.Int";
 			}
 			// Voltampere fuer elektrische Scheinleistung
 			elseif ("va" == strtolower($unit) && 7 == $datenTyp)
@@ -828,6 +840,10 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			$this->createVarProfile(MODUL_PREFIX.".Electricity.Float", VARIABLETYPE_FLOAT, ' Wh');
 			$this->createVarProfile(MODUL_PREFIX.".Electricity.Int", VARIABLETYPE_INTEGER, ' Wh');
 			$this->createVarProfile(MODUL_PREFIX.".Hertz.Int", VARIABLETYPE_INTEGER, ' Hz');
+*/
+			$this->createVarProfile(MODUL_PREFIX.".Hours.Int", VARIABLETYPE_INTEGER, ' h');
+			$this->createVarProfile(MODUL_PREFIX.".MilliAmpere.Int", VARIABLETYPE_INTEGER, ' mA');
+/*
 			$this->createVarProfile(MODUL_PREFIX.".Ohm.Int", VARIABLETYPE_INTEGER, ' Ohm');
 			$this->createVarProfile(MODUL_PREFIX.".Scheinleistung.Float", VARIABLETYPE_FLOAT, ' VA');
 			$this->createVarProfile(MODUL_PREFIX.".Scheinleistung.Int", VARIABLETYPE_INTEGER, ' VA');
@@ -835,6 +851,9 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			$this->createVarProfile(MODUL_PREFIX.".Temperature.Int", VARIABLETYPE_INTEGER, ' °C');
 			// Volt.Float: ~Volt
 			$this->createVarProfile(MODUL_PREFIX.".Volt.Int", VARIABLETYPE_INTEGER, ' V');
+*/
+			$this->createVarProfile(MODUL_PREFIX.".Volumenstrom.Int", VARIABLETYPE_INTEGER, ' l/min');
+/*
 			$this->createVarProfile(MODUL_PREFIX.".Watt.Int", VARIABLETYPE_INTEGER, ' W');
 */
 		}
