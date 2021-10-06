@@ -6,7 +6,7 @@
         },
         {
             "type": "Label",
-            "label": "Im Konfigurationsmenü der Solvis Heizung muss unter dem Menüpunkt 'Modbus' die Datenausgabe über Modbus per 'TCP' und der Sunspec Model Type 'float' aktiviert werden."
+            "label": "Im Konfigurationsmenü der Solvis Heizung muss unter dem Menüpunkt 'Modbus' die Datenausgabe über Modbus per 'TCP' aktiviert werden."
         },
         {
             "type": "Label",
