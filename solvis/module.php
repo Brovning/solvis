@@ -122,6 +122,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(32769,"R","Unix Timestamp low","","int16","secs"),
 					array(32770,"R","Version SC2","","int16",), // String is not supported by IP-Symcon Modbus-addresses
 					array(32771,"R","Version NBG","","int16",), // String is not supported by IP-Symcon Modbus-addresses
+					array(33030,"R","S07 Solardruck","","uint16", ""),
 				);
 
 				$categoryId = $parentId;
@@ -136,7 +137,6 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33027,"R","S04 Heizungspuffer oben","","uint16", "°C"),
 					array(33028,"R","S05 Solarvorlauf","","uint16", "°C"),
 					array(33029,"R","S06 Solarrücklauf","","uint16", "°C"),
-					array(33030,"R","S07 Solardruck","","uint16", ""),
 					array(33031,"R","S08 Solarkollektor","","uint16", "°C"),
 					array(33032,"R","S09 Heizungspuffer unten","","uint16", "°C"),
 					array(33033,"R","S10 Aussentemperatur","","uint16", "°C"),
