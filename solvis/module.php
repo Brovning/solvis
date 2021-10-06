@@ -10,6 +10,12 @@ if (!defined('MODUL_PREFIX'))
 	define("MODUL_PREFIX", "Solvis");
 }
 
+// Offset von Register (erster Wert 1) zu Adresse (erster Wert 0) ist -1
+if (!defined('MODBUS_REGISTER_TO_ADDRESS_OFFSET'))
+{
+	define("MODBUS_REGISTER_TO_ADDRESS_OFFSET", 0);
+}
+
 // ArrayOffsets
 if (!defined('IMR_START_REGISTER'))
 {
