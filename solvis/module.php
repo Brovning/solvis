@@ -38,14 +38,25 @@ if (!defined('IMR_START_REGISTER'))
 			$this->RegisterPropertyString('hostIp', '');
 			$this->RegisterPropertyInteger('hostPort', '502');
 			$this->RegisterPropertyInteger('hostmodbusDevice', '1');
-			$this->RegisterPropertyBoolean('readIC120', 'false');
-            $this->RegisterPropertyBoolean('readIC121', 'false');
-            $this->RegisterPropertyBoolean('readIC122', 'false');
-            $this->RegisterPropertyBoolean('readIC123', 'false');
-            $this->RegisterPropertyBoolean('readIC124', 'false');
-			$this->RegisterPropertyBoolean('readI160', 'false');
-			$this->RegisterPropertyBoolean('readOnePhaseInverter', 'false');
 			$this->RegisterPropertyInteger('pollCycle', '60');
+
+			// Temp-Values
+			$this->RegisterTimer("calc_Temp", 0, "\$parentId = ".$this->InstanceID.";
+// Inverter - SF Variablen erstellen
+\$modelRegister_array = array(33024, 33025,33026,33027,33028,33029,33031,33032,33033,33034,33035,33036,33037,33038,33039);
+foreach(\$modelRegister_array AS \$modelRegister)
+{
+	\$instanceId = IPS_GetObjectIDByIdent(\$modelRegister, \$parentId);
+	\$targetId = IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
+	\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
+	\$sfValue = -10;
+	\$newValue = \$sourceValue * pow(10, \$sfValue);
+
+	if(GetValue(\$targetId) != \$newValue)
+	{
+		SetValue(\$targetId, \$newValue);
+	}
+}");
 
 			// *** Erstelle Variablen-Profile ***
 			$this->checkProfiles();
@@ -96,9 +107,7 @@ if (!defined('IMR_START_REGISTER'))
 
 				$parentId = $this->InstanceID;
 
-				/* ****** Fronius Register **************************************************************************
-					HINWEIS! Diese Register gelten nur für Wechselrichter. Für Fronius String Controls und Energiezähler sind diese Register nicht relevant
-					************************************************************************************************** */
+				/* ****** Solvis Register ************************************************************************** */
 				$modelRegister_array = array(
 					array(2049,"R","Zirkulation Betriebsart", "1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_zirkulation"),
 					array(3840,"R","Analog Out 1", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
@@ -109,52 +118,74 @@ if (!defined('IMR_START_REGISTER'))
 					array(3865,"R","Analog Out 6", "Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_betriebsart"),
 					array(32768,"R","Unix Timestamp high","","int16","secs"),
 					array(32769,"R","Unix Timestamp low","","int16","secs"),
-//					array(32770,"R","Version SC2","String","??",), // String is not supported by IP-Symcon Modbus-Addresses
-//					array(32771,"R","Version NBG","String","??",), // String is not supported by IP-Symcon Modbus-Addresses
-/* Temperaturwerte S1 - S16
-bspw. Wert=619 --> 61,9 (division durch 10 nötig!!!)*/
-					array(33024,"R","Temp S1","","int16", /*"°C"*/),
-					array(33025,"R","Temp S2","","int16", /*"°C"*/),
-					array(33026,"R","Temp S3","","int16", /*"°C"*/),
-					array(33027,"R","Temp S4","","int16", /*"°C"*/),
-					array(33028,"R","Temp S5","","int16", /*"°C"*/),
-					array(33029,"R","Temp S6","","int16", /*"°C"*/),
-					array(33030,"R","S7","","int16", "°C"),
-					array(33031,"R","Temp S8","","int16", /*"°C"*/),
-					array(33032,"R","Temp S9","","int16", /*"°C"*/),
-					array(33033,"R","Temp S10","","int16", /*"°C"*/),
-					array(33034,"R","Temp S11","","int16", /*"°C"*/),
-					array(33035,"R","Temp S12","","int16", /*"°C"*/),
-					array(33036,"R","Temp S13","","int16", /*"°C"*/),
-					array(33037,"R","Temp S14","","int16", /*"°C"*/),
-					array(33038,"R","Temp S15","","int16", /*"°C"*/),
-					array(33039,"R","Temp S16","","int16", /*"°C"*/),
+					array(32770,"R","Version SC2","","int16",), // String is not supported by IP-Symcon Modbus-addresses
+					array(32771,"R","Version NBG","","int16",), // String is not supported by IP-Symcon Modbus-addresses
+				);
+
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+
+				// Temperaturwerte S1 - S16 (division durch 10 nötig!!!)
+				$modelRegister_array =	array(
+					array(33024,"R","Temp S1","","uint16", "°C"),
+					array(33025,"R","Temp S2","","uint16", "°C"),
+					array(33026,"R","Temp S3","","uint16", "°C"),
+					array(33027,"R","Temp S4","","uint16", "°C"),
+					array(33028,"R","Temp S5","","uint16", "°C"),
+					array(33029,"R","Temp S6","","uint16", "°C"),
+					array(33030,"R","S7","","uint16", "°C"),
+					array(33031,"R","Temp S8","","uint16", "°C"),
+					array(33032,"R","Temp S9","","uint16", "°C"),
+					array(33033,"R","Temp S10","","uint16", "°C"),
+					array(33034,"R","Temp S11","","uint16", "°C"),
+					array(33035,"R","Temp S12","","uint16", "°C"),
+					array(33036,"R","Temp S13","","uint16", "°C"),
+					array(33037,"R","Temp S14","","uint16", "°C"),
+					array(33038,"R","Temp S15","","uint16", "°C"),
+					array(33039,"R","Temp S16","","uint16", "°C"),
+				);
+
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetHidden($varId, true);
+					
+					$dataType = 7;
+					$profile = $this->getProfile($modelRegister[IMR_UNITS], $dataType);
+
+					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetHidden($varId, true);
+				}
+				
+				
+				$modelRegister_array = array(
 					array(33040,"R","Volumenstrom S17","","int16", "l/min"),
 					array(33041,"R","Volumenstrom S18","","int16", "l/min"),
 					array(33042,"R","Analog In 1","","int16", "V"),
 					array(33043,"R","Analog In 2","","int16", "V"),
 					array(33044,"R","Analog In 3","","int16", "V"),
-//					array(33045,"R","DigIn Störungen","","",""),
-/*
-die Ausgänge A1-A14 sollten unbedingt in der Einheit auf Byte(8bit vorzeichenlos) stehen:
-mit Char wird eine 0 ausgegeben mit Byte kommt 100 (hier eine Pumpe läuft mit 100 %)
-
-Alle Temperaturwerte benötigen Word(16bit vorz.los) sonst kommen keine verwertbaren Daten
-*/
-					array(33280,"R","Ausgang A1","","int16", "%"),
-					array(33281,"R","Ausgang A2","","int16", "%"),
-					array(33282,"R","Ausgang A3","","int16", "%"),
-					array(33283,"R","Ausgang A4","","int16", "%"),
-					array(33284,"R","Ausgang A5","","int16", "%"),
-					array(33285,"R","Ausgang A6","","int16", "%"),
-					array(33286,"R","Ausgang A7","","int16", "%"),
-					array(33287,"R","Ausgang A8","","int16", "%"),
-					array(33288,"R","Ausgang A9","","int16", "%"),
-					array(33289,"R","Ausgang A10","","int16", "%"),
-					array(33290,"R","Ausgang A11","","int16", "%"),
-					array(33291,"R","Ausgang A12","","int16", "%"),
-					array(33292,"R","Ausgang A13","","int16", "%"),
-					array(33293,"R","Ausgang A14","","int16", "%"),
+// Datentyp?		array(33045,"R","DigIn Störungen","","",""),
+					array(33280,"R","Ausgang A01","","uint8", "%"),
+					array(33281,"R","Ausgang A02","","uint8", "%"),
+					array(33282,"R","Ausgang A03","","uint8", "%"),
+					array(33283,"R","Ausgang A04","","uint8", "%"),
+					array(33284,"R","Ausgang A05","","uint8", "%"),
+					array(33285,"R","Ausgang A06","","uint8", "%"),
+					array(33286,"R","Ausgang A07","","uint8", "%"),
+					array(33287,"R","Ausgang A08","","uint8", "%"),
+					array(33288,"R","Ausgang A09","","uint8", "%"),
+					array(33289,"R","Ausgang A10","","uint8", "%"),
+					array(33290,"R","Ausgang A11","","uint8", "%"),
+					array(33291,"R","Ausgang A12","","uint8", "%"),
+					array(33292,"R","Ausgang A13","","uint8", "%"),
+					array(33293,"R","Ausgang A14","","uint8", "%"),
 					array(33294,"R","Analog Out O1","","int16", "V"),
 					array(33295,"R","Analog Out O2","","int16", "V"),
 					array(33296,"R","Analog Out O3","","int16",""),
@@ -219,12 +250,7 @@ Alle Temperaturwerte benötigen Word(16bit vorz.los) sonst kommen keine verwertb
 					array(33842,"R","Meldung 10 Par 2","","int16",""),
 				);
 
-				/*** Wechselrichter / Inverter ***/
 				$categoryId = $parentId;
-
-				// SmartMeter - Timer deaktivieren
-//					$this->SetTimerInterval("SM_Update-Evt", 0);
-
 				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 
 
@@ -286,7 +312,10 @@ Alle Temperaturwerte benötigen Word(16bit vorz.los) sonst kommen keine verwertb
                 if (0 != $interfaceId_Old && $interfaceId != $interfaceId_Old) {
                     $this->deleteInstanceNotInUse($interfaceId_Old, MODBUS_INSTANCES);
                 }
-            }
+
+				// activate Timer
+				$this->SetTimerInterval("calc_Temp", 5000);
+			}
 		}
 
 		private function createModbusInstances($modelRegister_array, $parentId, $gatewayId, $pollCycle, $uniqueIdent = "")
@@ -303,7 +332,13 @@ Alle Temperaturwerte benötigen Word(16bit vorz.los) sonst kommen keine verwertb
 						continue;
 					}
 
-					$profile = $this->getProfile($inverterModelRegister[IMR_UNITS], $datenTyp);
+                    if (isset($inverterModelRegister[IMR_UNITS])) {
+                        $profile = $this->getProfile($inverterModelRegister[IMR_UNITS], $datenTyp);
+                    }
+					else
+					{
+						$profile = false;
+					}
 
 					$instanceId = @IPS_GetObjectIDByIdent($inverterModelRegister[IMR_START_REGISTER].$uniqueIdent, $parentId);
 					$initialCreation = false;
@@ -429,7 +464,14 @@ Alle Temperaturwerte benötigen Word(16bit vorz.los) sonst kommen keine verwertb
 		{
 			// Datentyp ermitteln
 			// 0=Bit, 1=Byte, 2=Word, 3=DWord, 4=ShortInt, 5=SmallInt, 6=Integer, 7=Real
-			if ("uint16" == strtolower($type)
+			if ("uint8" == strtolower($type)
+				|| "enum8" == strtolower($type)
+				|| "int8" == strtolower($type)
+			)
+			{
+				$datenTyp = 1;
+			}
+			else if ("uint16" == strtolower($type)
 				|| "enum16" == strtolower($type)
 				|| "uint8+uint8" == strtolower($type)
 			)
