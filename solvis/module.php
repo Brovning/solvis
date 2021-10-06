@@ -258,7 +258,8 @@ foreach(\$modelRegister_array AS \$modelRegister)
                     // Erreichbarkeit von IP und Port pruefen
                     $portOpen = false;
                     $waitTimeoutInSeconds = 1;
-                    if ($fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)) {
+					// ACHTUNG: Die Solvis Heizung antwortet nicht auf den Port-Check per fsockopen!!!
+                    if (Sys_Ping($hostIp, $hostPort, $waitTimeoutInSeconds*1000) /*$fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)*/) {
                         // It worked
                         $portOpen = true;
                         fclose($fp);
