@@ -65,6 +65,29 @@
         {
             "type": "Label",
             "label": "Achtung: Die Berechnung der Wirkarbeit (Wh/kWh) wird exakter, je kleiner der Abfarge-Intervall gewählt wird.\nABER: Je kleiner der Abfrage-Intervall, um so höher die Systemlast und auch die Archiv-Größe bei aktiviertem Logging!"
+        },
+        {
+            "type": "Label",
+            "label": " "
+        },
+        {
+            "type": "Label",
+            "label": "Sollen Werte von Variablen im Archiv gelogged werden?"
+        },
+        {
+            "type": "CheckBox",
+            "caption": "Temperatur (S01 - S16)",
+            "name": "loggingTemp"
+        },
+        {
+            "type": "CheckBox",
+            "caption": "Ausgänge (A01 - A14)",
+            "name": "loggingAusgang"
+        },
+        {
+            "type": "CheckBox",
+            "caption": "Sonstiges (Brennerstarts, Brennerstufe,...)",
+            "name": "loggingSonstiges"
         }
     ],
     "status": [
