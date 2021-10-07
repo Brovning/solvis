@@ -124,7 +124,6 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 				/* ****** Solvis Register ************************************************************************** */
 				$modelRegister_array = array(
-					array(2049,"R","Zirkulation Betriebsart", "Zirkulation: 1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_Zirkulation"),
 					array(3840,"R","Analog Out 1", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
 					array(3845,"R","Analog Out 2", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
 					array(3850,"R","Analog Out 3", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
@@ -242,6 +241,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 
 				$modelRegister_array = array(
+					array(2049,"R","Zirkulation Betriebsart", "Zirkulation: 1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_Zirkulation"),
 					array(33536,"R","Laufzeit Brennerstufe 1","","int16", "h"),
 					array(33537,"R","Brennerstarts Stufe 1","","int16", ""),
 					array(33538,"R","Laufzeit Brennerstufe 2","","int16", "h"),
