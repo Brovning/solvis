@@ -135,8 +135,8 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					//noch nicht klar
 					array(32768,"R","Unix Timestamp high","","int16","secs"),
 					array(32769,"R","Unix Timestamp low","","int16","secs"),
-					array(32770,"R","Version SC2","","string", ""),
-					array(32771,"R","Version NBG","","string", ""),
+					array(32770,"R","Version SC2","","int16", ""),
+					array(32771,"R","Version NBG","","int16", ""),
 					array(33030,"R","S07 Solardruck","","uint16", ""),
 				);
 
