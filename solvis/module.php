@@ -723,11 +723,15 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 		private function checkProfiles()
 		{
-			$this->createVarProfile(MODUL_PREFIX.".Temperature.Int", VARIABLETYPE_INTEGER, ' °C', -30, 220, 1, 0, 0, array(
-					array('Name' => "Kurzschluss", 'Wert' => -30, "Kurzschlussfehler", 'Farbe' => 16711680),
-					array('Name' => "Unterbrechung", 'Wert' => 220, "Unterbrechungsfehler", 'Farbe' => 16711680),
-				)
+			$valueArray = array(
+				array('Name' => "Kurzschluss", 'Wert' => -300, "Kurzschlussfehler", 'Farbe' => 16711680),
+				array('Name' => "Unterbrechung", 'Wert' => 2200, "Unterbrechungsfehler", 'Farbe' => 16711680),
 			);
+			for($i = -20; $i<900; $i=$i+10)
+			{
+				$valueArray[] = array('Name' => ($i/10), 'Wert' => $i, ($i/10));
+			}
+			$this->createVarProfile(MODUL_PREFIX.".Temperature.Int", VARIABLETYPE_INTEGER, ' °C', -300, 2200, 1, 0, 0, $valueArray);
 
 			$this->createVarProfile(MODUL_PREFIX.".Betriebsart.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "Auto PWM", 'Wert' => 0, "Auto PWM", 'Farbe' => 65280),
