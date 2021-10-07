@@ -45,6 +45,9 @@ if (!defined('IMR_START_REGISTER'))
 			$this->RegisterPropertyInteger('hostPort', '502');
 			$this->RegisterPropertyInteger('hostmodbusDevice', '1');
 			$this->RegisterPropertyInteger('pollCycle', '60');
+			$this->RegisterPropertyBoolean('loggingTemp', 'false');
+			$this->RegisterPropertyBoolean('loggingAusgang', 'false');
+			$this->RegisterPropertyBoolean('loggingSonstiges', 'false');
 
 			// Temp-Values
 			$this->RegisterTimer("calc_Temp", 0, "\$parentId = ".$this->InstanceID.";
@@ -89,6 +92,9 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			$hostmodbusDevice = $this->ReadPropertyInteger('hostmodbusDevice');
 			$hostSwapWords = 0; // Solvis = false
 			$pollCycle = $this->ReadPropertyInteger('pollCycle') * 1000;
+			$loggingTemp = $this->ReadPropertyBoolean('loggingTemp');
+			$loggingAusgang = $this->ReadPropertyBoolean('loggingAusgang');
+			$loggingSonstiges = $this->ReadPropertyBoolean('loggingSonstiges');
 
 			$archiveId = $this->getArchiveId();
 			if (false === $archiveId)
@@ -171,11 +177,17 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
 
+					// Logging setzen
+					if (false !== $varId && false !== $archiveId)
+					{
+						AC_SetLoggingStatus($archiveId, $varId, $loggingTemp);
+					}
+
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
 					IPS_SetVariableCustomProfile($varId, "");
 					IPS_SetHidden($varId, true);
 				}
-				
+
 				
 				$modelRegister_array = array(
 					array(33040,"R","S17 Volumenstrom WW","","int16", "l/min"),
@@ -184,6 +196,11 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33043,"R","Analog In 2","","int16", "V"),
 					array(33044,"R","Analog In 3","","int16", "V"),
 // Datentyp?		array(33045,"R","DigIn Störungen","","",""),
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				$modelRegister_array = array(
 					array(33280,"R","A01 Pumpe Zirkulation","","uint8", "%"),
 					array(33281,"R","A02 Pumpe Solar","","uint8", "%"),
 					array(33282,"R","A03 Pumpe Heizkreis 1","","uint8", "%"),
@@ -198,17 +215,54 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33291,"R","A12 Brenner","","uint8", "%"),
 					array(33292,"R","A13 Brenner Stufe 2","","uint8", "%"),
 					array(33293,"R","A14","","uint8", "%"),
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				// Logging setzen
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					if (false !== $varId && false !== $archiveId)
+					{
+						AC_SetLoggingStatus($archiveId, $varId, $loggingAusgang);
+					}
+				}					
+
+				$modelRegister_array = array(
 					array(33294,"R","Analog Out O1","","int16", "V"),
 					array(33295,"R","Analog Out O2","","int16", "V"),
 					array(33296,"R","Analog Out O3","","int16",""),
 					array(33297,"R","Analog Out O4","","int16",""),
 					array(33298,"R","Analog Out O5","","int16",""),
 					array(33299,"R","Analog Out O6","","int16",""),
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				$modelRegister_array = array(
 					array(33536,"R","Laufzeit Brennerstufe 1","","int16", "h"),
 					array(33537,"R","Brennerstarts Stufe 1","","int16", ""),
 					array(33538,"R","Laufzeit Brennerstufe 2","","int16", "h"),
 					array(33539,"R","Wärmeerzeuger SX aktuelle Leistung W","","int16",""),
 					array(33540,"R","Ionisationsstrom mA","","int16","mA"),
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				// Logging setzen
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					if (false !== $varId && false !== $archiveId)
+					{
+						AC_SetLoggingStatus($archiveId, $varId, $loggingSonstiges);
+					}
+				}					
+
+				$modelRegister_array = array(
 					array(33792,"R","Meldungen Anzahl","","int16",""),
 					array(33793,"R","Meldung 01 Code","","int16","enumerated_StatsHeizkreis"),
 					array(33794,"R","Meldung 01 UnixZeit H","","int16","secs"),
