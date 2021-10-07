@@ -129,8 +129,8 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					//noch nicht klar
 					array(32768,"R","Unix Timestamp high","","int16","secs"),
 					array(32769,"R","Unix Timestamp low","","int16","secs"),
-					array(32770,"R","Version SC2","","int16",), // String is not supported by IP-Symcon Modbus-addresses
-					array(32771,"R","Version NBG","","int16",), // String is not supported by IP-Symcon Modbus-addresses
+					array(32770,"R","Version SC2","","string", ""),
+					array(32771,"R","Version NBG","","string", ""),
 					array(33030,"R","S07 Solardruck","","uint16", ""),
 				);
 
@@ -172,6 +172,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
 
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetVariableCustomProfile($varId, "");
 					IPS_SetHidden($varId, true);
 				}
 				
@@ -480,7 +481,8 @@ foreach(\$modelRegister_array AS \$modelRegister)
 		private function getModbusDatatype($type)
 		{
 			// Datentyp ermitteln
-			// 0=Bit, 1=Byte, 2=Word, 3=DWord, 4=ShortInt, 5=SmallInt, 6=Integer, 7=Real
+			// 0=Bit (1 bit)
+			// 1=Byte (8 bit unsigned)
 			if ("uint8" == strtolower($type)
 				|| "enum8" == strtolower($type)
 				|| "int8" == strtolower($type)
@@ -488,6 +490,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			{
 				$datenTyp = 1;
 			}
+			// 2=Word (16 bit unsigned)
 			else if ("uint16" == strtolower($type)
 				|| "enum16" == strtolower($type)
 				|| "uint8+uint8" == strtolower($type)
@@ -495,6 +498,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			{
 				$datenTyp = 2;
 			}
+			// 3=DWord (32 bit unsigned)
 			elseif ("uint32" == strtolower($type)
 				|| "acc32" == strtolower($type)
 				|| "acc64" == strtolower($type)
@@ -502,33 +506,38 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			{
 				$datenTyp = 3;
 			}
+			// 4=Char / ShortInt (8 bit signed)
 			elseif ("int16" == strtolower($type)
 				|| "sunssf" == strtolower($type)
 			)
 			{
 				$datenTyp = 4;
 			}
+			// 5=Short / SmallInt (16 bit signed)
+			// 6=Integer (32 bit signed)
 			elseif ("int32" == strtolower($type))
 			{
 				$datenTyp = 6;
 			}
+			// 7=Real (32 bit signed)
 			elseif ("float32" == strtolower($type))
 			{
 				$datenTyp = 7;
 			}
+			// 8=Int64
 			elseif ("uint64" == strtolower($type))
 			{
 				$datenTyp = 8;
 			}
+			// 9=Real64 (32 bit signed)
+			// 10=String
 			elseif ("string32" == strtolower($type)
 				|| "string16" == strtolower($type)
 				|| "string8" == strtolower($type)
 				|| "string" == strtolower($type)
 			)
 			{
-				$this->SendDebug("getModbusDatatype()", "Datentyp '".$type."' wird von Modbus in IPS nicht unterstützt! --> skip", 0);
-
-				return "continue";
+				$datenTyp = 10;
 			}
 			else
 			{
@@ -726,6 +735,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 		private function checkProfiles()
 		{
+/*
 			$valueArray = array(
 				array('Name' => "Kurzschluss", 'Wert' => -300, "Kurzschlussfehler", 'Farbe' => 16711680),
 				array('Name' => "Unterbrechung", 'Wert' => 2200, "Unterbrechungsfehler", 'Farbe' => 16711680),
@@ -735,7 +745,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 				$valueArray[] = array('Name' => ($i/10), 'Wert' => $i, ($i/10));
 			}
 			$this->createVarProfile(MODUL_PREFIX.".Temperature.Int", VARIABLETYPE_INTEGER, ' °C', -300, 2200, 1, 0, 0, $valueArray);
-
+*/
 			$this->createVarProfile(MODUL_PREFIX.".Betriebsart.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "Auto PWM", 'Wert' => 0, "Auto PWM", 'Farbe' => 65280),
 					array('Name' => "Hand PWM", 'Wert' => 1, "Hand PWM", 'Farbe' => 16773632),
