@@ -52,15 +52,18 @@ if (!defined('IMR_START_REGISTER'))
 \$modelRegister_array = array(33024, 33025,33026,33027,33028,33029,33031,33032,33033,33034,33035,33036,33037,33038,33039);
 foreach(\$modelRegister_array AS \$modelRegister)
 {
-	\$instanceId = IPS_GetObjectIDByIdent(\$modelRegister, \$parentId);
-	\$targetId = IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
-	\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-	\$sfValue = -1;
-	\$newValue = \$sourceValue * pow(10, \$sfValue);
-
-	if(GetValue(\$targetId) != \$newValue)
+	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$parentId);
+	\$targetId = @IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
+	if(false !== \$instanceId && false !== \$targetId)
 	{
-		SetValue(\$targetId, \$newValue);
+		\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
+		\$sfValue = -1;
+		\$newValue = \$sourceValue * pow(10, \$sfValue);
+
+		if(GetValue(\$targetId) != \$newValue)
+		{
+			SetValue(\$targetId, \$newValue);
+		}
 	}
 }");
 
@@ -727,7 +730,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 				array('Name' => "Kurzschluss", 'Wert' => -300, "Kurzschlussfehler", 'Farbe' => 16711680),
 				array('Name' => "Unterbrechung", 'Wert' => 2200, "Unterbrechungsfehler", 'Farbe' => 16711680),
 			);
-			for($i = -20; $i<900; $i=$i+10)
+			for($i = -200; $i<900; $i=$i+10)
 			{
 				$valueArray[] = array('Name' => ($i/10), 'Wert' => $i, ($i/10));
 			}
