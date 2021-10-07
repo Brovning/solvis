@@ -98,7 +98,6 @@ Solvis.Betriebsart.Int | Integer
 Solvis.Hours.Int | Integer
 Solvis.MilliAmpere.Int | Integer
 Solvis.StatsHeizkreis.Int | Integer
-Solvis.Temperature.Int | Integer
 Solvis.Volumenstrom.Int | Integer
 Solvis.Zirkulation.Int | Integer
 
