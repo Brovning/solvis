@@ -843,7 +843,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 		private function checkProfiles()
 		{
-/*			// ToDo: Fehlervariable für Kurschluss+Unterbrechnung je Temperatursensor hinzufügen!
+/*			// ToDo: Fehlervariable für Kurzschluss+Unterbrechnung je Temperatursensor sinnvoll?
 			$valueArray = array(
 				array('Name' => "Kurzschluss", 'Wert' => -300, "Kurzschlussfehler", 'Farbe' => 16711680),
 				array('Name' => "Unterbrechung", 'Wert' => 2200, "Unterbrechungsfehler", 'Farbe' => 16711680),
