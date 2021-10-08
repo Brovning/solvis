@@ -5,7 +5,7 @@
 
 
 # Solvis
-IP-Symcon (IPS) Modul für Solvis Heizungen mit Modbus TCP Unterstützung.
+IP-Symcon (IPS) Modul für Solvis Heizungen SolvisControl2 (SC2 mit MA205 oder höher) und SolvisControl3 (SC3) mit Modbus TCP Unterstützung.
 
 
 ### Inhaltsverzeichnis
@@ -31,7 +31,7 @@ Unterhalb der Solvis Instanz werden die Modbus Adressen erstellt.
 * Die Solvis Heizung muss Modbus TCP unterstützen!
 * Im Konfigurationsmenü der Solvis Heizung muss folgendes aktiviert werden:
 
-Vorbereiten der SC-03 auf die Modbus-Schnittstelle Wechsel in den Installateur-Modus (Zugangscode über deinen Heizi oder SOLVIS) Unter „Sonstiges“ auf Punkt „Modbus“, hier die vorgegebene Adresse nutzen oder bei mehreren Anlagen entsprechend ändern. Der „Modus“ bleibt vorerst auf TCP(read) stehen.
+Vorbereiten der SolvisControl auf die Modbus-Schnittstelle Wechsel in den Installateur-Modus (Zugangscode über deinen Heizi oder SOLVIS) Unter „Sonstiges“ auf Punkt „Modbus“, hier die vorgegebene Adresse nutzen oder bei mehreren Anlagen entsprechend ändern. Der „Modus“ bleibt vorerst auf TCP(read) stehen.
 
 ![alt text](./docs/Solvis_Sonstiges_Modbus.jpg?raw=true "Solvis > Sonstiges > Modbus")
 
@@ -91,7 +91,7 @@ StartRegister | FunctionCode | Name | Type | Units | Description
 3865 | R | Analog Out 6 | int16 | Betriebsart | 0 - Auto PWM, 1 - Hand PWM, 2 - Auto analog, 3 - Hand analog
 32768 | R | Unix Timestamp high | int16 |  | 
 32769 | R | Unix Timestamp low | int16 |  | 
-32770 | R | Version SC2 | int16 |  | 
+32770 | R | Version SC2/SC3 | int16 |  | 
 32771 | R | Version NBG | int16 |  | 
 33030 | R | S07 Solardruck | uint16 |  | 
 33024 | R | S01 Speicher oben | int16 | °C | 
