@@ -84,13 +84,13 @@ Das Solvis-Modul ermöglicht den einfachen und schnellen Zugriff auf die wichtig
 
 StartRegister | FunctionCode | Name | Type | Units | Description
 ------------- | ------------ | ---- | ---- | ----- | -----------
-2049 | R | Zirkulation Betriebsart | int16 | Zirkulation | 1 - Aus, 2 - Puls, 3 - Temp, 4 - Warten
-3840 | R | Analog Out 1 | int16 | Betriebsart | 0 - Auto PWM, 1 - Hand PWM, 2 - Auto analog, 3 - Hand analog
-3845 | R | Analog Out 2 | int16 | Betriebsart | 0 - Auto PWM, 1 - Hand PWM, 2 - Auto analog, 3 - Hand analog
-3850 | R | Analog Out 3 | int16 | Betriebsart | 0 - Auto PWM, 1 - Hand PWM, 2 - Auto analog, 3 - Hand analog
-3855 | R | Analog Out 4 | int16 | Betriebsart | 0 - Auto PWM, 1 - Hand PWM, 2 - Auto analog, 3 - Hand analog
-3860 | R | Analog Out 5 | int16 | Betriebsart | 0 - Auto PWM, 1 - Hand PWM, 2 - Auto analog, 3 - Hand analog
-3865 | R | Analog Out 6 | int16 | Betriebsart | 0 - Auto PWM, 1 - Hand PWM, 2 - Auto analog, 3 - Hand analog
+2049 | R | Zirkulation Betriebsart | int16 | Zirkulation | 1=Aus, 2=Puls, 3=Temp, 4=Warten
+3840 | R | Analog Out 1 | int16 | Betriebsart | 0=Auto PWM, 1=Hand PWM, 2=Auto analog, 3=Hand analog
+3845 | R | Analog Out 2 | int16 | Betriebsart | 0=Auto PWM, 1=Hand PWM, 2=Auto analog, 3=Hand analog
+3850 | R | Analog Out 3 | int16 | Betriebsart | 0=Auto PWM, 1=Hand PWM, 2=Auto analog, 3=Hand analog
+3855 | R | Analog Out 4 | int16 | Betriebsart | 0=Auto PWM, 1=Hand PWM, 2=Auto analog, 3=Hand analog
+3860 | R | Analog Out 5 | int16 | Betriebsart | 0=Auto PWM, 1=Hand PWM, 2=Auto analog, 3=Hand analog
+3865 | R | Analog Out 6 | int16 | Betriebsart | 0=Auto PWM, 1=Hand PWM, 2=Auto analog, 3=Hand analog
 32768 | R | Unix Timestamp high | int16 |  | 
 32769 | R | Unix Timestamp low | int16 |  | 
 32770 | R | Version SC2/SC3 | int16 |  | 
