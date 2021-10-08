@@ -43,7 +43,7 @@ if (!defined('IMR_START_REGISTER'))
 			$this->RegisterPropertyBoolean('active', 'true');
 			$this->RegisterPropertyString('hostIp', '');
 			$this->RegisterPropertyInteger('hostPort', '502');
-			$this->RegisterPropertyInteger('hostmodbusDevice', '1');
+			$this->RegisterPropertyInteger('hostmodbusDevice', '101');
 			$this->RegisterPropertyInteger('pollCycle', '60');
 			$this->RegisterPropertyBoolean('loggingTemp', 'false');
 			$this->RegisterPropertyBoolean('loggingAusgang', 'false');
@@ -248,8 +248,8 @@ function removeInvalidChars(\$input)
 				$modelRegister_array = array(
 					array(32768, "R", "Unix Timestamp high", "", "int16"/*,"secs"*/), // ToDo: Umrechnungsformel unbekannt...
 					array(32769, "R", "Unix Timestamp low", "", "int16"/*,"secs"*/), // ToDo: Umrechnungsformel unbekannt...
-					array(32770, "R", "Version SC2", "", "int16", ""),
-					array(32771, "R", "Version NBG", "", "int16", ""),
+					array(32770, "R", "Version SC2/SC3", "", "uint16", ""),
+					array(32771, "R", "Version NBG", "", "uint16", ""),
 				);
 				$categoryIdent = "Allg";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
@@ -439,7 +439,7 @@ function removeInvalidChars(\$input)
 
 				$modelRegister_array = array(
 					array(33536, "R", "Laufzeit Brennerstufe 1", "", "int16", "h"),	// ToDo: Einheit wirklich in ganze Stunden?
-					array(33537, "R", "Brennerstarts Stufe 1", "", "int16", ""),
+					array(33537, "R", "Brennerstarts Stufe 1", "", "uint16", ""),
 					array(33538, "R", "Laufzeit Brennerstufe 2", "", "int16", "h"),	// ToDo: Einheit wirklich in ganze Stunden?
 					array(33539, "R", "Wärmeerzeuger SX aktuelle Leistung", "", "int16","W"),
 					array(33540, "R", "Ionisationsstrom mA", "", "int16","mA"),

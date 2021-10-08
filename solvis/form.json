@@ -41,7 +41,7 @@
         },
         {
             "type": "NumberSpinner",
-            "caption": "Geräte ID (Standard: 1)",
+            "caption": "Geräte ID (Standard: 101)",
             "name": "hostmodbusDevice",
             "digits": 0,
             "minimum": 1,
