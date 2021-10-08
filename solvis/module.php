@@ -401,7 +401,7 @@ function removeInvalidChars(\$input)
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 
 					$profile = "~Switch";
-					$varId = $this->MaintainInstanceVariable("aktiv", "aktiv", VARIABLETYPE_BOOLEAN, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+					$varId = $this->MaintainInstanceVariable("aktiv", "aktiv", VARIABLETYPE_BOOLEAN, $profile, 0, true, $instanceId, "false = nicht aktiv, true = aktiv"/*$modelRegister[IMR_DESCRIPTION]*/);
 				}
 
 
