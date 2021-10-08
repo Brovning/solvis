@@ -52,7 +52,7 @@ if (!defined('IMR_START_REGISTER'))
 			// Temp-Values
 			$this->RegisterTimer("calc_Temp", 0, "\$parentId = ".$this->InstanceID.";
 // Inverter - SF Variablen erstellen
-\$modelRegister_array = array(33024, 33025,33026,33027,33028,33029,33031,33032,33033,33034,33035,33036,33037,33038,33039);
+\$modelRegister_array = array(33024, 33025, 33026, 33027, 33028, 33029, 33031, 33032, 33033, 33034, 33035, 33036, 33037, 33038, 33039, 33042, 33043, 33044, 33294, 33295, 33296, 33297, 33298, 33299);
 foreach(\$modelRegister_array AS \$modelRegister)
 {
 	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$parentId);
@@ -124,129 +124,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 				/* ****** Solvis Register ************************************************************************** */
 				$modelRegister_array = array(
-					array(3840,"R","Analog Out 1", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3845,"R","Analog Out 2", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3850,"R","Analog Out 3", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3855,"R","Analog Out 4", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3860,"R","Analog Out 5", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					array(3865,"R","Analog Out 6", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", ""),
-					
-					//noch nicht klar
-					array(32768,"R","Unix Timestamp high","","int16","secs"),
-					array(32769,"R","Unix Timestamp low","","int16","secs"),
-					array(32770,"R","Version SC2","","int16", ""),
-					array(32771,"R","Version NBG","","int16", ""),
-					array(33030,"R","S07 Solardruck","","uint16", ""),
-				);
-
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
-
-
-				// Temperaturwerte S1 - S16 (division durch 10 nötig!!!)
-				$modelRegister_array =	array(
-					array(33024,"R","S01 Speicher oben","","uint16", "°C"),
-					array(33025,"R","S02 Warmwasser","","uint16", "°C"),
-					array(33026,"R","S03 Speicherreferenz","","uint16", "°C"),
-					array(33027,"R","S04 Heizungspuffer oben","","uint16", "°C"),
-					array(33028,"R","S05 Solarvorlauf","","uint16", "°C"),
-					array(33029,"R","S06 Solarrücklauf","","uint16", "°C"),
-					array(33031,"R","S08 Solarkollektor","","uint16", "°C"),
-					array(33032,"R","S09 Heizungspuffer unten","","uint16", "°C"),
-					array(33033,"R","S10 Aussentemperatur","","uint16", "°C"),
-					array(33034,"R","S11 Zirkulation","","uint16", "°C"),
-					array(33035,"R","S12 Vorlauf Heizkreis 1","","uint16", "°C"),
-					array(33036,"R","S13 Vorlauf Heizkreis 2","","uint16", "°C"),
-					array(33037,"R","S14 Vorlauf Heizkreis 3","","uint16", "°C"),
-					array(33038,"R","S15 Kaltwasser","","uint16", "°C"),
-					array(33039,"R","S16 unbenannt","","uint16", "°C"),
-				);
-
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
-
-				foreach($modelRegister_array AS $modelRegister)
-				{
-					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
-					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
-					IPS_SetHidden($varId, true);
-					
-					$dataType = 7;
-					$profile = $this->getProfile($modelRegister[IMR_UNITS], $dataType);
-
-					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
-
-					// Logging setzen
-					if (false !== $varId && false !== $archiveId)
-					{
-						AC_SetLoggingStatus($archiveId, $varId, $loggingTemp);
-					}
-
-					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
-					IPS_SetVariableCustomProfile($varId, "");
-					IPS_SetHidden($varId, true);
-				}
-
-				
-				$modelRegister_array = array(
-					array(33040,"R","S17 Volumenstrom WW","","int16", "l/min"),
-					array(33041,"R","S18 Volumenstrom Solar","","int16", "l/min"),
-					array(33042,"R","Analog In 1","","int16", "V"),
-					array(33043,"R","Analog In 2","","int16", "V"),
-					array(33044,"R","Analog In 3","","int16", "V"),
-// Datentyp?		array(33045,"R","DigIn Störungen","","",""),
-				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
-
-				$modelRegister_array = array(
-					array(33280,"R","A01 Pumpe Zirkulation","","uint8", "%"),
-					array(33281,"R","A02 Pumpe Solar","","uint8", "%"),
-					array(33282,"R","A03 Pumpe Heizkreis 1","","uint8", "%"),
-					array(33283,"R","A04 Pumpe Heizkreis 2","","uint8", "%"),
-					array(33284,"R","A05 Pumpe Heizkreis 3","","uint8", "%"),
-					array(33285,"R","A06","","uint8", "%"),
-					array(33286,"R","A07","","uint8", "%"),
-					array(33287,"R","A08 Mischer HK1 auf","","uint8", "%"),
-					array(33288,"R","A09 Mischer HK1 zu","","uint8", "%"),
-					array(33289,"R","A10 Mischer HK2 auf","","uint8", "%"),
-					array(33290,"R","A11 Mischer HK2 zu","","uint8", "%"),
-					array(33291,"R","A12 Brenner","","uint8", "%"),
-					array(33292,"R","A13 Brenner Stufe 2","","uint8", "%"),
-					array(33293,"R","A14","","uint8", "%"),
-				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
-
-				// Logging setzen
-				foreach($modelRegister_array AS $modelRegister)
-				{
-					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
-					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
-					if (false !== $varId && false !== $archiveId)
-					{
-						AC_SetLoggingStatus($archiveId, $varId, $loggingAusgang);
-					}
-				}					
-
-				$modelRegister_array = array(
-					array(33294,"R","Analog Out O1","","int16", "V"),
-					array(33295,"R","Analog Out O2","","int16", "V"),
-					array(33296,"R","Analog Out O3","","int16",""),
-					array(33297,"R","Analog Out O4","","int16",""),
-					array(33298,"R","Analog Out O5","","int16",""),
-					array(33299,"R","Analog Out O6","","int16",""),
-				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
-
-				$modelRegister_array = array(
-					array(2049,"R","Zirkulation Betriebsart", "Zirkulation: 1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_Zirkulation"),
-					array(33536,"R","Laufzeit Brennerstufe 1","","int16", "h"),
-					array(33537,"R","Brennerstarts Stufe 1","","int16", ""),
-					array(33538,"R","Laufzeit Brennerstufe 2","","int16", "h"),
-					array(33539,"R","Wärmeerzeuger SX aktuelle Leistung W","","int16",""),
-					array(33540,"R","Ionisationsstrom mA","","int16","mA"),
+					array(2049, "R", "Zirkulation Betriebsart", "Zirkulation: 1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_Zirkulation"),
 				);
 				$categoryId = $parentId;
 				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
@@ -263,57 +141,233 @@ foreach(\$modelRegister_array AS \$modelRegister)
 				}					
 
 				$modelRegister_array = array(
-					array(33792,"R","Meldungen Anzahl","","int16",""),
-					array(33793,"R","Meldung 01 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33794,"R","Meldung 01 UnixZeit H","","int16","secs"),
-					array(33795,"R","Meldung 01 UnixZeit L","","int16","secs"),
-					array(33796,"R","Meldung 01 Par 1","","int16",""),
-					array(33797,"R","Meldung 01 Par 2","","int16",""),
-					array(33798,"R","Meldung 02 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33799,"R","Meldung 02 UnixZeit H","","int16","secs"),
-					array(33800,"R","Meldung 02 UnixZeit L","","int16","secs"),
-					array(33801,"R","Meldung 02 Par 1","","int16",""),
-					array(33802,"R","Meldung 02 Par 2","","int16",""),
-					array(33803,"R","Meldung 03 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33804,"R","Meldung 03 UnixZeit H","","int16","secs"),
-					array(33805,"R","Meldung 03 UnixZeit L","","int16","secs"),
-					array(33806,"R","Meldung 03 Par 1","","int16",""),
-					array(33807,"R","Meldung 03 Par 2","","int16",""),
-					array(33808,"R","Meldung 04 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33809,"R","Meldung 04 UnixZeit H","","int16","secs"),
-					array(33810,"R","Meldung 04 UnixZeit L","","int16","secs"),
-					array(33811,"R","Meldung 04 Par 1","","int16",""),
-					array(33812,"R","Meldung 04 Par 2","","int16",""),
-					array(33813,"R","Meldung 05 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33814,"R","Meldung 05 UnixZeit H","","int16","secs"),
-					array(33815,"R","Meldung 05 UnixZeit L","","int16","secs"),
-					array(33816,"R","Meldung 05 Par 1","","int16",""),
-					array(33817,"R","Meldung 05 Par 2","","int16",""),
-					array(33818,"R","Meldung 06 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33819,"R","Meldung 06 UnixZeit H","","int16","secs"),
-					array(33820,"R","Meldung 06 UnixZeit L","","int16","secs"),
-					array(33821,"R","Meldung 06 Par 1","","int16",""),
-					array(33822,"R","Meldung 06 Par 2","","int16",""),
-					array(33823,"R","Meldung 07 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33824,"R","Meldung 07 UnixZeit H","","int16","secs"),
-					array(33825,"R","Meldung 07 UnixZeit L","","int16","secs"),
-					array(33826,"R","Meldung 07 Par 1","","int16",""),
-					array(33827,"R","Meldung 07 Par 2","","int16",""),
-					array(33828,"R","Meldung 08 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33829,"R","Meldung 08 UnixZeit H","","int16","secs"),
-					array(33830,"R","Meldung 08 UnixZeit L","","int16","secs"),
-					array(33831,"R","Meldung 08 Par 1","","int16",""),
-					array(33832,"R","Meldung 08 Par 2","","int16",""),
-					array(33833,"R","Meldung 09 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33834,"R","Meldung 09 UnixZeit H","","int16","secs"),
-					array(33835,"R","Meldung 09 UnixZeit L","","int16","secs"),
-					array(33836,"R","Meldung 09 Par 1","","int16",""),
-					array(33837,"R","Meldung 09 Par 2","","int16",""),
-					array(33838,"R","Meldung 10 Code","","int16","enumerated_StatsHeizkreis"),
-					array(33839,"R","Meldung 10 UnixZeit H","","int16","secs"),
-					array(33840,"R","Meldung 10 UnixZeit L","","int16","secs"),
-					array(33841,"R","Meldung 10 Par 1","","int16",""),
-					array(33842,"R","Meldung 10 Par 2","","int16",""),
+					array(3840, "R", "Analog Out 1", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
+					array(3845, "R", "Analog Out 2", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
+					array(3850, "R", "Analog Out 3", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
+					array(3855, "R", "Analog Out 4", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
+					array(3860, "R", "Analog Out 5", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
+					array(3865, "R", "Analog Out 6", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
+					array(32768, "R", "Unix Timestamp high", "", "int16"/*,"secs"*/), // ToDo: Umrechnungsformel unbekannt...
+					array(32769, "R", "Unix Timestamp low", "", "int16"/*,"secs"*/), // ToDo: Umrechnungsformel unbekannt...
+					array(32770, "R", "Version SC2", "", "int16", ""),
+					array(32771, "R", "Version NBG", "", "int16", ""),
+					array(33030, "R", "S07 Solardruck", "", "uint16", ""), // ToDo: Einheit?
+				);
+
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+
+				// Temperaturwerte S1 - S16 (division durch 10 nötig!!!)
+				$modelRegister_array =	array(
+					array(33024, "R", "S01 Speicher oben", "", "uint16"/*, "°C"*/),
+					array(33025, "R", "S02 Warmwasser", "", "uint16"/*, "°C"*/),
+					array(33026, "R", "S03 Speicherreferenz", "", "uint16"/*, "°C"*/),
+					array(33027, "R", "S04 Heizungspuffer oben", "", "uint16"/*, "°C"*/),
+					array(33028, "R", "S05 Solarvorlauf", "", "uint16"/*, "°C"*/),
+					array(33029, "R", "S06 Solarrücklauf", "", "uint16"/*, "°C"*/),
+					array(33031, "R", "S08 Solarkollektor", "", "uint16"/*, "°C"*/),
+					array(33032, "R", "S09 Heizungspuffer unten", "", "uint16"/*, "°C"*/),
+					array(33033, "R", "S10 Aussentemperatur", "", "uint16"/*, "°C"*/),
+					array(33034, "R", "S11 Zirkulation", "", "uint16"/*, "°C"*/),
+					array(33035, "R", "S12 Vorlauf Heizkreis 1", "", "uint16"/*, "°C"*/),
+					array(33036, "R", "S13 Vorlauf Heizkreis 2", "", "uint16"/*, "°C"*/),
+					array(33037, "R", "S14 Vorlauf Heizkreis 3", "", "uint16"/*, "°C"*/),
+					array(33038, "R", "S15 Kaltwasser", "", "uint16"/*, "°C"*/),
+					array(33039, "R", "S16 unbenannt", "", "uint16"/*, "°C"*/),
+				);
+
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetHidden($varId, true);
+					
+					$dataType = 7;
+					$profile = $this->getProfile("°C"/*$modelRegister[IMR_UNITS]*/, $dataType);
+
+					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+
+					// Logging setzen
+					if (false !== $varId && false !== $archiveId)
+					{
+						AC_SetLoggingStatus($archiveId, $varId, $loggingTemp);
+					}
+
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetVariableCustomProfile($varId, "");
+					IPS_SetHidden($varId, true);
+				}
+
+				
+				$modelRegister_array = array(
+					array(33040, "R", "S17 Volumenstrom WW", "", "int16", "l/min"),
+					array(33041, "R", "S18 Volumenstrom Solar", "", "int16", "l/min"),
+//					array(33045, "R", "DigIn Störungen", "", "",""), // ToDo: Datentyp
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+
+				$modelRegister_array = array(
+					array(33042, "R", "Analog In 1", "", "int16"/*, "V"*/),
+					array(33043, "R", "Analog In 2", "", "int16"/*, "V"*/),
+					array(33044, "R", "Analog In 3", "", "int16"/*, "V"*/),
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetHidden($varId, true);
+					
+					$dataType = 7;
+					$profile = $this->getProfile("V"/*$modelRegister[IMR_UNITS]*/, $dataType);
+
+					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetVariableCustomProfile($varId, "");
+					IPS_SetHidden($varId, true);
+				}
+
+
+				$modelRegister_array = array(
+					array(33280, "R", "A01 Pumpe Zirkulation", "", "uint8", "%"),
+					array(33281, "R", "A02 Pumpe Solar", "", "uint8", "%"),
+					array(33282, "R", "A03 Pumpe Heizkreis 1", "", "uint8", "%"),
+					array(33283, "R", "A04 Pumpe Heizkreis 2", "", "uint8", "%"),
+					array(33284, "R", "A05 Pumpe Heizkreis 3", "", "uint8", "%"),
+					array(33285, "R", "A06", "", "uint8", "%"),
+					array(33286, "R", "A07", "", "uint8", "%"),
+					array(33287, "R", "A08 Mischer HK1 auf", "", "uint8", "%"),
+					array(33288, "R", "A09 Mischer HK1 zu", "", "uint8", "%"),
+					array(33289, "R", "A10 Mischer HK2 auf", "", "uint8", "%"),
+					array(33290, "R", "A11 Mischer HK2 zu", "", "uint8", "%"),
+					array(33291, "R", "A12 Brenner", "", "uint8", "%"),
+					array(33292, "R", "A13 Brenner Stufe 2", "", "uint8", "%"),
+					array(33293, "R", "A14", "", "uint8", "%"),
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				// Logging setzen
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					if (false !== $varId && false !== $archiveId)
+					{
+						AC_SetLoggingStatus($archiveId, $varId, $loggingAusgang);
+					}
+				}					
+
+				$modelRegister_array = array(
+					array(33294, "R", "Analog Out O1", "", "int16"/*, "V"*/),
+					array(33295, "R", "Analog Out O2", "", "int16"/*, "V"*/),
+					array(33296, "R", "Analog Out O3", "", "int16"/*, "V"*/),
+					array(33297, "R", "Analog Out O4", "", "int16"/*, "V"*/),
+					array(33298, "R", "Analog Out O5", "", "int16"/*, "V"*/),
+					array(33299, "R", "Analog Out O6", "", "int16"/*, "V"*/),
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetHidden($varId, true);
+					
+					$dataType = 7;
+					$profile = $this->getProfile("V"/*$modelRegister[IMR_UNITS]*/, $dataType);
+
+					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetVariableCustomProfile($varId, "");
+					IPS_SetHidden($varId, true);
+				}
+
+
+				$modelRegister_array = array(
+					array(33536, "R", "Laufzeit Brennerstufe 1", "", "int16", "h"),	// ToDo: Einheit wirklich in ganze Stunden?
+					array(33537, "R", "Brennerstarts Stufe 1", "", "int16", ""),
+					array(33538, "R", "Laufzeit Brennerstufe 2", "", "int16", "h"),	// ToDo: Einheit wirklich in ganze Stunden?
+					array(33539, "R", "Wärmeerzeuger SX aktuelle Leistung", "", "int16","W"),
+					array(33540, "R", "Ionisationsstrom mA", "", "int16","mA"),
+				);
+				$categoryId = $parentId;
+				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+
+				// Logging setzen
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					if (false !== $varId && false !== $archiveId)
+					{
+						AC_SetLoggingStatus($archiveId, $varId, $loggingSonstiges);
+					}
+				}					
+
+				$modelRegister_array = array(
+					array(33792, "R", "Meldungen Anzahl", "", "int16",""),
+					array(33793, "R", "Meldung 01 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33794, "R", "Meldung 01 UnixZeit H", "", "int16"/*,"secs"*/), // ToDo: Umrechnung unbekannt...
+					array(33795, "R", "Meldung 01 UnixZeit L", "", "int16"/*,"secs"*/), // ToDo: Umrechnung unbekannt...
+					array(33796, "R", "Meldung 01 Par 1", "", "int16",""),
+					array(33797, "R", "Meldung 01 Par 2", "", "int16",""),
+					array(33798, "R", "Meldung 02 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33799, "R", "Meldung 02 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33800, "R", "Meldung 02 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33801, "R", "Meldung 02 Par 1", "", "int16",""),
+					array(33802, "R", "Meldung 02 Par 2", "", "int16",""),
+					array(33803, "R", "Meldung 03 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33804, "R", "Meldung 03 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33805, "R", "Meldung 03 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33806, "R", "Meldung 03 Par 1", "", "int16",""),
+					array(33807, "R", "Meldung 03 Par 2", "", "int16",""),
+					array(33808, "R", "Meldung 04 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33809, "R", "Meldung 04 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33810, "R", "Meldung 04 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33811, "R", "Meldung 04 Par 1", "", "int16",""),
+					array(33812, "R", "Meldung 04 Par 2", "", "int16",""),
+					array(33813, "R", "Meldung 05 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33814, "R", "Meldung 05 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33815, "R", "Meldung 05 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33816, "R", "Meldung 05 Par 1", "", "int16",""),
+					array(33817, "R", "Meldung 05 Par 2", "", "int16",""),
+					array(33818, "R", "Meldung 06 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33819, "R", "Meldung 06 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33820, "R", "Meldung 06 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33821, "R", "Meldung 06 Par 1", "", "int16",""),
+					array(33822, "R", "Meldung 06 Par 2", "", "int16",""),
+					array(33823, "R", "Meldung 07 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33824, "R", "Meldung 07 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33825, "R", "Meldung 07 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33826, "R", "Meldung 07 Par 1", "", "int16",""),
+					array(33827, "R", "Meldung 07 Par 2", "", "int16",""),
+					array(33828, "R", "Meldung 08 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33829, "R", "Meldung 08 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33830, "R", "Meldung 08 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33831, "R", "Meldung 08 Par 1", "", "int16",""),
+					array(33832, "R", "Meldung 08 Par 2", "", "int16",""),
+					array(33833, "R", "Meldung 09 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33834, "R", "Meldung 09 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33835, "R", "Meldung 09 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33836, "R", "Meldung 09 Par 1", "", "int16",""),
+					array(33837, "R", "Meldung 09 Par 2", "", "int16",""),
+					array(33838, "R", "Meldung 10 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33839, "R", "Meldung 10 UnixZeit H", "", "int16"/*,"secs"*/),
+					array(33840, "R", "Meldung 10 UnixZeit L", "", "int16"/*,"secs"*/),
+					array(33841, "R", "Meldung 10 Par 1", "", "int16",""),
+					array(33842, "R", "Meldung 10 Par 2", "", "int16",""),
 				);
 
 				$categoryId = $parentId;
@@ -789,7 +843,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 		private function checkProfiles()
 		{
-/*
+/*			// ToDo: Fehlervariable für Kurschluss+Unterbrechnung je Temperatursensor hinzufügen!
 			$valueArray = array(
 				array('Name' => "Kurzschluss", 'Wert' => -300, "Kurzschlussfehler", 'Farbe' => 16711680),
 				array('Name' => "Unterbrechung", 'Wert' => 2200, "Unterbrechungsfehler", 'Farbe' => 16711680),
@@ -890,7 +944,6 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array('Name' => "AFCI", 'Wert' => 13, "AFCI Event (Arc-Erkennung)"),
 				)
 			);
-/-*
 			$this->createVarProfile(MODUL_PREFIX.".Emergency-Power.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "nicht unterstützt", 'Wert' => 0, "Notstrom wird nicht von Ihrem Gerät unterstützt", 'Farbe' => 16753920),
 					array('Name' => "aktiv", 'Wert' => 1, "Notstrom aktiv (Ausfall des Stromnetzes)", 'Farbe' => 65280),
@@ -899,7 +952,6 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array('Name' => "Fehler", 'Wert' => 4, "Der Motorschalter des S10 E befindet sich nicht in der richtigen Position, sondern wurde manuell abgeschaltet oder nicht eingeschaltet.", 'Farbe' => 16711680),
 				)
 			);
-
 			$this->createVarProfile(MODUL_PREFIX.".Powermeter.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 				array('Name' => "N/A", 'Wert' => 0),
 				array('Name' => "Wurzelleistungsmesser", 'Wert' => 1, "Dies ist der Regelpunkt des Systems. Der Regelpunkt entspricht üblicherweise dem Hausanschlusspunkt."),
@@ -914,33 +966,28 @@ foreach(\$modelRegister_array AS \$modelRegister)
 				array('Name' => "Regelungsbypass", 'Wert' => 10, "Die gemessene Leistung wird nicht in die Batterie geladen, aus der Batterie entladen."),
 				)
 			);
-*-/
-			$this->createVarProfile(MODUL_PREFIX.".Ampere.Int", VARIABLETYPE_INTEGER, ' A');
-			$this->createVarProfile(MODUL_PREFIX.".AmpereHour.Float", VARIABLETYPE_FLOAT, ' Ah');
-			$this->createVarProfile(MODUL_PREFIX.".AmpereHour.Int", VARIABLETYPE_INTEGER, ' Ah');
-			$this->createVarProfile(MODUL_PREFIX.".Angle.Float", VARIABLETYPE_FLOAT, ' °');
-			$this->createVarProfile(MODUL_PREFIX.".Angle.Int", VARIABLETYPE_INTEGER, ' °');
-			$this->createVarProfile(MODUL_PREFIX.".Blindleistung.Float", VARIABLETYPE_FLOAT, ' Var');
-			$this->createVarProfile(MODUL_PREFIX.".Blindleistung.Int", VARIABLETYPE_INTEGER, ' Var');
-			$this->createVarProfile(MODUL_PREFIX.".Electricity.Float", VARIABLETYPE_FLOAT, ' Wh');
-			$this->createVarProfile(MODUL_PREFIX.".Electricity.Int", VARIABLETYPE_INTEGER, ' Wh');
-			$this->createVarProfile(MODUL_PREFIX.".Hertz.Int", VARIABLETYPE_INTEGER, ' Hz');
 */
+//			$this->createVarProfile(MODUL_PREFIX.".Ampere.Int", VARIABLETYPE_INTEGER, ' A');
+//			$this->createVarProfile(MODUL_PREFIX.".AmpereHour.Float", VARIABLETYPE_FLOAT, ' Ah');
+//			$this->createVarProfile(MODUL_PREFIX.".AmpereHour.Int", VARIABLETYPE_INTEGER, ' Ah');
+//			$this->createVarProfile(MODUL_PREFIX.".Angle.Float", VARIABLETYPE_FLOAT, ' °');
+//			$this->createVarProfile(MODUL_PREFIX.".Angle.Int", VARIABLETYPE_INTEGER, ' °');
+//			$this->createVarProfile(MODUL_PREFIX.".Blindleistung.Float", VARIABLETYPE_FLOAT, ' Var');
+//			$this->createVarProfile(MODUL_PREFIX.".Blindleistung.Int", VARIABLETYPE_INTEGER, ' Var');
+//			$this->createVarProfile(MODUL_PREFIX.".Electricity.Float", VARIABLETYPE_FLOAT, ' Wh');
+//			$this->createVarProfile(MODUL_PREFIX.".Electricity.Int", VARIABLETYPE_INTEGER, ' Wh');
+//			$this->createVarProfile(MODUL_PREFIX.".Hertz.Int", VARIABLETYPE_INTEGER, ' Hz');
 			$this->createVarProfile(MODUL_PREFIX.".Hours.Int", VARIABLETYPE_INTEGER, ' h');
 			$this->createVarProfile(MODUL_PREFIX.".MilliAmpere.Int", VARIABLETYPE_INTEGER, ' mA');
-/*
-			$this->createVarProfile(MODUL_PREFIX.".Ohm.Int", VARIABLETYPE_INTEGER, ' Ohm');
-			$this->createVarProfile(MODUL_PREFIX.".Scheinleistung.Float", VARIABLETYPE_FLOAT, ' VA');
-			$this->createVarProfile(MODUL_PREFIX.".Scheinleistung.Int", VARIABLETYPE_INTEGER, ' VA');
+//			$this->createVarProfile(MODUL_PREFIX.".Ohm.Int", VARIABLETYPE_INTEGER, ' Ohm');
+//			$this->createVarProfile(MODUL_PREFIX.".Scheinleistung.Float", VARIABLETYPE_FLOAT, ' VA');
+//			$this->createVarProfile(MODUL_PREFIX.".Scheinleistung.Int", VARIABLETYPE_INTEGER, ' VA');
 			// Temperature.Float: ~Temperature
-			$this->createVarProfile(MODUL_PREFIX.".Temperature.Int", VARIABLETYPE_INTEGER, ' °C');
+//			$this->createVarProfile(MODUL_PREFIX.".Temperature.Int", VARIABLETYPE_INTEGER, ' °C');
 			// Volt.Float: ~Volt
-			$this->createVarProfile(MODUL_PREFIX.".Volt.Int", VARIABLETYPE_INTEGER, ' V');
-*/
+//			$this->createVarProfile(MODUL_PREFIX.".Volt.Int", VARIABLETYPE_INTEGER, ' V');
 			$this->createVarProfile(MODUL_PREFIX.".Volumenstrom.Int", VARIABLETYPE_INTEGER, ' l/min');
-/*
 			$this->createVarProfile(MODUL_PREFIX.".Watt.Int", VARIABLETYPE_INTEGER, ' W');
-*/
 		}
 
 		private function GetVariableValue($instanceIdent, $variableIdent = "Value")
