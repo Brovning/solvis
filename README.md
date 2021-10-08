@@ -197,7 +197,7 @@ StartRegister | FunctionCode | Name | Type | Units | Description
 #### Statusvariablen
 Variablenname | Type | Units | Description
 ---- | ---- | ----- | -----------
-\- | - | - | -
+aktiv | boolean | - | Wird je A01-A14 erstellt. (false = nicht aktiv, true = aktiv)
 
 
 #### Profile
