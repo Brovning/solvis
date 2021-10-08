@@ -37,7 +37,7 @@
         },
         {
             "type": "Label",
-            "label": "Geräte ID der Solvis Heizung (bspw.: ID=1)"
+            "label": "Geräte ID der Solvis Heizung"
         },
         {
             "type": "NumberSpinner",
