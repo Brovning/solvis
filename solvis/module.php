@@ -50,12 +50,14 @@ if (!defined('IMR_START_REGISTER'))
 			$this->RegisterPropertyBoolean('loggingSonstiges', 'false');
 
 			// Temp-Values
-			$this->RegisterTimer("calc_Temp", 0, "\$parentId = ".$this->InstanceID.";
-// Inverter - SF Variablen erstellen
-\$modelRegister_array = array(33024, 33025, 33026, 33027, 33028, 33029, 33031, 33032, 33033, 33034, 33035, 33036, 33037, 33038, 33039, 33042, 33043, 33044, 33294, 33295, 33296, 33297, 33298, 33299);
+			$this->RegisterTimer("calc_SF", 0, "\$parentId = ".$this->InstanceID.";
+// S01 - S18: Temperature values - SF Variables
+\$modelRegister_array = array(33024, 33025, 33026, 33027, 33028, 33029, 33031, 33032, 33033, 33034, 33035, 33036, 33037, 33038, 33039);
+\$categoryIdent = \"S\";
+\$categoryId = @IPS_GetObjectIDByIdent(removeInvalidChars(\$categoryIdent), \$parentId);
 foreach(\$modelRegister_array AS \$modelRegister)
 {
-	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$parentId);
+	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$categoryId);
 	\$targetId = @IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
 	if(false !== \$instanceId && false !== \$targetId)
 	{
@@ -68,6 +70,52 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			SetValue(\$targetId, \$newValue);
 		}
 	}
+}
+
+// Analog IN/Out: V values - SF Variables
+\$modelRegister_array = array(33042, 33043, 33044, 33294, 33295, 33296, 33297, 33298, 33299);
+\$categoryIdent = \"Anal\";
+\$categoryId = @IPS_GetObjectIDByIdent(removeInvalidChars(\$categoryIdent), \$parentId);
+foreach(\$modelRegister_array AS \$modelRegister)
+{
+	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$categoryId);
+	\$targetId = @IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
+	if(false !== \$instanceId && false !== \$targetId)
+	{
+		\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
+		\$sfValue = -1;
+		\$newValue = \$sourceValue * pow(10, \$sfValue);
+
+		if(GetValue(\$targetId) != \$newValue)
+		{
+			SetValue(\$targetId, \$newValue);
+		}
+	}
+}
+
+// A0-A14 values - SF Variables
+\$modelRegister_array = array(33280, 33281, 33282, 33283, 33284, 33285, 33286, 33287, 33288, 33289, 33290, 33291, 33292, 33293);
+\$categoryIdent = \"A\";
+\$categoryId = @IPS_GetObjectIDByIdent(removeInvalidChars(\$categoryIdent), \$parentId);
+foreach(\$modelRegister_array AS \$modelRegister)
+{
+	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$categoryId);
+	\$targetId = @IPS_GetObjectIDByIdent(\"aktiv\", \$instanceId);
+	if(false !== \$instanceId && false !== \$targetId)
+	{
+		\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
+		\$newValue = (\$sourceValue > 0);
+
+		if(GetValue(\$targetId) != \$newValue)
+		{
+			SetValue(\$targetId, \$newValue);
+		}
+	}
+}
+
+function removeInvalidChars(\$input)
+{
+	return preg_replace( '/[^a-z0-9]/i', '', \$input);
 }");
 
 			// *** Erstelle Variablen-Profile ***
@@ -96,6 +144,14 @@ foreach(\$modelRegister_array AS \$modelRegister)
 			$loggingAusgang = $this->ReadPropertyBoolean('loggingAusgang');
 			$loggingSonstiges = $this->ReadPropertyBoolean('loggingSonstiges');
 
+			$categoryArray = array(
+				"Allg" => array("Name" => "Allgemeines", 'Position' => 1),
+				"Anal" => array("Name" => "Analog In/Out", 'Position' => 2),
+				"A" => array("Name" => "A01-A14", 'Position' => 3),
+				"S" => array("Name" => "S01-S18", 'Position' => 4),
+				"Meld" => array("Name" => "Meldungen", 'Position' => 5),
+			);
+
 			$archiveId = $this->getArchiveId();
 			if (false === $archiveId)
 			{
@@ -122,12 +178,41 @@ foreach(\$modelRegister_array AS \$modelRegister)
 
 				$parentId = $this->InstanceID;
 
+				// Kategorien erstellen
+				foreach($categoryArray as $ident => $category)
+				{
+					$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($ident), $parentId);
+					if (false === $categoryId)
+					{
+						$categoryId = IPS_CreateCategory();
+						IPS_SetIdent($categoryId, $this->removeInvalidChars($ident));
+						IPS_SetName($categoryId, $category['Name']);
+						IPS_SetParent($categoryId, $parentId);
+						if(isset($category['Position']))
+						{
+							IPS_SetPosition($categoryId, $category['Position']);
+						}
+						if(isset($category['Description']))
+						{
+							IPS_SetInfo($categoryId, $category['Description']);
+						}
+					}
+				}
+
 				/* ****** Solvis Register ************************************************************************** */
 				$modelRegister_array = array(
 					array(2049, "R", "Zirkulation Betriebsart", "Zirkulation: 1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_Zirkulation"),
 				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "Allg";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 				// Logging setzen
 				foreach($modelRegister_array AS $modelRegister)
@@ -140,6 +225,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					}
 				}					
 
+
 				$modelRegister_array = array(
 					array(3840, "R", "Analog Out 1", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
 					array(3845, "R", "Analog Out 2", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
@@ -147,15 +233,34 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(3855, "R", "Analog Out 4", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
 					array(3860, "R", "Analog Out 5", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
 					array(3865, "R", "Analog Out 6", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
+				);
+				$categoryIdent = "Anal";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
+
+				$modelRegister_array = array(
 					array(32768, "R", "Unix Timestamp high", "", "int16"/*,"secs"*/), // ToDo: Umrechnungsformel unbekannt...
 					array(32769, "R", "Unix Timestamp low", "", "int16"/*,"secs"*/), // ToDo: Umrechnungsformel unbekannt...
 					array(32770, "R", "Version SC2", "", "int16", ""),
 					array(32771, "R", "Version NBG", "", "int16", ""),
-					array(33030, "R", "S07 Solardruck", "", "uint16", ""), // ToDo: Einheit?
 				);
-
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "Allg";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 
 				// Temperaturwerte S1 - S16 (division durch 10 nötig!!!)
@@ -176,19 +281,26 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33038, "R", "S15 Kaltwasser", "", "uint16"/*, "°C"*/),
 					array(33039, "R", "S16 unbenannt", "", "uint16"/*, "°C"*/),
 				);
-
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "S";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 				foreach($modelRegister_array AS $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetVariableCustomProfile($varId, "");
 					IPS_SetHidden($varId, true);
 					
 					$dataType = 7;
 					$profile = $this->getProfile("°C"/*$modelRegister[IMR_UNITS]*/, $dataType);
-
 					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
 
 					// Logging setzen
@@ -196,20 +308,25 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					{
 						AC_SetLoggingStatus($archiveId, $varId, $loggingTemp);
 					}
-
-					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
-					IPS_SetVariableCustomProfile($varId, "");
-					IPS_SetHidden($varId, true);
 				}
 
 				
 				$modelRegister_array = array(
+					array(33030, "R", "S07 Solardruck", "", "uint16", ""), // ToDo: Einheit mbar oder bar?
 					array(33040, "R", "S17 Volumenstrom WW", "", "int16", "l/min"),
 					array(33041, "R", "S18 Volumenstrom Solar", "", "int16", "l/min"),
 //					array(33045, "R", "DigIn Störungen", "", "",""), // ToDo: Datentyp
 				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "S";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 
 				$modelRegister_array = array(
@@ -217,23 +334,27 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33043, "R", "Analog In 2", "", "int16"/*, "V"*/),
 					array(33044, "R", "Analog In 3", "", "int16"/*, "V"*/),
 				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "Anal";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 				foreach($modelRegister_array AS $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetVariableCustomProfile($varId, "");
 					IPS_SetHidden($varId, true);
 					
 					$dataType = 7;
 					$profile = $this->getProfile("V"/*$modelRegister[IMR_UNITS]*/, $dataType);
-
 					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
-
-					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
-					IPS_SetVariableCustomProfile($varId, "");
-					IPS_SetHidden($varId, true);
 				}
 
 
@@ -253,8 +374,16 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33292, "R", "A13 Brenner Stufe 2", "", "uint8", "%"),
 					array(33293, "R", "A14", "", "uint8", "%"),
 				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "A";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 				// Logging setzen
 				foreach($modelRegister_array AS $modelRegister)
@@ -267,6 +396,15 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					}
 				}					
 
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+
+					$profile = "~Switch";
+					$varId = $this->MaintainInstanceVariable("aktiv", "aktiv", VARIABLETYPE_BOOLEAN, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+				}
+
+
 				$modelRegister_array = array(
 					array(33294, "R", "Analog Out O1", "", "int16"/*, "V"*/),
 					array(33295, "R", "Analog Out O2", "", "int16"/*, "V"*/),
@@ -275,23 +413,27 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33298, "R", "Analog Out O5", "", "int16"/*, "V"*/),
 					array(33299, "R", "Analog Out O6", "", "int16"/*, "V"*/),
 				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "Anal";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 				foreach($modelRegister_array AS $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					IPS_SetVariableCustomProfile($varId, "");
 					IPS_SetHidden($varId, true);
 					
 					$dataType = 7;
 					$profile = $this->getProfile("V"/*$modelRegister[IMR_UNITS]*/, $dataType);
-
 					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
-
-					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
-					IPS_SetVariableCustomProfile($varId, "");
-					IPS_SetHidden($varId, true);
 				}
 
 
@@ -302,8 +444,16 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33539, "R", "Wärmeerzeuger SX aktuelle Leistung", "", "int16","W"),
 					array(33540, "R", "Ionisationsstrom mA", "", "int16","mA"),
 				);
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "Allg";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 				// Logging setzen
 				foreach($modelRegister_array AS $modelRegister)
@@ -369,9 +519,16 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33841, "R", "Meldung 10 Par 1", "", "int16",""),
 					array(33842, "R", "Meldung 10 Par 2", "", "int16",""),
 				);
-
-				$categoryId = $parentId;
-				$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				$categoryIdent = "Meld";
+				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+				if(false !== $categoryId)
+				{
+					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
+				}
+				else
+				{
+					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
+				}
 
 
                 if ($active) {
@@ -440,7 +597,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
                 }
 
 				// activate Timer
-				$this->SetTimerInterval("calc_Temp", 5000);
+				$this->SetTimerInterval("calc_SF", 5000);
 			}
 		}
 
