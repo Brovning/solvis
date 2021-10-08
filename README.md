@@ -31,9 +31,11 @@ Unterhalb der Solvis Instanz werden die Modbus Adressen erstellt.
 * Die Solvis Heizung muss Modbus TCP unterstützen!
 * Im Konfigurationsmenü der Solvis Heizung muss folgendes aktiviert werden:
 
-Vorbereiten der SolvisControl auf die Modbus-Schnittstelle Wechsel in den Installateur-Modus (Zugangscode über deinen Heizi oder SOLVIS) Unter „Sonstiges“ auf Punkt „Modbus“, hier die vorgegebene Adresse nutzen oder bei mehreren Anlagen entsprechend ändern. Der „Modus“ bleibt vorerst auf TCP(read) stehen.
+Vorbereiten der SolvisControl auf die Modbus-Schnittstelle Wechsel in den Installateur-Modus (Zugangscode über deinen Heizi oder SOLVIS) Unter „Sonstiges“ auf Punkt „Modbus“, hier die vorgegebene Adresse nutzen oder bei mehreren Anlagen entsprechend ändern.
 
 ![alt text](./docs/Solvis_Sonstiges_Modbus.jpg?raw=true "Solvis > Sonstiges > Modbus")
+
+Der „Modus“ bleibt vorerst auf TCP(read) stehen.
 
 ![alt text](./docs/Solvis_Sonstiges_Modbus-read.jpg?raw=true "Solvis > Sonstiges > Modbus read")
 
