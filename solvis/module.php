@@ -168,7 +168,7 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array(33029, "R", "S06 Solarrücklauf", "", "uint16"/*, "°C"*/),
 					array(33031, "R", "S08 Solarkollektor", "", "uint16"/*, "°C"*/),
 					array(33032, "R", "S09 Heizungspuffer unten", "", "uint16"/*, "°C"*/),
-					array(33033, "R", "S10 Aussentemperatur", "", "uint16"/*, "°C"*/),
+					array(33033, "R", "S10 Aussentemperatur", "", "uint16"/*, "°C"*/),	// ToDo: Sind uint16 für °C korrekt? Müsste es nicht int16 sein?
 					array(33034, "R", "S11 Zirkulation", "", "uint16"/*, "°C"*/),
 					array(33035, "R", "S12 Vorlauf Heizkreis 1", "", "uint16"/*, "°C"*/),
 					array(33036, "R", "S13 Vorlauf Heizkreis 2", "", "uint16"/*, "°C"*/),
@@ -863,15 +863,6 @@ foreach(\$modelRegister_array AS \$modelRegister)
 				)
 			);
 
-			$this->createVarProfile(MODUL_PREFIX.".Zirkulation.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
-					array('Name' => "Aus", 'Wert' => 1, "Aus"),
-					array('Name' => "Puls", 'Wert' => 2, "Puls"),
-					array('Name' => "Temp", 'Wert' => 3, "Temp"),
-					array('Name' => "Warten", 'Wert' => 4, "Warten"),
-					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
-				)
-			);
-
 			$this->createVarProfile(MODUL_PREFIX.".StatsHeizkreis.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "Aus", 'Wert' => 1, "Aus"),
 					array('Name' => "Automatik", 'Wert' => 2, "Automatik"),
@@ -884,6 +875,15 @@ foreach(\$modelRegister_array AS \$modelRegister)
 					array('Name' => "Frostschutz", 'Wert' => 9, "Frostschutz"),
 					array('Name' => "Pumpenschutz", 'Wert' => 10, "Pumpenschutz"),
 					array('Name' => "Estrich", 'Wert' => 11, "Estrich"),
+					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
+				)
+			);
+
+			$this->createVarProfile(MODUL_PREFIX.".Zirkulation.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+					array('Name' => "Aus", 'Wert' => 1, "Aus"),
+					array('Name' => "Puls", 'Wert' => 2, "Puls"),
+					array('Name' => "Temp", 'Wert' => 3, "Temp"),
+					array('Name' => "Warten", 'Wert' => 4, "Warten"),
 					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
 				)
 			);
