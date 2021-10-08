@@ -69,9 +69,9 @@ Name     | Beschreibung
 Open | Schalter zum Aktivieren und Deaktivieren der Instanz. Default: aus
 IP | IP-Adresse des Solvis-Stromspeichers im lokalen Netzwerk (IPv4)
 Port | Port, welcher im Solvis unter dem Menüpunkt Modbus angegeben wurde. Default: 502
-Geräte Id | Modbus Geräte ID, welche im Solvis Menü gesetzt werden kann. Default: 1
+Geräte Id | Modbus Geräte ID, welche im Solvis Menü gesetzt werden kann. Default: 101
 Abfrage-Intervall	| Intervall (in Sekunden) in welchem die Modbus-Adressen abgefragt werden sollen. Achtung: Die Berechnung der Wirkarbeit (Wh/kWh) wird exakter, je kleiner der Abfrage-Intervall gewählt wird. Jedoch je kleiner der Abfrage-Intervall, umso höher die Systemlast und auch die Archiv-Größe bei Logging! Default: 60 Sekunden
-
+Variablen-Logging | Für welche Variablen soll das Logging aktiviert werden? Zur Auswahl stehen Temperatur (S01-S16), Ausgänge (A01-A14) und Sonstiges (Brennerstarts, Brennerstufe,...)
 
 ### 5. Statusvariablen und Profile
 
