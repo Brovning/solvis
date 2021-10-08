@@ -234,5 +234,16 @@ Noch keine Funktionen verfügbar.
 
 ### 8. Versionshistorie
 
+#### v0.2
+- Kategorien hinzugefügt
+- Variablen Logging hinzugefügt
+- README erstellt
+- Variable "aktiv" zu A01-A14 hinzugefügt
+- Geräte ID default = 101
+- Volt zu Analog Out O1 bis O6 hinzugefügt
+- Umrechnung Volt (entsprechend °C) hinzugefügt
+- Watt-Profil erstellt für Wärmeerzeuger Leistung
+
+
 #### v0.1
 - initiales Release
