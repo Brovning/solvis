@@ -544,6 +544,35 @@ trait myFunctions
         return $archiveId;
     }
 
+    // ermittelt RGB Farben mit Rückgabewert Int
+    private function getRgbColor($color)
+    {
+        $color = strtolower($color);
+
+        if("green" == $color || "gruen" == $color || "00ff00" == $color)
+        {
+            $rgbInt = 65280;
+        }
+        else if("yellow" == $color || "gelb" == $color || "fff200" == $color)
+        {
+            $rgbInt = 16773632;
+        }
+        else if("orange" == $color || "ff8000" == $color)
+        {
+            $rgbInt = 16744448;
+        }
+        else if("red" == $color || "rot" == $color || "ff0000" == $color)
+        {
+            $rgbInt = 16711680;
+        }
+        else
+        {
+            $rgbInt = 0;
+        }
+
+        return $rgbInt;
+    }
+
     // Reduce LogSize by keeping the newest value and removing all older values per Intervall $aggregation (=minute, hour, day)
     function RecordReducing($ID, $MStartDate, $MEndDate, $aggregation = "i")
     {
