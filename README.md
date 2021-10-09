@@ -5,7 +5,7 @@
 
 
 # Solvis
-IP-Symcon (IPS) Modul für Solvis Heizungen SolvisControl2 (SC2 mit MA205 oder höher) und SolvisControl3 (SC3) mit Modbus TCP Unterstützung.
+IP-Symcon (IPS) Modul für [Solvis Heizungen](https://www.solvis.de) mit SolvisControl2 + SolvisRemote (SC2 mit MA205 oder höher) oder SolvisControl3 (SC3) zur Kommunikation per Modbus TCP.
 
 
 ### Inhaltsverzeichnis
@@ -26,36 +26,61 @@ Unterhalb der Solvis Instanz werden die Modbus Adressen erstellt.
 
 
 ### 2. Voraussetzungen
-
 * IP-Symcon ab Version 5.0
-* Die Solvis Heizung muss Modbus TCP unterstützen!
+* Solvis Heizung muss Modbus TCP unterstützen!
+  * SolvisControl2 + SolvisRemote (SC2 mit MA205 oder höher)
+  * oder SolvisControl3 (SC3)
 * Im Konfigurationsmenü der Solvis Heizung muss folgendes aktiviert werden:
 
-Vorbereiten der SolvisControl auf die Modbus-Schnittstelle Wechsel in den Installateur-Modus (Zugangscode über deinen Heizi oder SOLVIS) Unter „Sonstiges“ auf Punkt „Modbus“, hier die vorgegebene Adresse nutzen oder bei mehreren Anlagen entsprechend ändern.
+Zur Aktivierung der Modbus-Schnittstelle muss auf der SolvisControl in den Installateur-Modus gewechselt werden (Zugangscode kann über Installateur oder SOLVIS-Support bezogen werden).
 
-![alt text](./docs/Solvis_Sonstiges_Modbus.jpg?raw=true "Solvis > Sonstiges > Modbus")
+**SolvisControl3 (SC3)**
 
-Der „Modus“ bleibt vorerst auf TCP(read) stehen.
+Im Menüpunkt `Sonstiges` den Meüpunkt `Modbus` auswählen. 
 
-![alt text](./docs/Solvis_Sonstiges_Modbus-read.jpg?raw=true "Solvis > Sonstiges > Modbus read")
+Die vorgegebene Adresse (Standard: 101) kann unverändert verwendet werden. Bei mehreren Anlagen die Adresse entsprechend ändern.
+
+![SolvisControl3_Modbus](./docs/Solvis_Sonstiges_Modbus.jpg "Solvis SolvisControl3 (SC3) > Sonstiges > Modbus")
+
+
+Den „Modus“ je nach Verwendung auf `TCP(read)` (nur lesend) oder `TCP(write)` (lesend+schreibend) einstellen.
+
+![SolvisControl3_Modbus2](./docs/Solvis_Sonstiges_Modbus-read.jpg "Solvis SolvisControl3 (SC3) > Sonstiges > Modbus read")
+
+
+**SolvisControl2 (SC2) + SolvisRemote**
+
+Im Menüpunkt `Sonstiges` den Meüpunkt `Remote` auswählen. 
+
+Die vorgegebene Adresse (Standard: 101) kann unverändert verwendet werden. Bei mehreren Anlagen die Adresse entsprechend ändern.
+
+![SolvisControl2_Remote](./docs/Solvis_SC2_Sonstiges.png "Solvis SolvisControl2 (SC2) > Sonstiges > Remote")
+
+
+Den Modus für Modbus TCP je nach Verwendung auf `Lesen` (nur lesend) oder `Senden` (lesend+schreibend) einstellen.
+
+![SolvisControl2_Remote2](./docs/Solvis_SC2_Sonstiges_Remote_2.png "Solvis SolvisControl2 (SC2) > Sonstiges > Remote > Modbus read")
+
+
+Nun sollte unter der angegebenen IP-Addresse der SolvisRemote auf Port 502 (TCP) über dieses Modul erreichbar sein..
 
 
 ### 3. Software-Installation
 
-#### Variante 1 (empfohlen): Module Store
+#### Variante 1 (empfohlen): Modulverwaltung (Module Control)
 
-Über den in der IP Symcon Console integrierten Module Store das 'Solvis'-Modul installieren:
+Über das in der IP Symcon Console (unter Core Instances/Kerninstanzen) enthaltene Modulverwaltung (Module Control) die URL `https://github.com/Brovning/solvis` manuell hinzufügen.
 
-![alt text](./docs/symcon_module-store.jpg?raw=true "Symcon > Module Store > 'Solvis'-Modul")
+![alt text](./docs/symcon_module-control.jpg?raw=true "Symcon Console > Module Control > URL hinzufuegen")
 
 Anschließend steht das Modul zur Verfügung und eine Solvis Instanz kann hinzugefügt werden.
 
 
-#### Variante 2: Module Control
+#### Variante 2: Module Store
 
-Über das in der IP Symcon Console (unter Core Instances/Kerninstanzen) enthaltene Module Control die URL https://github.com/Brovning/solvis manuell hinzufügen.
+Über den in der IP Symcon Console integrierten Module Store das 'Solvis'-Modul installieren:
 
-![alt text](./docs/symcon_module-control.jpg?raw=true "Symcon Console > Module Control > URL hinzufuegen")
+![alt text](./docs/symcon_module-store.jpg?raw=true "Symcon > Module Store > 'Solvis'-Modul")
 
 Anschließend steht das Modul zur Verfügung und eine Solvis Instanz kann hinzugefügt werden.
 
