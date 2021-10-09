@@ -59,15 +59,34 @@ foreach(\$modelRegister_array AS \$modelRegister)
 {
 	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$categoryId);
 	\$targetId = @IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
+	\$targetStatusId = @IPS_GetObjectIDByIdent(\"status\", \$instanceId);
 	if(false !== \$instanceId && false !== \$targetId)
 	{
 		\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
 		\$sfValue = -1;
 		\$newValue = \$sourceValue * pow(10, \$sfValue);
 
+		if(-300 == \$sourceValue)
+		{
+			\$newStatusValue = 1;
+		}
+		else if(2200 == \$sourceValue)
+		{
+			\$newStatusValue = 2;
+		}
+		else
+		{
+			\$newStatusValue = 0;
+		}
+
 		if(GetValue(\$targetId) != \$newValue)
 		{
 			SetValue(\$targetId, \$newValue);
+		}
+
+		if(GetValue(\$targetStatusId) != \$newStatusValue)
+		{
+			SetValue(\$targetStatusId, \$newStatusValue);
 		}
 	}
 }
@@ -308,8 +327,11 @@ function removeInvalidChars(\$input)
 					{
 						AC_SetLoggingStatus($archiveId, $varId, $loggingTemp);
 					}
+	
+					$profile = MODUL_PREFIX.".TempFehler.Int";
+					$varId = $this->MaintainInstanceVariable("status", "Status", VARIABLETYPE_INTEGER, $profile, 0, true, $instanceId, "0 = OK, 1 = Kurzschlussfehler, 2 = Unterbrechungsfehler"/*$modelRegister[IMR_DESCRIPTION]*/);
 				}
-
+	
 				
 				$modelRegister_array = array(
 					array(33030, "R", "S07 Solardruck", "", "uint16", ""), // ToDo: Einheit mbar oder bar?
@@ -1000,23 +1022,19 @@ function removeInvalidChars(\$input)
 
 		private function checkProfiles()
 		{
-/*			// ToDo: Fehlervariable für Kurzschluss+Unterbrechnung je Temperatursensor sinnvoll?
-			$valueArray = array(
-				array('Name' => "Kurzschluss", 'Wert' => -300, "Kurzschlussfehler", 'Farbe' => 16711680),
-				array('Name' => "Unterbrechung", 'Wert' => 2200, "Unterbrechungsfehler", 'Farbe' => 16711680),
+			$this->createVarProfile(MODUL_PREFIX.".TempFehler.Int", VARIABLETYPE_INTEGER, '', 0, 2, 1, 0, 0, array(
+					array('Name' => "OK", 'Wert' => 0, "OK", 'Farbe' => $this->getRgbColor("green")),
+					array('Name' => "Kurzschluss", 'Wert' => 1, "Kurzschlussfehler", 'Farbe' => $this->getRgbColor("red")),
+					array('Name' => "Unterbrechung", 'Wert' => 2, "Unterbrechungsfehler", 'Farbe' => $this->getRgbColor("red")),
+				)
 			);
-			for($i = -200; $i<900; $i=$i+10)
-			{
-				$valueArray[] = array('Name' => ($i/10), 'Wert' => $i, ($i/10));
-			}
-			$this->createVarProfile(MODUL_PREFIX.".Temperature.Int", VARIABLETYPE_INTEGER, ' °C', -300, 2200, 1, 0, 0, $valueArray);
-*/
+
 			$this->createVarProfile(MODUL_PREFIX.".Betriebsart.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
-					array('Name' => "Auto PWM", 'Wert' => 0, "Auto PWM", 'Farbe' => 65280),
-					array('Name' => "Hand PWM", 'Wert' => 1, "Hand PWM", 'Farbe' => 16773632),
-					array('Name' => "Auto analog", 'Wert' => 2, "Auto analog", 'Farbe' => 65280),
-					array('Name' => "Hand analog", 'Wert' => 3, "Hand analog", 'Farbe' => 16773632),
-					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
+					array('Name' => "Auto PWM", 'Wert' => 0, "Auto PWM", 'Farbe' => $this->getRgbColor("green")),
+					array('Name' => "Hand PWM", 'Wert' => 1, "Hand PWM", 'Farbe' => $this->getRgbColor("yellow")),
+					array('Name' => "Auto analog", 'Wert' => 2, "Auto analog", 'Farbe' => $this->getRgbColor("green")),
+					array('Name' => "Hand analog", 'Wert' => 3, "Hand analog", 'Farbe' => $this->getRgbColor("yellow")),
+					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => $this->getRgbColor("red")),
 				)
 			);
 
@@ -1032,7 +1050,7 @@ function removeInvalidChars(\$input)
 					array('Name' => "Frostschutz", 'Wert' => 9, "Frostschutz"),
 					array('Name' => "Pumpenschutz", 'Wert' => 10, "Pumpenschutz"),
 					array('Name' => "Estrich", 'Wert' => 11, "Estrich"),
-					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
+					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => $this->getRgbColor("red")),
 				)
 			);
 
@@ -1041,7 +1059,7 @@ function removeInvalidChars(\$input)
 					array('Name' => "Puls", 'Wert' => 2, "Puls"),
 					array('Name' => "Temp", 'Wert' => 3, "Temp"),
 					array('Name' => "Warten", 'Wert' => 4, "Warten"),
-					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => 16711680),
+					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => $this->getRgbColor("red")),
 				)
 			);
 
@@ -1077,10 +1095,10 @@ function removeInvalidChars(\$input)
 					array('Name' => "OFF", 'Wert' => 1, "Wechselrichter ist aus"),
 					array('Name' => "SLEEPING", 'Wert' => 2, "Auto-Shutdown"),
 					array('Name' => "STARTING", 'Wert' => 3, "Wechselrichter startet"),
-					array('Name' => "MPPT", 'Wert' => 4, "Wechselrichter arbeitet normal", 'Farbe' => 65280),
-					array('Name' => "THROTTLED", 'Wert' => 5, "Leistungsreduktion aktiv", 'Farbe' => 16744448),
+					array('Name' => "MPPT", 'Wert' => 4, "Wechselrichter arbeitet normal", 'Farbe' => $this->getRgbColor("green")),
+					array('Name' => "THROTTLED", 'Wert' => 5, "Leistungsreduktion aktiv", 'Farbe' => $this->getRgbColor("orange")),
 					array('Name' => "SHUTTING_DOWN", 'Wert' => 6, "Wechselrichter schaltet ab"),
-					array('Name' => "FAULT", 'Wert' => 7, "Ein oder mehr Fehler existieren, siehe St *oder Evt * Register", 'Farbe' => 16711680),
+					array('Name' => "FAULT", 'Wert' => 7, "Ein oder mehr Fehler existieren, siehe St *oder Evt * Register", 'Farbe' => $this->getRgbColor("red")),
 					array('Name' => "STANDBY", 'Wert' => 8, "Standby"),
 				)
 			);
@@ -1089,10 +1107,10 @@ function removeInvalidChars(\$input)
 					array('Name' => "OFF", 'Wert' => 1, "Wechselrichter ist aus"),
 					array('Name' => "SLEEPING", 'Wert' => 2, "Auto-Shutdown"),
 					array('Name' => "STARTING", 'Wert' => 3, "Wechselrichter startet"),
-					array('Name' => "MPPT", 'Wert' => 4, "Wechselrichter arbeitet normal", 'Farbe' => 65280),
-					array('Name' => "THROTTLED", 'Wert' => 5, "Leistungsreduktion aktiv", 'Farbe' => 16744448),
+					array('Name' => "MPPT", 'Wert' => 4, "Wechselrichter arbeitet normal", 'Farbe' => $this->getRgbColor("green")),
+					array('Name' => "THROTTLED", 'Wert' => 5, "Leistungsreduktion aktiv", 'Farbe' => $this->getRgbColor("orange")),
 					array('Name' => "SHUTTING_DOWN", 'Wert' => 6, "Wechselrichter schaltet ab"),
-					array('Name' => "FAULT", 'Wert' => 7, "Ein oder mehr Fehler existieren, siehe St * oder Evt * Register", 'Farbe' => 16711680),
+					array('Name' => "FAULT", 'Wert' => 7, "Ein oder mehr Fehler existieren, siehe St * oder Evt * Register", 'Farbe' => $this->getRgbColor("red")),
 					array('Name' => "STANDBY", 'Wert' => 8, "Standby"),
 					array('Name' => "NO_BUSINIT", 'Wert' => 9, "Keine SolarNet Kommunikation"),
 					array('Name' => "NO_COMM_INV", 'Wert' => 10, "Keine Kommunikation mit Wechselrichter möglich"),
@@ -1103,10 +1121,10 @@ function removeInvalidChars(\$input)
 			);
 			$this->createVarProfile(MODUL_PREFIX.".Emergency-Power.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "nicht unterstützt", 'Wert' => 0, "Notstrom wird nicht von Ihrem Gerät unterstützt", 'Farbe' => 16753920),
-					array('Name' => "aktiv", 'Wert' => 1, "Notstrom aktiv (Ausfall des Stromnetzes)", 'Farbe' => 65280),
+					array('Name' => "aktiv", 'Wert' => 1, "Notstrom aktiv (Ausfall des Stromnetzes)", 'Farbe' => $this->getRgbColor("green")),
 					array('Name' => "nicht aktiv", 'Wert' => 2, "Notstrom nicht aktiv", 'Farbe' => -1),
 					array('Name' => "nicht verfügbar", 'Wert' => 3, "Notstrom nicht verfügbar", 'Farbe' => 16753920),
-					array('Name' => "Fehler", 'Wert' => 4, "Der Motorschalter des S10 E befindet sich nicht in der richtigen Position, sondern wurde manuell abgeschaltet oder nicht eingeschaltet.", 'Farbe' => 16711680),
+					array('Name' => "Fehler", 'Wert' => 4, "Der Motorschalter des S10 E befindet sich nicht in der richtigen Position, sondern wurde manuell abgeschaltet oder nicht eingeschaltet.", 'Farbe' => $this->getRgbColor("red")),
 				)
 			);
 			$this->createVarProfile(MODUL_PREFIX.".Powermeter.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
