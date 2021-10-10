@@ -5,7 +5,7 @@
 
 
 # Solvis
-IP-Symcon (IPS) Modul für [Solvis Heizungen](https://www.solvis.de) mit SolvisControl2 + SolvisRemote (SC2 mit MA205 oder höher) oder SolvisControl3 (SC3) zur Kommunikation per Modbus TCP.
+IP-Symcon (IPS) Modul für [Solvis Heizungen](https://www.solvis.de) mit SolvisControl2 (SC2 mit MA205 oder höher) oder SolvisControl3 (SC3) zur Kommunikation per Modbus TCP.
 
 
 ### Inhaltsverzeichnis
@@ -28,13 +28,13 @@ Unterhalb der Solvis Instanz werden die Modbus Adressen erstellt.
 ### 2. Voraussetzungen
 * IP-Symcon ab Version 5.0
 * Solvis Heizung muss Modbus TCP unterstützen!
-  * SolvisControl2 + SolvisRemote (SC2 mit MA205 oder höher)
+  * SolvisControl2 (SC2 mit MA205 oder höher), optional: SolvisRemote
   * oder SolvisControl3 (SC3)
 * Im Konfigurationsmenü der Solvis Heizung muss folgendes aktiviert werden:
 
 Zur Aktivierung der Modbus-Schnittstelle muss auf der SolvisControl in den Installateur-Modus gewechselt werden (Zugangscode kann über Installateur oder SOLVIS-Support bezogen werden).
 
-**SolvisControl3 (SC3)**
+**SolvisControl3 (SC-03)**
 
 Im Menüpunkt `Sonstiges` den Meüpunkt `Modbus` auswählen. 
 
@@ -48,7 +48,7 @@ Den „Modus“ je nach Verwendung auf `TCP(read)` (nur lesend) oder `TCP(write)
 ![SolvisControl3_Modbus2](./docs/Solvis_Sonstiges_Modbus-read.jpg "Solvis SolvisControl3 (SC3) > Sonstiges > Modbus read")
 
 
-**SolvisControl2 (SC2) + SolvisRemote**
+**SolvisControl2 (SC-02)**
 
 Im Menüpunkt `Sonstiges` den Meüpunkt `Remote` auswählen. 
 
@@ -62,7 +62,7 @@ Den Modus für Modbus TCP je nach Verwendung auf `Lesen` (nur lesend) oder `Send
 ![SolvisControl2_Remote2](./docs/Solvis_SC2_Sonstiges_Remote_2.png "Solvis SolvisControl2 (SC2) > Sonstiges > Remote > Modbus read")
 
 
-Nun sollte unter der angegebenen IP-Addresse der SolvisRemote auf Port 502 (TCP) über dieses Modul erreichbar sein..
+Nun sollte unter der angegebenen IP-Addresse der SolvisControl auf Port 502 (TCP) über dieses Modul erreichbar sein..
 
 
 ### 3. Software-Installation
