@@ -341,6 +341,10 @@ function removeInvalidChars(\$input)
 	
 					$profile = MODUL_PREFIX.".TempFehler.Int";
 					$varId = $this->MaintainInstanceVariable("status", substr($modelRegister[IMR_NAME], 0, 3)." Status", VARIABLETYPE_INTEGER, $profile, 0, true, $instanceId, "0 = OK, 1 = Kurzschlussfehler, 2 = Unterbrechungsfehler"/*$modelRegister[IMR_DESCRIPTION]*/);
+					if(substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
+					{
+						IPS_SetName($varId, substr($modelRegister[IMR_NAME], 0, 3)." ".IPS_GetName($varId));
+					}
 				}
 	
 				
@@ -440,6 +444,10 @@ function removeInvalidChars(\$input)
 
 					$profile = "~Switch";
 					$varId = $this->MaintainInstanceVariable("aktiv", substr($modelRegister[IMR_NAME], 0, 3)." aktiv", VARIABLETYPE_BOOLEAN, $profile, 0, true, $instanceId, "false = nicht aktiv, true = aktiv"/*$modelRegister[IMR_DESCRIPTION]*/);
+					if(substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
+					{
+						IPS_SetName($varId, substr($modelRegister[IMR_NAME], 0, 3)." ".IPS_GetName($varId));
+					}
 				}
 
 
