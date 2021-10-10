@@ -264,6 +264,17 @@ function removeInvalidChars(\$input)
 					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
 				}
 
+				foreach($modelRegister_array AS $modelRegister)
+				{
+					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					if(substr(IPS_GetName($varId), 0, 12) != substr($modelRegister[IMR_NAME], 0, 12))
+					{
+						IPS_SetName($varId, substr($modelRegister[IMR_NAME], 0, 12)." ".IPS_GetName($varId));
+					}
+				}
+
+
 				$modelRegister_array = array(
 					array(32768, "R", "Unix Timestamp high", "", "int16"/*,"secs"*/), // ToDo: Umrechnungsformel unbekannt...
 					array(32769, "R", "Unix Timestamp low", "", "int16"/*,"secs"*/), // ToDo: Umrechnungsformel unbekannt...
@@ -320,7 +331,7 @@ function removeInvalidChars(\$input)
 					
 					$dataType = 7;
 					$profile = $this->getProfile("°C"/*$modelRegister[IMR_UNITS]*/, $dataType);
-					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+					$varId = $this->MaintainInstanceVariable("Value_SF", substr($modelRegister[IMR_NAME], 0, 3)." ".IPS_GetName($varId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
 
 					// Logging setzen
 					if (false !== $varId && false !== $archiveId)
@@ -329,7 +340,7 @@ function removeInvalidChars(\$input)
 					}
 	
 					$profile = MODUL_PREFIX.".TempFehler.Int";
-					$varId = $this->MaintainInstanceVariable("status", "Status", VARIABLETYPE_INTEGER, $profile, 0, true, $instanceId, "0 = OK, 1 = Kurzschlussfehler, 2 = Unterbrechungsfehler"/*$modelRegister[IMR_DESCRIPTION]*/);
+					$varId = $this->MaintainInstanceVariable("status", substr($modelRegister[IMR_NAME], 0, 3)." Status", VARIABLETYPE_INTEGER, $profile, 0, true, $instanceId, "0 = OK, 1 = Kurzschlussfehler, 2 = Unterbrechungsfehler"/*$modelRegister[IMR_DESCRIPTION]*/);
 				}
 	
 				
@@ -376,7 +387,7 @@ function removeInvalidChars(\$input)
 					
 					$dataType = 7;
 					$profile = $this->getProfile("V"/*$modelRegister[IMR_UNITS]*/, $dataType);
-					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId)." ".IPS_GetName($varId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
 				}
 
 
@@ -421,9 +432,14 @@ function removeInvalidChars(\$input)
 				foreach($modelRegister_array AS $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
+					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
+					if(substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
+					{
+						IPS_SetName($varId, substr($modelRegister[IMR_NAME], 0, 3)." ".IPS_GetName($varId));
+					}
 
 					$profile = "~Switch";
-					$varId = $this->MaintainInstanceVariable("aktiv", "aktiv", VARIABLETYPE_BOOLEAN, $profile, 0, true, $instanceId, "false = nicht aktiv, true = aktiv"/*$modelRegister[IMR_DESCRIPTION]*/);
+					$varId = $this->MaintainInstanceVariable("aktiv", substr($modelRegister[IMR_NAME], 0, 3)." aktiv", VARIABLETYPE_BOOLEAN, $profile, 0, true, $instanceId, "false = nicht aktiv, true = aktiv"/*$modelRegister[IMR_DESCRIPTION]*/);
 				}
 
 
@@ -455,7 +471,7 @@ function removeInvalidChars(\$input)
 					
 					$dataType = 7;
 					$profile = $this->getProfile("V"/*$modelRegister[IMR_UNITS]*/, $dataType);
-					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
+					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId)." ".IPS_GetName($varId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
 				}
 
 
@@ -1203,4 +1219,21 @@ function removeInvalidChars(\$input)
 			return $returnValue;
 		}
 
+/* ToDo:
+## Raumtemperatur per Modbus-Register statt Raumbedienelement 
+Normalerweise wird über das (optionale) Raumbedienelement die Raumtemperatur an die Solvis Control2 (SC2) gemeldet. Dadurch kann die Heizung die Regelung an die erreichte Raumtemperatur anpassen.
+
+Es gibt aber ein Modbus Register 34304 (Raumtemperatur 1), mit welchem die Raumtemperatur über die in IP Symcon ggf. vorhandenen Temperatursensoren per Modbus in das Register zu schreiben.
+Achtung: Schreiben schlägt trotz aktiviertem schreibenden Modbus-Zugriff fehl, wenn SC2/SC3 nicht für ein Raumbedienelement eingerichtet ist!
+
+### Voraussetzungen
+- Solvis Control muss mit Raumbedienelement für den Heizkreislauf konfiguriert sein (auch wenn kein Raumbedienelement per Kabel angeschlossen wird)
+- dafür ist ein Zurücksetzen der Solvis Control auf Werkseinstellung nötig, da in der Initialisierung das Raumbedienelement zum Heizkreislauf zugeordnet wird
+- Anschließend muss im Installateur-Menü unter `Sonstiges --> Remote --> Seite 3 --> Raumfühler HK1` auf `Modbus` umgestellt werden
+![Remote-HKR1-Raumfühler-Modbus](../doc/Solvis_SC2_Sonstiges_Remote_3.png)
+- und der Modbus-Modus muss auf `senden` was dem schreibenden Zugriff entspricht umgestellt werden, falls noch nicht geschehen
+
+!!! info "Hinweis"
+    Die Temperatur muss ca. alle 60 Sekunden per Modbus in das Register geschrieben werden, sonst "verschwindet" die Temperatur in der Anzeige und zeigt nur noch "--"
+*/
 	}
