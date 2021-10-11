@@ -22,8 +22,7 @@ IP-Symcon (IPS) Modul für [Solvis Heizungen](https://www.solvis.de) mit SolvisC
 ### 1. Funktionsumfang
 
 Dieses Modul erstellt anhand der Konfiguration der Solvis Instanz den nötigen Client Socket und das dazugehörige Modbus Gateway. Sofern diese bereits vorhanden sind, werden keine weiteren Client Sockets oder Modbus Gateways erstellt.
-Unterhalb der Solvis Instanz werden die Modbus Adressen erstellt.
-
+Unterhalb der Solvis Instanz werden die Modbus Adressen mit insgesamt ca. 170 Variablen erstellt.
 
 ### 2. Voraussetzungen
 * IP-Symcon ab Version 5.0
