@@ -37,6 +37,9 @@ Zur Aktivierung der Modbus-Schnittstelle muss auf der SolvisControl in den Insta
 
 Im Menüpunkt `Sonstiges` den Meüpunkt `Modbus` auswählen. 
 
+![SolvisControl3_Sonstiges](./docs/Solvis_Sonstiges.jpg "Solvis SolvisControl3 (SC3) > Sonstiges")
+
+
 Die vorgegebene Adresse (Standard: 101) kann unverändert verwendet werden. Bei mehreren Anlagen die Adresse entsprechend ändern.
 
 ![SolvisControl3_Modbus](./docs/Solvis_Sonstiges_Modbus.jpg "Solvis SolvisControl3 (SC3) > Sonstiges > Modbus")
@@ -51,10 +54,10 @@ Den „Modus“ je nach Verwendung auf `TCP(read)` (nur lesend) oder `TCP(write)
 
 Im Menüpunkt `Sonstiges` den Meüpunkt `Remote` auswählen. 
 
-Die vorgegebene Adresse (Standard: 101) kann unverändert verwendet werden. Bei mehreren Anlagen die Adresse entsprechend ändern.
-
 ![SolvisControl2_Remote](./docs/Solvis_SC2_Sonstiges.png "Solvis SolvisControl2 (SC2) > Sonstiges > Remote")
 
+
+Die vorgegebene Adresse (Standard: 101) kann unverändert verwendet werden. Bei mehreren Anlagen die Adresse entsprechend ändern.
 
 Den Modus für Modbus TCP je nach Verwendung auf `Lesen` (nur lesend) oder `Senden` (lesend+schreibend) einstellen.
 
@@ -87,13 +90,20 @@ Anschließend steht das Modul zur Verfügung und eine Solvis Instanz kann hinzug
 ### 4. Einrichten der Instanzen in IP-Symcon
 
  Unter 'Instanz hinzufügen' ist das Solvis-Modul unter dem Hersteller 'Solvis' aufgeführt.
+ 
+ ![alt text](./docs/symcon_solvis_instance.jpg?raw=true "Symcon > Instanz hinzufügen > 'Solvis'")
+
 
 __Konfigurationsseite__:
+
+Nach Anlage der Instanz erreicht man durch Doppelklick auf die Solvis-Modul Instanz das Konfigurationsfenster. Hier können alle relevanten Daten der Heizung eingegeben werden.
+Die IP-Adresse der Solvis kann auf dem Heizungs-Display abgelesen werden, sofern die Anlage bereits ins Netzwerk eingebunden ist. Die Einbindung in ein Netzwerk ist im Solvis-Handbuch beschrieben.
+
 
 Name     | Beschreibung
 -------- | ------------------
 Open | Schalter zum Aktivieren und Deaktivieren der Instanz. Default: aus
-IP | IP-Adresse des Solvis-Stromspeichers im lokalen Netzwerk (IPv4)
+IP | IP-Adresse der Solvis-Heizung im lokalen Netzwerk (IPv4)
 Port | Port, welcher im Solvis unter dem Menüpunkt Modbus angegeben wurde. Default: 502
 Geräte Id | Modbus Geräte ID, welche im Solvis Menü gesetzt werden kann. Default: 101
 Abfrage-Intervall	| Intervall (in Sekunden) in welchem die Modbus-Adressen abgefragt werden sollen. Achtung: Die Berechnung der Wirkarbeit (Wh/kWh) wird exakter, je kleiner der Abfrage-Intervall gewählt wird. Jedoch je kleiner der Abfrage-Intervall, umso höher die Systemlast und auch die Archiv-Größe bei Logging! Default: 60 Sekunden
@@ -102,6 +112,10 @@ Variablen-Logging | Für welche Variablen soll das Logging aktiviert werden? Zur
 ### 5. Statusvariablen und Profile
 
 Die Statusvariablen/Kategorien werden automatisch angelegt. Das Löschen einzelner kann zu Fehlfunktionen führen.
+Die Datenpunkte sind bereits richtig benannt. Eine Ausnahme bildet hier eine evtl. gewollte Umbelegung der Solvis-Anschlüsse durch den Heizungsbauer.
+
+ ![alt text](./docs/symcon_solvis_instance_datenpunkte.jpg?raw=true "Symcon > 'Solvis'-Instanz > Datenpunkte")
+
 
 #### Statusregister
 Das Solvis-Modul ermöglicht den einfachen und schnellen Zugriff auf die wichtigsten und am häufigsten benötigten Daten.
@@ -224,6 +238,8 @@ StartRegister | FunctionCode | Name | Type | Units | Description
 Variablenname | Type | Units | Description
 ---- | ---- | ----- | -----------
 aktiv | boolean | - | Wird je A01-A14 erstellt. (false = nicht aktiv, true = aktiv)
+
+Es werden zusätzliche Variablen erstellt, die z.B. int-Werte des Modbus in Temperaturen °C umrechnen oder einen Ausgang als aktiv darstellen, damit diese im Webfront / IPS-View abgebildet werden können.
 
 
 #### Profile
