@@ -35,7 +35,7 @@ Zur Aktivierung der Modbus-Schnittstelle muss auf der SolvisControl in den Insta
 
 **SolvisControl3 (SC-03)**
 
-Im Menüpunkt `Sonstiges` den Meüpunkt `Modbus` auswählen. 
+Im Menüpunkt `Sonstiges` den Menüpunkt `Modbus` auswählen. 
 
 ![SolvisControl3_Sonstiges](./docs/Solvis_Sonstiges.jpg "Solvis SolvisControl3 (SC3) > Sonstiges")
 
@@ -52,7 +52,7 @@ Den „Modus“ je nach Verwendung auf `TCP(read)` (nur lesend) oder `TCP(write)
 
 **SolvisControl2 (SC-02)**
 
-Im Menüpunkt `Sonstiges` den Meüpunkt `Remote` auswählen. 
+Im Menüpunkt `Sonstiges` den Menüpunkt `Remote` auswählen. 
 
 ![SolvisControl2_Remote](./docs/Solvis_SC2_Sonstiges.png "Solvis SolvisControl2 (SC2) > Sonstiges > Remote")
 
@@ -64,7 +64,7 @@ Den Modus für Modbus TCP je nach Verwendung auf `Lesen` (nur lesend) oder `Send
 ![SolvisControl2_Remote2](./docs/Solvis_SC2_Sonstiges_Remote_2.png "Solvis SolvisControl2 (SC2) > Sonstiges > Remote > Modbus read")
 
 
-Nun sollte unter der angegebenen IP-Addresse der SolvisControl auf Port 502 (TCP) über dieses Modul erreichbar sein..
+Nun sollte unter der angegebenen IP-Addresse der SolvisControl auf Port 502 (TCP) über dieses Modul erreichbar sein.
 
 
 ### 3. Software-Installation
