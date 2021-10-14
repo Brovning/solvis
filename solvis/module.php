@@ -586,12 +586,14 @@ function removeInvalidChars(\$input)
                         // It worked
                         $portOpen = true;
                         
-                        // Client Soket aktivieren
+                        // Client Socket aktivieren
                         if (false == IPS_GetProperty($interfaceId, "Open")) {
                             IPS_SetProperty($interfaceId, "Open", true);
                             IPS_ApplyChanges($interfaceId);
                             //IPS_Sleep(100);
-                        }
+
+							$this->SendDebug("ClientSocket-Status", "ClientSocket activated (".$interfaceId.")", 0);
+						}
                         
                         // aktiv
                         $this->SetStatus(102);
@@ -610,11 +612,13 @@ function removeInvalidChars(\$input)
 						fclose($fp); // nötig für fsockopen!
 					}
 			} else {
-                    // Client Soket deaktivieren
+                    // Client Socket deaktivieren
                     if (true == IPS_GetProperty($interfaceId, "Open")) {
                         IPS_SetProperty($interfaceId, "Open", false);
                         IPS_ApplyChanges($interfaceId);
                         //IPS_Sleep(100);
+
+						$this->SendDebug("ClientSocket-Status", "ClientSocket deactivated (".$interfaceId.")", 0);
                     }
                     
                     // Timer deaktivieren
@@ -635,12 +639,16 @@ function removeInvalidChars(\$input)
                 // pruefen, ob sich ModBus-Gateway geaendert hat
                 if (0 != $gatewayId_Old && $gatewayId != $gatewayId_Old) {
                     $this->deleteInstanceNotInUse($gatewayId_Old, MODBUS_ADDRESSES);
-                }
+
+					$this->SendDebug("ModbusGateway-Status", "ModbusGateway deleted (".$gatewayId_Old.")", 0);
+				}
 
                 // pruefen, ob sich ClientSocket Interface geaendert hat
                 if (0 != $interfaceId_Old && $interfaceId != $interfaceId_Old) {
                     $this->deleteInstanceNotInUse($interfaceId_Old, MODBUS_INSTANCES);
-                }
+
+					$this->SendDebug("ClientSocket-Status", "ClientSocket deleted (".$interfaceId_Old.")", 0);
+				}
 
 				// activate Timer
 				$this->SetTimerInterval("calc_SF", 5000);
