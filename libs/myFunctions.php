@@ -284,6 +284,8 @@ trait myFunctions
         {
             IPS_SetProperty($currentClientSocketId, "Open", true);
             $applyChanges = true;
+
+            $this->SendDebug("ClientSocket-Status", "ClientSocket activated (".$currentClientSocketId.")", 0);
         }
 
         if($applyChanges)
