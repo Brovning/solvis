@@ -163,6 +163,9 @@ function removeInvalidChars(\$input)
 			$loggingAusgang = $this->ReadPropertyBoolean('loggingAusgang');
 			$loggingSonstiges = $this->ReadPropertyBoolean('loggingSonstiges');
 
+			// activate Timer
+			$this->SetTimerInterval("calc_SF", 5000);
+
 			$categoryArray = array(
 				"Allg" => array("Name" => "Allgemeines", 'Position' => 1),
 				"Anal" => array("Name" => "Analog In/Out", 'Position' => 2),
@@ -409,7 +412,7 @@ function removeInvalidChars(\$input)
 					array(33290, "R", "A11 Mischer HK2 zu", "", "uint8", "%"),
 					array(33291, "R", "A12 Brenner", "", "uint8", "%"),
 					array(33292, "R", "A13 Brenner Stufe 2", "", "uint8", "%"),
-					array(33293, "R", "A14", "", "uint8", "%"),
+					array(33293, "R", "A14 Wärmepumpe", "", "uint8", "%"),
 				);
 				$categoryIdent = "A";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
@@ -452,12 +455,12 @@ function removeInvalidChars(\$input)
 
 
 				$modelRegister_array = array(
-					array(33294, "R", "Analog Out O1", "", "int16"/*, "V"*/),
-					array(33295, "R", "Analog Out O2", "", "int16"/*, "V"*/),
-					array(33296, "R", "Analog Out O3", "", "int16"/*, "V"*/),
-					array(33297, "R", "Analog Out O4", "", "int16"/*, "V"*/),
-					array(33298, "R", "Analog Out O5", "", "int16"/*, "V"*/),
-					array(33299, "R", "Analog Out O6", "", "int16"/*, "V"*/),
+					array(33294, "R", "Analog Out O1", "", "int16", "", "V"),
+					array(33295, "R", "Analog Out O2", "", "int16", "", "V"),
+					array(33296, "R", "Analog Out O3", "", "int16", "", "V"),
+					array(33297, "R", "Analog Out O4 WP Umwälzpumpe", "", "int16", "", "%"),
+					array(33298, "R", "Analog Out O5", "", "int16", "", "V"),
+					array(33299, "R", "Analog Out O6", "", "int16", "", "V"),
 				);
 				$categoryIdent = "Anal";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
@@ -478,7 +481,7 @@ function removeInvalidChars(\$input)
 					IPS_SetHidden($varId, true);
 					
 					$dataType = 7;
-					$profile = $this->getProfile("V"/*$modelRegister[IMR_UNITS]*/, $dataType);
+					$profile = $this->getProfile($modelRegister[(IMR_UNITS+1)], $dataType);
 					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId)." ".IPS_GetName($varId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
 				}
 
@@ -577,7 +580,8 @@ function removeInvalidChars(\$input)
 				}
 
 
-                if ($active) {
+                if ($active) 
+				{
                     // Erreichbarkeit von IP und Port pruefen
                     $portOpen = false;
                     $waitTimeoutInSeconds = 1;
@@ -611,7 +615,9 @@ function removeInvalidChars(\$input)
 					{
 						fclose($fp); // nötig für fsockopen!
 					}
-			} else {
+				} 
+				else 
+				{
                     // Client Socket deaktivieren
                     if (true == IPS_GetProperty($interfaceId, "Open")) {
                         IPS_SetProperty($interfaceId, "Open", false);
@@ -649,9 +655,6 @@ function removeInvalidChars(\$input)
 
 					$this->SendDebug("ClientSocket-Status", "ClientSocket deleted (".$interfaceId_Old.")", 0);
 				}
-
-				// activate Timer
-				$this->SetTimerInterval("calc_SF", 5000);
 			}
 		}
 
