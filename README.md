@@ -1,8 +1,8 @@
 ![Code](https://img.shields.io/badge/Code-PHP-blue.svg)
 [![Version](https://img.shields.io/badge/Symcon-PHPModul-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
 [![Version](https://img.shields.io/badge/Symcon%20Version-5.0%20%3C-green.svg)](https://community.symcon.de/t/ip-symcon-5-0-verfuegbar/47528)
-[![GitHub Stars](https://img.shields.io/github/stars/elueckel/Unifi-Toolbox.svg?logo=github)](https://github.com/elueckel/Unifi-Toolbox/stargazers)
-[![GitHub Release](https://img.shields.io/github/v/release/elueckel/Unifi-Toolbox.svg?logo=github)](https://github.com/elueckel/Unifi-Toolbox/releases)
+[![GitHub Stars](https://img.shields.io/github/stars/Brovning/solvis.svg?logo=github)](https://github.com/Brovning/solvis/stargazers)
+[![GitHub Release](https://img.shields.io/github/v/release/Brovning/solvis.svg?logo=github)](https://github.com/Brovning/solvis/releases)
 
 
 # Solvis
