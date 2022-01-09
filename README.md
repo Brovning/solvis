@@ -267,7 +267,9 @@ Aktuell kein WebFront umgesetzt.
 #### Empfehlung
 Sofern nur eine Instanz des Solvis-Moduls im Einsatz ist, sollte die $InstanzID wie folgt dynamisch ermittelt werden und nicht statisch gesetzt werden, da somit ein Löschen und Neuinstallieren der Solvis-Instanz keine Auswirkung auf andere Skripte hat:
 
-`$InstanzID = IPS_GetInstanceListByModuleID("{6F809C50-0314-84A3-14AE-00E32121DCF3}")[0];`
+```PHP
+$InstanzID = IPS_GetInstanceListByModuleID("{6F809C50-0314-84A3-14AE-00E32121DCF3}")[0];
+```
 
 
 #### Funktionen
