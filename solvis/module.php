@@ -727,6 +727,11 @@ function removeInvalidChars(\$input)
 					{
 						IPS_SetProperty($instanceId, "Poller", $pollCycle);
 					}
+					// set length for modbus datatype string
+					if (10 == $datenTyp && $inverterModelRegister[IMR_SIZE] != IPS_GetProperty($instanceId, "Length")) // if string --> set length accordingly
+					{
+						IPS_SetProperty($instanceId, "Length", $inverterModelRegister[IMR_SIZE]);
+					}
 /*
 					if(0 != IPS_GetProperty($instanceId, "Factor"))
 					{
@@ -829,13 +834,15 @@ function removeInvalidChars(\$input)
 				$datenTyp = 3;
 			}
 			// 4=Char / ShortInt (8 bit signed)
-			elseif ("int16" == strtolower($type)
-				|| "sunssf" == strtolower($type)
-			)
+			elseif ("sunssf" == strtolower($type))
 			{
 				$datenTyp = 4;
 			}
 			// 5=Short / SmallInt (16 bit signed)
+			elseif ("int16" == strtolower($type))
+			{
+				$datenTyp = 5;
+			}
 			// 6=Integer (32 bit signed)
 			elseif ("int32" == strtolower($type))
 			{
@@ -1022,7 +1029,7 @@ function removeInvalidChars(\$input)
 			{
 				$profile = MODUL_PREFIX.".StatsHeizkreis.Int";
 			}
-			elseif ("" == $unit && "emergency-power" == strtolower($datenTyp))
+			elseif ("emergency-power" == strtolower($unit))
 			{
 				$profile = MODUL_PREFIX.".Emergency-Power.Int";
 			}
@@ -1097,8 +1104,8 @@ function removeInvalidChars(\$input)
 					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => $this->getRgbColor("red")),
 				)
 			);
-
-/*			$this->createVarProfile("SunSpec.ChaSt.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+/*
+			$this->createVarProfile("SunSpec.ChaSt.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
 					array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
 					array('Name' => "OFF", 'Wert' => 1, "OFF: Energiespeicher nicht verfügbar"),
 					array('Name' => "EMPTY", 'Wert' => 2, "EMPTY: Energiespeicher vollständig entladen"),
