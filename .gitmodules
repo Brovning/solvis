@@ -1,0 +1,3 @@
+[submodule "tests/stub"]
+	path = tests/stub
+	url = https://github.com/symcon/SymconStubs
