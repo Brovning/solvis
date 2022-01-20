@@ -12,7 +12,7 @@ if (!defined('VARIABLETYPE_BOOLEAN'))
 
 if (!defined('KL_DEBUG'))
 {
-    define('KL_DEBUG', 10206);		// Debugmeldung (werden ausschlie�lich ins Log geschrieben. Bei Deaktivierung des Spezialschalter "LogfileVerbose" werden diese nichtmal ins Log geschrieben.)
+    define('KL_DEBUG', 10206);		// Debugmeldung (werden ausschliesslich ins Log geschrieben. Bei Deaktivierung des Spezialschalter "LogfileVerbose" werden diese nichtmal ins Log geschrieben.)
     define('KL_ERROR', 10206);		// Fehlermeldung
     define('KL_MESSAGE', 10201);	// Nachricht
     define('KL_NOTIFY', 10203);		// Benachrichtigung
@@ -141,7 +141,7 @@ trait myFunctions
                 }
             }
 
-            // L�sche Connection-Instanz (bspw. ModbusAddress, ClientSocket,...), wenn nicht mehr in Verwendung
+            // Loesche Connection-Instanz (bspw. ModbusAddress, ClientSocket,...), wenn nicht mehr in Verwendung
             if(!$inUse)
             {
                 IPS_DeleteInstance($connectionId_Old);
@@ -576,7 +576,7 @@ trait myFunctions
     }
 
     // Reduce LogSize by keeping the newest value and removing all older values per Intervall $aggregation (=minute, hour, day)
-    function RecordReducing($ID, $MStartDate, $MEndDate, $aggregation = "i")
+	public function RecordReducing(int $ID, int $MStartDate, int $MEndDate, string $aggregation = "i")
     {
 /* !!! ACHTUNG: Aktuell noch Fehlerhaft ! ! !
         $ah_ID = $this->getArchiveId();
