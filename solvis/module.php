@@ -1,8 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../libs/myFunctions.php';  // globale Funktionen
+declare(strict_types=1);
 
-define("DEVELOPMENT", true);
+require_once __DIR__.'/../libs/myFunctions.php';  // globale Funktionen
+
+define("DEVELOPMENT", false);
 
 // Modul Prefix
 if (!defined('MODUL_PREFIX'))
@@ -28,6 +30,7 @@ if (!defined('IMR_START_REGISTER'))
 	define("IMR_DESCRIPTION", 3);
 	define("IMR_TYPE", 4);
 	define("IMR_UNITS", 5);
+	define("IMR_SF", 6);
 }
 
 	class Solvis extends IPSModule
@@ -147,6 +150,115 @@ function removeInvalidChars(\$input)
 			parent::Destroy();
 		}
 
+		public function GetConfigurationForm()
+		{
+			$formElements = array();
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => "Die Solvis Heizung muss Modbus TCP unterstützen!"
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => "Im Konfigurationsmenü der Solvis Heizung muss im SolvisControl-Menü „Installateur=>Sonstiges=>Remote bzw. „Installateur=>Sonstiges=>Modbus“ der Modus Modbus TCP aktiviert werden."
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => " "
+			);
+			$formElements[] = array(
+				'type' => "CheckBox",
+				'caption' => "Open",
+				'name' => "active"
+			);
+			$formElements[] = array(
+				'type' => "ValidationTextBox",
+				'caption' => "IP",
+				'name' => "hostIp",
+				'validate' => "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+			);
+			$formElements[] = array(
+				'type' => "NumberSpinner",
+				'caption' => "Port (Standard: 502)",
+				'name' => "hostPort",
+				'digits' => 0,
+				'minimum' => 1,
+				'maximum' => 65535
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => ""
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => "Geräte ID der Solvis Heizung"
+			);
+			$formElements[] = array(
+				'type' => "NumberSpinner",
+				'caption' => "Geräte ID (Standard: 101)",
+				'name' => "hostmodbusDevice",
+				'digits' => 0,
+				'minimum' => 1,
+				'maximum' => 255
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => " "
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => "In welchem Zeitintervall sollen die Modbus-Werte abgefragt werden (Empfehlung: 10 Sekunden)?"
+			);
+		$formElements[] = array(
+				'type' => "NumberSpinner",
+				'caption' => "Abfrage-Intervall (in Sekunden)",
+				'name' => "pollCycle",
+				'minimum' => 1,
+				'maximum' => 3600
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => "Achtung: Die Berechnung der Wirkarbeit (Wh/kWh) wird exakter, je kleiner der Abfarge-Intervall gewählt wird.\nABER: Je kleiner der Abfrage-Intervall, um so höher die Systemlast und auch die Archiv-Größe bei aktiviertem Logging!"
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => " "
+			);
+			$formElements[] = array(
+				'type' => "Label",
+				'label' => "Sollen Werte von Variablen im Archiv gelogged werden?"
+			);
+			$formElements[] = array(
+				'type' => "CheckBox",
+				'caption' => "Temperatur (S01 - S16)",
+				'name' => "loggingTemp"
+			);
+			$formElements[] = array(
+				'type' => "CheckBox",
+				'caption' => "Ausgänge (A01 - A14)",
+				'name' => "loggingAusgang"
+			);
+			$formElements[] = array(
+				'type' => "CheckBox",
+				'caption' => "Sonstiges (Brennerstarts, Brennerstufe,...)",
+				'name' => "loggingSonstiges"
+			);
+
+			$formActions = array();
+
+			$formStatus = array();
+			$formStatus[] = array(
+				'code' => IS_IPPORTERROR,
+				'icon' => "error",
+				'caption' => "IP oder Port sind nicht erreichtbar",
+			);
+			$formStatus[] = array(
+				'code' => IS_NOARCHIVE,
+				'icon' => "error",
+				'caption' => "Archiv nicht gefunden",
+			);
+			return json_encode(array('elements' => $formElements, 'actions' => $formActions, 'status' => $formStatus));
+		}
+
 		public function ApplyChanges()
 		{
 			//Never delete this line!
@@ -178,7 +290,7 @@ function removeInvalidChars(\$input)
 			if (false === $archiveId)
 			{
 				// no archive found
-				$this->SetStatus(201);
+				$this->SetStatus(IS_NOARCHIVE);
 			}
 
 			// Workaround für "InstanceInterface not available" Fehlermeldung beim Server-Start...
@@ -186,10 +298,13 @@ function removeInvalidChars(\$input)
 			{
 				// --> do nothing
 			}
-			else if("" == $hostIp)
+			// IP-Adresse nicht konfiguriert
+			elseif ("" == $hostIp)
 			{
 				// keine IP --> inaktiv
-				$this->SetStatus(104);
+				$this->SetStatus(IS_INACTIVE);
+
+				$this->SendDebug("Module-Status", "ERROR: ".MODUL_PREFIX." IP not set!", 0);
 			}
 			// Instanzen nur mit Konfigurierter IP erstellen
 			else
@@ -580,78 +695,86 @@ function removeInvalidChars(\$input)
 				}
 
 
-                if ($active) 
+				if ($active)
 				{
-                    // Erreichbarkeit von IP und Port pruefen
-                    $portOpen = false;
-                    $waitTimeoutInSeconds = 1;
+					// Erreichbarkeit von IP und Port pruefen
+					$portOpen = false;
+					$waitTimeoutInSeconds = 1;
 					// ACHTUNG: Die Solvis Heizung antwortet nicht auf den Port-Check per fsockopen!!!
-                    if (Sys_Ping($hostIp, $waitTimeoutInSeconds*1000) /*$fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)*/) {
-                        // It worked
-                        $portOpen = true;
-                        
-                        // Client Socket aktivieren
-                        if (false == IPS_GetProperty($interfaceId, "Open")) {
-                            IPS_SetProperty($interfaceId, "Open", true);
-                            IPS_ApplyChanges($interfaceId);
-                            //IPS_Sleep(100);
+                    if (Sys_Ping($hostIp, $waitTimeoutInSeconds*1000) /*$fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)*/)
+					{
+						// It worked
+						$portOpen = true;
+
+						// Client Socket aktivieren
+						if (false == IPS_GetProperty($interfaceId, "Open"))
+						{
+							IPS_SetProperty($interfaceId, "Open", true);
+							IPS_ApplyChanges($interfaceId);
+							//IPS_Sleep(100);
 
 							$this->SendDebug("ClientSocket-Status", "ClientSocket activated (".$interfaceId.")", 0);
 						}
-                        
-                        // aktiv
-                        $this->SetStatus(102);
-    
-                        $this->SendDebug("Module-Status", MODUL_PREFIX."-module activated", 0);
-                    } else {
-                        // IP oder Port nicht erreichbar
-                        $this->SetStatus(200);
-    
-                        $this->SendDebug("Module-Status", "ERROR: ".MODUL_PREFIX." with IP=".$hostIp." and Port=".$hostPort." cannot be reached!", 0);
-                    }
+
+						// aktiv
+						$this->SetStatus(IS_ACTIVE);
+
+						$this->SendDebug("Module-Status", MODUL_PREFIX."-module activated", 0);
+					}
+					else
+					{
+						// IP oder Port nicht erreichbar
+						$this->SetStatus(IS_IPPORTERROR);
+
+						$this->SendDebug("Module-Status", "ERROR: ".MODUL_PREFIX." with IP=".$hostIp." and Port=".$hostPort." cannot be reached!", 0);
+					}
 
 					// Close fsockopen
-					if(isset($fp))
+					if (isset($fp) && false !== $fp)
 					{
 						fclose($fp); // nötig für fsockopen!
 					}
-				} 
-				else 
+				}
+				else
 				{
-                    // Client Socket deaktivieren
-                    if (true == IPS_GetProperty($interfaceId, "Open")) {
-                        IPS_SetProperty($interfaceId, "Open", false);
-                        IPS_ApplyChanges($interfaceId);
-                        //IPS_Sleep(100);
+					// Client Soket deaktivieren
+					if (true == IPS_GetProperty($interfaceId, "Open"))
+					{
+						IPS_SetProperty($interfaceId, "Open", false);
+						IPS_ApplyChanges($interfaceId);
+						//IPS_Sleep(100);
 
 						$this->SendDebug("ClientSocket-Status", "ClientSocket deactivated (".$interfaceId.")", 0);
-                    }
-                    
-                    // Timer deaktivieren
-                    /*
+					}
+
+					// Timer deaktivieren
+					/*
                                     $this->SetTimerInterval("Update-Autarkie-Eigenverbrauch", 0);
                                     $this->SetTimerInterval("Update-EMS-Status", 0);
                                     $this->SetTimerInterval("Update-WallBox_X_CTRL", 0);
                                     $this->SetTimerInterval("Update-ValuesKw", 0);
                                     $this->SetTimerInterval("Wh-Berechnung", 0);
                                     $this->SetTimerInterval("HistoryCleanUp", 0);
-                    */
-                    // inaktiv
-                    $this->SetStatus(104);
-    
-                    $this->SendDebug("Module-Status", MODUL_PREFIX."-module deactivated", 0);
-                }
-    
-                // pruefen, ob sich ModBus-Gateway geaendert hat
-                if (0 != $gatewayId_Old && $gatewayId != $gatewayId_Old) {
-                    $this->deleteInstanceNotInUse($gatewayId_Old, MODBUS_ADDRESSES);
+					 */
+					// inaktiv
+					$this->SetStatus(IS_INACTIVE);
+
+					$this->SendDebug("Module-Status", MODUL_PREFIX."-module deactivated", 0);
+				}
+
+
+				// pruefen, ob sich ModBus-Gateway geaendert hat
+				if (0 != $gatewayId_Old && $gatewayId != $gatewayId_Old)
+				{
+					$this->deleteInstanceNotInUse($gatewayId_Old, MODBUS_ADDRESSES);
 
 					$this->SendDebug("ModbusGateway-Status", "ModbusGateway deleted (".$gatewayId_Old.")", 0);
 				}
 
-                // pruefen, ob sich ClientSocket Interface geaendert hat
-                if (0 != $interfaceId_Old && $interfaceId != $interfaceId_Old) {
-                    $this->deleteInstanceNotInUse($interfaceId_Old, MODBUS_INSTANCES);
+				// pruefen, ob sich ClientSocket Interface geaendert hat
+				if (0 != $interfaceId_Old && $interfaceId != $interfaceId_Old)
+				{
+					$this->deleteInstanceNotInUse($interfaceId_Old, MODBUS_INSTANCES);
 
 					$this->SendDebug("ClientSocket-Status", "ClientSocket deleted (".$interfaceId_Old.")", 0);
 				}
@@ -666,15 +789,28 @@ function removeInvalidChars(\$input)
 				// Erstelle Modbus Instancen
 				foreach ($modelRegister_array as $inverterModelRegister)
 				{
+					// get datatype
 					$datenTyp = $this->getModbusDatatype($inverterModelRegister[IMR_TYPE]);
-					if("continue" == $datenTyp)
+					if ("continue" == $datenTyp)
 					{
 						continue;
 					}
 
-                    if (isset($inverterModelRegister[IMR_UNITS])) {
-                        $profile = $this->getProfile($inverterModelRegister[IMR_UNITS], $datenTyp);
-                    }
+					// if scale factor is given, variable will be of type float
+					if (isset($inverterModelRegister[IMR_SF]) && 10000 >= $inverterModelRegister[IMR_SF])
+					{
+						$varDataType = MODBUSDATATYPE_REAL;
+					}
+					else
+					{
+						$varDataType = $datenTyp;
+					}
+
+					// get profile
+					if (isset($inverterModelRegister[IMR_UNITS]))
+					{
+						$profile = $this->getProfile($inverterModelRegister[IMR_UNITS], $varDataType);
+					}
 					else
 					{
 						$profile = false;
@@ -686,7 +822,7 @@ function removeInvalidChars(\$input)
 					// Modbus-Instanz erstellen, sofern noch nicht vorhanden
 					if (false === $instanceId)
 					{
-						$this->SendDebug("create Modbus address", "REG_".$inverterModelRegister[IMR_START_REGISTER]." - ".$inverterModelRegister[IMR_NAME]." (datatype=".$datenTyp.", profile=".$profile.")", 0);
+						$this->SendDebug("create Modbus address", "REG_".$inverterModelRegister[IMR_START_REGISTER]." - ".$inverterModelRegister[IMR_NAME]." (modbusDataType=".$datenTyp.", varDataType=".$varDataType.", profile=".$profile.")", 0);
 
 						$instanceId = IPS_CreateInstance(MODBUS_ADDRESSES);
 
@@ -714,28 +850,33 @@ function removeInvalidChars(\$input)
 					}
 
 
-					// Modbus-Instanz konfigurieren
+					// ************************
+					// config Modbus-Instance
+					// ************************
+					// set data type
 					if ($datenTyp != IPS_GetProperty($instanceId, "DataType"))
 					{
 						IPS_SetProperty($instanceId, "DataType", $datenTyp);
 					}
+					// set emulation state
 					if (false != IPS_GetProperty($instanceId, "EmulateStatus"))
 					{
 						IPS_SetProperty($instanceId, "EmulateStatus", false);
 					}
+					// set poll cycle
 					if ($pollCycle != IPS_GetProperty($instanceId, "Poller"))
 					{
 						IPS_SetProperty($instanceId, "Poller", $pollCycle);
 					}
 					// set length for modbus datatype string
-					if (10 == $datenTyp && $inverterModelRegister[IMR_SIZE] != IPS_GetProperty($instanceId, "Length")) // if string --> set length accordingly
-					{
+					if (MODBUSDATATYPE_STRING == $datenTyp && $inverterModelRegister[IMR_SIZE] != IPS_GetProperty($instanceId, "Length"))
+					{ // if string --> set length accordingly
 						IPS_SetProperty($instanceId, "Length", $inverterModelRegister[IMR_SIZE]);
 					}
-/*
-					if(0 != IPS_GetProperty($instanceId, "Factor"))
+/*					// set scale factor
+					if (isset($inverterModelRegister[IMR_SF]) && 10000 >= $inverterModelRegister[IMR_SF] && $inverterModelRegister[IMR_SF] != IPS_GetProperty($instanceId, "Factor"))
 					{
-						IPS_SetProperty($instanceId, "Factor", 0);
+						IPS_SetProperty($instanceId, "Factor", $inverterModelRegister[IMR_SF]);
 					}
 */
 
@@ -744,15 +885,15 @@ function removeInvalidChars(\$input)
 					{
 						IPS_SetProperty($instanceId, "ReadAddress", $inverterModelRegister[IMR_START_REGISTER] + MODBUS_REGISTER_TO_ADDRESS_OFFSET);
 					}
-					if(6 == $inverterModelRegister[IMR_FUNCTION_CODE])
+					if (6 == $inverterModelRegister[IMR_FUNCTION_CODE])
 					{
 						$ReadFunctionCode = 3;
 					}
-					else if("R" == $inverterModelRegister[IMR_FUNCTION_CODE])
+					elseif ("R" == $inverterModelRegister[IMR_FUNCTION_CODE])
 					{
 						$ReadFunctionCode = 3;
 					}
-					else if("RW" == $inverterModelRegister[IMR_FUNCTION_CODE])
+					elseif ("RW" == $inverterModelRegister[IMR_FUNCTION_CODE])
 					{
 						$ReadFunctionCode = 3;
 					}
@@ -782,7 +923,7 @@ function removeInvalidChars(\$input)
 						IPS_SetProperty($instanceId, "WriteFunctionCode", 0);
 					}
 
-					if(IPS_HasChanges($instanceId))
+					if (IPS_HasChanges($instanceId))
 					{
 						IPS_ApplyChanges($instanceId);
 					}
@@ -791,21 +932,24 @@ function removeInvalidChars(\$input)
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
 
 					// Profil der Statusvariable initial einmal zuweisen
-					if(false != $profile && !IPS_VariableProfileExists($profile))
+					if (false != $profile && !IPS_VariableProfileExists($profile))
 					{
 						$this->SendDebug("Variable-Profile", "Profile ".$profile." does not exist!", 0);
-					}	
-					else if ($initialCreation && false != $profile)
+					}
+					elseif ($initialCreation && false != $profile)
 					{
 						// Justification Rule 11: es ist die Funktion RegisterVariable...() in diesem Fall nicht nutzbar, da die Variable durch die Modbus-Instanz bereits erstellt wurde
 						// --> Custo Profil wird initial einmal beim Instanz-erstellen gesetzt
-						IPS_SetVariableCustomProfile($varId, $profile);
+						if (!IPS_SetVariableCustomProfile($varId, $profile))
+						{
+							$this->SendDebug("Variable-Profile", "Error setting profile ".$profile." for VarID ".$varId."!", 0);
+						}
 					}
 				}
 			}
 		}
-		
-		private function getModbusDatatype($type)
+
+		private function getModbusDatatype(string $type)//PHP8 :mixed
 		{
 			// Datentyp ermitteln
 			// 0=Bit (1 bit)
@@ -813,75 +957,75 @@ function removeInvalidChars(\$input)
 			if ("uint8" == strtolower($type)
 				|| "enum8" == strtolower($type)
 				|| "int8" == strtolower($type)
-			)
-			{
-				$datenTyp = 1;
+			) {
+				$datenTyp = MODBUSDATATYPE_BIT;
 			}
 			// 2=Word (16 bit unsigned)
-			else if ("uint16" == strtolower($type)
+			elseif ("uint16" == strtolower($type)
 				|| "enum16" == strtolower($type)
 				|| "uint8+uint8" == strtolower($type)
-			)
-			{
-				$datenTyp = 2;
+			) {
+				$datenTyp = MODBUSDATATYPE_WORD;
 			}
 			// 3=DWord (32 bit unsigned)
 			elseif ("uint32" == strtolower($type)
 				|| "acc32" == strtolower($type)
 				|| "acc64" == strtolower($type)
-			)
-			{
-				$datenTyp = 3;
+			) {
+				$datenTyp = MODBUSDATATYPE_DWORD;
 			}
 			// 4=Char / ShortInt (8 bit signed)
 			elseif ("sunssf" == strtolower($type))
 			{
-				$datenTyp = 4;
+				$datenTyp = MODBUSDATATYPE_CHAR;
 			}
 			// 5=Short / SmallInt (16 bit signed)
 			elseif ("int16" == strtolower($type))
 			{
-				$datenTyp = 5;
+				$datenTyp = MODBUSDATATYPE_SHORT;
 			}
 			// 6=Integer (32 bit signed)
 			elseif ("int32" == strtolower($type))
 			{
-				$datenTyp = 6;
+				$datenTyp = MODBUSDATATYPE_INT;
 			}
 			// 7=Real (32 bit signed)
 			elseif ("float32" == strtolower($type))
 			{
-				$datenTyp = 7;
+				$datenTyp = MODBUSDATATYPE_REAL;
 			}
 			// 8=Int64
 			elseif ("uint64" == strtolower($type))
 			{
-				$datenTyp = 8;
+				$datenTyp = MODBUSDATATYPE_INT64;
 			}
-			// 9=Real64 (32 bit signed)
+			/* 9=Real64 (32 bit signed)
+			elseif ("???" == strtolower($type))
+			{
+				$datenTyp = MODBUSDATATYPE_REAL64;
+			}*/
 			// 10=String
 			elseif ("string32" == strtolower($type)
 				|| "string16" == strtolower($type)
 				|| "string8" == strtolower($type)
 				|| "string" == strtolower($type)
-			)
-			{
-				$datenTyp = 10;
+			) {
+				$datenTyp = MODBUSDATATYPE_STRING;
 			}
 			else
 			{
 				$this->SendDebug("getModbusDatatype()", "Unbekannter Datentyp '".$type."'! --> skip", 0);
 
 				return "continue";
-			}	
+			}
 
 			return $datenTyp;
 		}
 
-		private function getProfile($unit, $datenTyp = -1)
+		private function getProfile(string $unit, int $datenTyp = -1)//PHP8 :mixed
 		{
 			// Profil ermitteln
-			if ("a" == strtolower($unit) && 7 == $datenTyp)
+			if ("a" == strtolower($unit) && MODBUSDATATYPE_REAL == $datenTyp)
 			{
 				$profile = "~Ampere";
 			}
@@ -895,26 +1039,24 @@ function removeInvalidChars(\$input)
 			}
 			elseif (("ah" == strtolower($unit)
 					|| "vah" == strtolower($unit))
-				&& 7 == $datenTyp
-			)
-			{
-						$profile = MODUL_PREFIX.".AmpereHour.Float";
+				&& MODBUSDATATYPE_REAL == $datenTyp
+			) {
+				$profile = MODUL_PREFIX.".AmpereHour.Float";
 			}
 			elseif ("ah" == strtolower($unit)
 				|| "vah" == strtolower($unit)
-			)
-			{
-						$profile = MODUL_PREFIX.".AmpereHour.Int";
+			) {
+				$profile = MODUL_PREFIX.".AmpereHour.Int";
 			}
-			elseif ("v" == strtolower($unit) && 7 == $datenTyp)
+			elseif ("v" == strtolower($unit) && MODBUSDATATYPE_REAL == $datenTyp)
 			{
 				$profile = "~Volt";
 			}
-			elseif("v" == strtolower($unit))
+			elseif ("v" == strtolower($unit))
 			{
 				$profile = MODUL_PREFIX.".Volt.Int";
 			}
-			elseif ("w" == strtolower($unit) && 7 == $datenTyp)
+			elseif ("w" == strtolower($unit) && MODBUSDATATYPE_REAL == $datenTyp)
 			{
 				$profile = "~Watt.14490";
 			}
@@ -926,7 +1068,7 @@ function removeInvalidChars(\$input)
 			{
 				$profile = MODUL_PREFIX.".Hours.Int";
 			}
-			elseif ("hz" == strtolower($unit) && 7 == $datenTyp)
+			elseif ("hz" == strtolower($unit) && MODBUSDATATYPE_REAL == $datenTyp)
 			{
 				$profile = "~Hertz";
 			}
@@ -939,7 +1081,7 @@ function removeInvalidChars(\$input)
 				$profile = MODUL_PREFIX.".Volumenstrom.Int";
 			}
 			// Voltampere fuer elektrische Scheinleistung
-			elseif ("va" == strtolower($unit) && 7 == $datenTyp)
+			elseif ("va" == strtolower($unit) && MODBUSDATATYPE_REAL == $datenTyp)
 			{
 				$profile = MODUL_PREFIX.".Scheinleistung.Float";
 			}
@@ -949,7 +1091,7 @@ function removeInvalidChars(\$input)
 				$profile = MODUL_PREFIX.".Scheinleistung.Int";
 			}
 			// Var fuer elektrische Blindleistung
-			elseif ("var" == strtolower($unit) && 7 == $datenTyp)
+			elseif ("var" == strtolower($unit) && MODBUSDATATYPE_REAL == $datenTyp)
 			{
 				$profile = MODUL_PREFIX.".Blindleistung.Float";
 			}
@@ -958,7 +1100,7 @@ function removeInvalidChars(\$input)
 			{
 				$profile = MODUL_PREFIX.".Blindleistung.Int";
 			}
-			elseif ("%" == $unit && 7 == $datenTyp)
+			elseif ("%" == $unit && MODBUSDATATYPE_REAL == $datenTyp)
 			{
 				$profile = "~Valve.F";
 			}
@@ -966,7 +1108,7 @@ function removeInvalidChars(\$input)
 			{
 				$profile = "~Valve";
 			}
-			elseif ("wh" == strtolower($unit) && (7 == $datenTyp || 8 == $datenTyp))
+			elseif ("wh" == strtolower($unit) && (MODBUSDATATYPE_REAL == $datenTyp || MODBUSDATATYPE_INT64 == $datenTyp))
 			{
 				$profile = MODUL_PREFIX.".Electricity.Float";
 			}
@@ -974,22 +1116,21 @@ function removeInvalidChars(\$input)
 			{
 				$profile = MODUL_PREFIX.".Electricity.Int";
 			}
-			elseif (("° C" == $unit
+			elseif ((
+				"° C" == $unit
 					|| "°C" == $unit
 					|| "C" == $unit
-				) && 7 == $datenTyp
-			)
-			{
+			) && MODBUSDATATYPE_REAL == $datenTyp
+			) {
 				$profile = "~Temperature";
 			}
 			elseif ("° C" == $unit
 				|| "°C" == $unit
 				|| "C" == $unit
-			)
-			{
+			) {
 				$profile = MODUL_PREFIX.".Temperature.Int";
 			}
-			elseif ("cos()" == strtolower($unit) && 7 == $datenTyp)
+			elseif ("cos()" == strtolower($unit) && MODBUSDATATYPE_REAL == $datenTyp)
 			{
 				$profile = MODUL_PREFIX.".Angle.Float";
 			}
@@ -1029,13 +1170,17 @@ function removeInvalidChars(\$input)
 			{
 				$profile = MODUL_PREFIX.".StatsHeizkreis.Int";
 			}
-			elseif ("emergency-power" == strtolower($unit))
+			elseif ("enumerated_emergency-power" == strtolower($unit))
 			{
 				$profile = MODUL_PREFIX.".Emergency-Power.Int";
 			}
-			elseif ("powermeter" == strtolower($unit))
+			elseif ("enumerated_powermeter" == strtolower($unit))
 			{
 				$profile = MODUL_PREFIX.".Powermeter.Int";
+			}
+			elseif ("enumerated_sg-ready-status" == strtolower($unit))
+			{
+				$profile = MODUL_PREFIX.".SG-Ready-Status.Int";
 			}
 			elseif ("secs" == strtolower($unit))
 			{
@@ -1045,8 +1190,7 @@ function removeInvalidChars(\$input)
 				|| "bitfield" == strtolower($unit)
 				|| "bitfield16" == strtolower($unit)
 				|| "bitfield32" == strtolower($unit)
-			)
-			{
+			) {
 				$profile = false;
 			}
 			else
@@ -1064,6 +1208,8 @@ function removeInvalidChars(\$input)
 
 		private function checkProfiles()
 		{
+			$deleteProfiles_array = array();
+
 			$this->createVarProfile(MODUL_PREFIX.".TempFehler.Int", VARIABLETYPE_INTEGER, '', 0, 2, 1, 0, 0, array(
 					array('Name' => "OK", 'Wert' => 0, "OK", 'Farbe' => $this->getRgbColor("green")),
 					array('Name' => "Kurzschluss", 'Wert' => 1, "Kurzschlussfehler", 'Farbe' => $this->getRgbColor("red")),
@@ -1205,9 +1351,18 @@ function removeInvalidChars(\$input)
 //			$this->createVarProfile(MODUL_PREFIX.".Volt.Int", VARIABLETYPE_INTEGER, ' V');
 			$this->createVarProfile(MODUL_PREFIX.".Volumenstrom.Int", VARIABLETYPE_INTEGER, ' l/min');
 			$this->createVarProfile(MODUL_PREFIX.".Watt.Int", VARIABLETYPE_INTEGER, ' W');
+
+			// delete not used profiles
+			foreach ($deleteProfiles_array as $profileName)
+			{
+				if (IPS_VariableProfileExists($profileName))
+				{
+					IPS_DeleteVariableProfile($profileName);
+				}
+			}
 		}
 
-		private function GetVariableValue($instanceIdent, $variableIdent = "Value")
+		private function GetVariableValue(string $instanceIdent, string $variableIdent = "Value")//PHP8 : mixed
 		{
 			$instanceId = IPS_GetObjectIDByIdent($this->removeInvalidChars($instanceIdent), $this->InstanceID);
 			$varId = IPS_GetObjectIDByIdent($this->removeInvalidChars($variableIdent), $instanceId);
@@ -1215,7 +1370,7 @@ function removeInvalidChars(\$input)
 			return GetValue($varId);
 		}
 
-		private function GetVariableId($instanceIdent, $variableIdent = "Value")
+		private function GetVariableId(string $instanceIdent, string $variableIdent = "Value"): int
 		{
 			$instanceId = IPS_GetObjectIDByIdent($this->removeInvalidChars($instanceIdent), $this->InstanceID);
 			$varId = IPS_GetObjectIDByIdent($this->removeInvalidChars($variableIdent), $instanceId);
@@ -1223,7 +1378,7 @@ function removeInvalidChars(\$input)
 			return $varId;
 		}
 
-		private function GetLoggedValuesInterval($id, $minutes)
+		private function GetLoggedValuesInterval(int $id, int $minutes)//PHP8 :mixed
 		{
 			$archiveId = IPS_GetInstanceListByModuleID("{43192F0B-135B-4CE7-A0A7-1475603F3060}");
 			if (isset($archiveId[0]))
@@ -1237,7 +1392,7 @@ function removeInvalidChars(\$input)
 				$archiveId = false;
 
 				// no archive found
-				$this->SetStatus(201);
+				$this->SetStatus(IS_NOARCHIVE);
 
 				$returnValue = GetValue($id);
 			}
