@@ -155,26 +155,26 @@ function removeInvalidChars(\$input)
 			$formElements = array();
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => "Die Solvis Heizung muss Modbus TCP unterstützen!"
+				'label' => "Die Solvis Heizung muss Modbus TCP unterstützen!",
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => "Im Konfigurationsmenü der Solvis Heizung muss im SolvisControl-Menü „Installateur=>Sonstiges=>Remote bzw. „Installateur=>Sonstiges=>Modbus“ der Modus Modbus TCP aktiviert werden."
+				'label' => "Im Konfigurationsmenü der Solvis Heizung muss im SolvisControl-Menü „Installateur=>Sonstiges=>Remote bzw. „Installateur=>Sonstiges=>Modbus“ der Modus Modbus TCP aktiviert werden.",
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => " "
+				'label' => " ",
 			);
 			$formElements[] = array(
 				'type' => "CheckBox",
 				'caption' => "Open",
-				'name' => "active"
+				'name' => "active",
 			);
 			$formElements[] = array(
 				'type' => "ValidationTextBox",
 				'caption' => "IP",
 				'name' => "hostIp",
-				'validate' => "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+				'validate' => "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
 			);
 			$formElements[] = array(
 				'type' => "NumberSpinner",
@@ -182,15 +182,15 @@ function removeInvalidChars(\$input)
 				'name' => "hostPort",
 				'digits' => 0,
 				'minimum' => 1,
-				'maximum' => 65535
+				'maximum' => 65535,
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => ""
+				'label' => "",
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => "Geräte ID der Solvis Heizung"
+				'label' => "Geräte ID der Solvis Heizung",
 			);
 			$formElements[] = array(
 				'type' => "NumberSpinner",
@@ -198,49 +198,49 @@ function removeInvalidChars(\$input)
 				'name' => "hostmodbusDevice",
 				'digits' => 0,
 				'minimum' => 1,
-				'maximum' => 255
+				'maximum' => 255,
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => " "
+				'label' => " ",
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => "In welchem Zeitintervall sollen die Modbus-Werte abgefragt werden (Empfehlung: 10 Sekunden)?"
+				'label' => "In welchem Zeitintervall sollen die Modbus-Werte abgefragt werden (Empfehlung: 10 Sekunden)?",
 			);
-		$formElements[] = array(
+			$formElements[] = array(
 				'type' => "NumberSpinner",
 				'caption' => "Abfrage-Intervall (in Sekunden)",
 				'name' => "pollCycle",
 				'minimum' => 1,
-				'maximum' => 3600
+				'maximum' => 3600,
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => "Achtung: Die Berechnung der Wirkarbeit (Wh/kWh) wird exakter, je kleiner der Abfarge-Intervall gewählt wird.\nABER: Je kleiner der Abfrage-Intervall, um so höher die Systemlast und auch die Archiv-Größe bei aktiviertem Logging!"
+				'label' => "Achtung: Die Berechnung der Wirkarbeit (Wh/kWh) wird exakter, je kleiner der Abfarge-Intervall gewählt wird.\nABER: Je kleiner der Abfrage-Intervall, um so höher die Systemlast und auch die Archiv-Größe bei aktiviertem Logging!",
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => " "
+				'label' => " ",
 			);
 			$formElements[] = array(
 				'type' => "Label",
-				'label' => "Sollen Werte von Variablen im Archiv gelogged werden?"
+				'label' => "Sollen Werte von Variablen im Archiv gelogged werden?",
 			);
 			$formElements[] = array(
 				'type' => "CheckBox",
 				'caption' => "Temperatur (S01 - S16)",
-				'name' => "loggingTemp"
+				'name' => "loggingTemp",
 			);
 			$formElements[] = array(
 				'type' => "CheckBox",
 				'caption' => "Ausgänge (A01 - A14)",
-				'name' => "loggingAusgang"
+				'name' => "loggingAusgang",
 			);
 			$formElements[] = array(
 				'type' => "CheckBox",
 				'caption' => "Sonstiges (Brennerstarts, Brennerstufe,...)",
-				'name' => "loggingSonstiges"
+				'name' => "loggingSonstiges",
 			);
 
 			$formActions = array();
@@ -316,7 +316,7 @@ function removeInvalidChars(\$input)
 				$parentId = $this->InstanceID;
 
 				// Kategorien erstellen
-				foreach($categoryArray as $ident => $category)
+				foreach ($categoryArray as $ident => $category)
 				{
 					$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($ident), $parentId);
 					if (false === $categoryId)
@@ -325,11 +325,11 @@ function removeInvalidChars(\$input)
 						IPS_SetIdent($categoryId, $this->removeInvalidChars($ident));
 						IPS_SetName($categoryId, $category['Name']);
 						IPS_SetParent($categoryId, $parentId);
-						if(isset($category['Position']))
+						if (isset($category['Position']))
 						{
 							IPS_SetPosition($categoryId, $category['Position']);
 						}
-						if(isset($category['Description']))
+						if (isset($category['Description']))
 						{
 							IPS_SetInfo($categoryId, $category['Description']);
 						}
@@ -338,11 +338,11 @@ function removeInvalidChars(\$input)
 
 				/* ****** Solvis Register ************************************************************************** */
 				$modelRegister_array = array(
-					array(2049, "R", "Zirkulation Betriebsart", "Zirkulation: 1 - Aus 2 - Puls 3 - Temp 4 - Warten","int16", "enumerated_Zirkulation"),
+					array(2049, "R", "Zirkulation Betriebsart", "Zirkulation: 1 - Aus 2 - Puls 3 - Temp 4 - Warten", "int16", "enumerated_Zirkulation"),
 				);
 				$categoryIdent = "Allg";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -352,7 +352,7 @@ function removeInvalidChars(\$input)
 				}
 
 				// Logging setzen
-				foreach($modelRegister_array AS $modelRegister)
+				foreach ($modelRegister_array as $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
@@ -360,20 +360,20 @@ function removeInvalidChars(\$input)
 					{
 						AC_SetLoggingStatus($archiveId, $varId, $loggingSonstiges);
 					}
-				}					
+				}
 
 
 				$modelRegister_array = array(
-					array(3840, "R", "Analog Out 1", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
-					array(3845, "R", "Analog Out 2", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
-					array(3850, "R", "Analog Out 3", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
-					array(3855, "R", "Analog Out 4", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
-					array(3860, "R", "Analog Out 5", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
-					array(3865, "R", "Analog Out 6", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog","int16", "enumerated_Betriebsart"),
+					array(3840, "R", "Analog Out 1", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog", "int16", "enumerated_Betriebsart"),
+					array(3845, "R", "Analog Out 2", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog", "int16", "enumerated_Betriebsart"),
+					array(3850, "R", "Analog Out 3", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog", "int16", "enumerated_Betriebsart"),
+					array(3855, "R", "Analog Out 4", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog", "int16", "enumerated_Betriebsart"),
+					array(3860, "R", "Analog Out 5", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog", "int16", "enumerated_Betriebsart"),
+					array(3865, "R", "Analog Out 6", "Betriebsart: Status,0 - Auto PWM 1 - Hand PWM 2 - Auto analog 3 - Hand analog", "int16", "enumerated_Betriebsart"),
 				);
 				$categoryIdent = "Anal";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -382,11 +382,11 @@ function removeInvalidChars(\$input)
 					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
 				}
 
-				foreach($modelRegister_array AS $modelRegister)
+				foreach ($modelRegister_array as $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
-					if(substr(IPS_GetName($varId), 0, 12) != substr($modelRegister[IMR_NAME], 0, 12))
+					if (substr(IPS_GetName($varId), 0, 12) != substr($modelRegister[IMR_NAME], 0, 12))
 					{
 						IPS_SetName($varId, substr($modelRegister[IMR_NAME], 0, 12)." ".IPS_GetName($varId));
 					}
@@ -401,7 +401,7 @@ function removeInvalidChars(\$input)
 				);
 				$categoryIdent = "Allg";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -412,26 +412,26 @@ function removeInvalidChars(\$input)
 
 
 				// Temperaturwerte S1 - S16 (division durch 10 nötig!!!)
-				$modelRegister_array =	array(
-					array(33024, "R", "S01 Speicher oben", "", "uint16"/*, "°C"*/),
-					array(33025, "R", "S02 Warmwasser", "", "uint16"/*, "°C"*/),
-					array(33026, "R", "S03 Speicherreferenz", "", "uint16"/*, "°C"*/),
-					array(33027, "R", "S04 Heizungspuffer oben", "", "uint16"/*, "°C"*/),
-					array(33028, "R", "S05 Solarvorlauf", "", "uint16"/*, "°C"*/),
-					array(33029, "R", "S06 Solarrücklauf", "", "uint16"/*, "°C"*/),
-					array(33031, "R", "S08 Solarkollektor", "", "uint16"/*, "°C"*/),
-					array(33032, "R", "S09 Heizungspuffer unten", "", "uint16"/*, "°C"*/),
-					array(33033, "R", "S10 Aussentemperatur", "", "uint16"/*, "°C"*/),	// ToDo: Sind uint16 für °C korrekt? Müsste es nicht int16 sein?
-					array(33034, "R", "S11 Zirkulation", "", "uint16"/*, "°C"*/),
-					array(33035, "R", "S12 Vorlauf Heizkreis 1", "", "uint16"/*, "°C"*/),
-					array(33036, "R", "S13 Vorlauf Heizkreis 2", "", "uint16"/*, "°C"*/),
-					array(33037, "R", "S14 Vorlauf Heizkreis 3", "", "uint16"/*, "°C"*/),
-					array(33038, "R", "S15 Kaltwasser", "", "uint16"/*, "°C"*/),
-					array(33039, "R", "S16 unbenannt", "", "uint16"/*, "°C"*/),
+				$modelRegister_array = array(
+					array(33024, "R", "S01 Speicher oben", "", "int16"/*, "°C"*/),
+					array(33025, "R", "S02 Warmwasser", "", "int16"/*, "°C"*/),
+					array(33026, "R", "S03 Speicherreferenz", "", "int16"/*, "°C"*/),
+					array(33027, "R", "S04 Heizungspuffer oben", "", "int16"/*, "°C"*/),
+					array(33028, "R", "S05 Solarvorlauf", "", "int16"/*, "°C"*/),
+					array(33029, "R", "S06 Solarrücklauf", "", "int16"/*, "°C"*/),
+					array(33031, "R", "S08 Solarkollektor", "", "int16"/*, "°C"*/),
+					array(33032, "R", "S09 Heizungspuffer unten", "", "int16"/*, "°C"*/),
+					array(33033, "R", "S10 Aussentemperatur", "", "int16"/*, "°C"*/),	// ToDo: Sind uint16 für °C korrekt? Müsste es nicht int16 sein?
+					array(33034, "R", "S11 Zirkulation", "", "int16"/*, "°C"*/),
+					array(33035, "R", "S12 Vorlauf Heizkreis 1", "", "int16"/*, "°C"*/),
+					array(33036, "R", "S13 Vorlauf Heizkreis 2", "", "int16"/*, "°C"*/),
+					array(33037, "R", "S14 Vorlauf Heizkreis 3", "", "int16"/*, "°C"*/),
+					array(33038, "R", "S15 Kaltwasser", "", "int16"/*, "°C"*/),
+					array(33039, "R", "S16 unbenannt", "", "int16"/*, "°C"*/),
 				);
 				$categoryIdent = "S";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -440,13 +440,13 @@ function removeInvalidChars(\$input)
 					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
 				}
 
-				foreach($modelRegister_array AS $modelRegister)
+				foreach ($modelRegister_array as $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
 					IPS_SetVariableCustomProfile($varId, "");
 					IPS_SetHidden($varId, true);
-					
+
 					$dataType = 7;
 					$profile = $this->getProfile("°C"/*$modelRegister[IMR_UNITS]*/, $dataType);
 					$varId = $this->MaintainInstanceVariable("Value_SF", substr($modelRegister[IMR_NAME], 0, 3)." ".IPS_GetName($varId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
@@ -456,25 +456,25 @@ function removeInvalidChars(\$input)
 					{
 						AC_SetLoggingStatus($archiveId, $varId, $loggingTemp);
 					}
-	
+
 					$profile = MODUL_PREFIX.".TempFehler.Int";
 					$varId = $this->MaintainInstanceVariable("status", substr($modelRegister[IMR_NAME], 0, 3)." Status", VARIABLETYPE_INTEGER, $profile, 0, true, $instanceId, "0 = OK, 1 = Kurzschlussfehler, 2 = Unterbrechungsfehler"/*$modelRegister[IMR_DESCRIPTION]*/);
-					if(substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
+					if (substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
 					{
 						IPS_SetName($varId, substr($modelRegister[IMR_NAME], 0, 3)." ".IPS_GetName($varId));
 					}
 				}
-	
-				
+
+
 				$modelRegister_array = array(
-					array(33030, "R", "S07 Solardruck", "", "uint16", ""), // ToDo: Einheit mbar oder bar?
+					array(33030, "R", "S07 Solardruck", "", "int16", ""), // ToDo: Einheit mbar oder bar?
 					array(33040, "R", "S17 Volumenstrom WW", "", "int16", "l/min"),
 					array(33041, "R", "S18 Volumenstrom Solar", "", "int16", "l/min"),
-//					array(33045, "R", "DigIn Störungen", "", "",""), // ToDo: Datentyp
+					//					array(33045, "R", "DigIn Störungen", "", "",""), // ToDo: Datentyp
 				);
 				$categoryIdent = "S";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -491,7 +491,7 @@ function removeInvalidChars(\$input)
 				);
 				$categoryIdent = "Anal";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -500,13 +500,13 @@ function removeInvalidChars(\$input)
 					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
 				}
 
-				foreach($modelRegister_array AS $modelRegister)
+				foreach ($modelRegister_array as $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
 					IPS_SetVariableCustomProfile($varId, "");
 					IPS_SetHidden($varId, true);
-					
+
 					$dataType = 7;
 					$profile = $this->getProfile("V"/*$modelRegister[IMR_UNITS]*/, $dataType);
 					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId)." ".IPS_GetName($varId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
@@ -514,24 +514,24 @@ function removeInvalidChars(\$input)
 
 
 				$modelRegister_array = array(
-					array(33280, "R", "A01 Pumpe Zirkulation", "", "uint8", "%"),
-					array(33281, "R", "A02 Pumpe Solar", "", "uint8", "%"),
-					array(33282, "R", "A03 Pumpe Heizkreis 1", "", "uint8", "%"),
-					array(33283, "R", "A04 Pumpe Heizkreis 2", "", "uint8", "%"),
-					array(33284, "R", "A05 Pumpe Heizkreis 3", "", "uint8", "%"),
-					array(33285, "R", "A06", "", "uint8", "%"),
-					array(33286, "R", "A07", "", "uint8", "%"),
-					array(33287, "R", "A08 Mischer HK1 auf", "", "uint8", "%"),
-					array(33288, "R", "A09 Mischer HK1 zu", "", "uint8", "%"),
-					array(33289, "R", "A10 Mischer HK2 auf", "", "uint8", "%"),
-					array(33290, "R", "A11 Mischer HK2 zu", "", "uint8", "%"),
-					array(33291, "R", "A12 Brenner", "", "uint8", "%"),
-					array(33292, "R", "A13 Brenner Stufe 2", "", "uint8", "%"),
-					array(33293, "R", "A14 Wärmepumpe", "", "uint8", "%"),
+					array(33280, "R", "A01 Pumpe Zirkulation", "", "int8", "%"),
+					array(33281, "R", "A02 Pumpe Solar", "", "int8", "%"),
+					array(33282, "R", "A03 Pumpe Heizkreis 1", "", "int8", "%"),
+					array(33283, "R", "A04 Pumpe Heizkreis 2", "", "int8", "%"),
+					array(33284, "R", "A05 Pumpe Heizkreis 3", "", "int8", "%"),
+					array(33285, "R", "A06", "", "int8", "%"),
+					array(33286, "R", "A07", "", "int8", "%"),
+					array(33287, "R", "A08 Mischer HK1 auf", "", "int8", "%"),
+					array(33288, "R", "A09 Mischer HK1 zu", "", "int8", "%"),
+					array(33289, "R", "A10 Mischer HK2 auf", "", "int8", "%"),
+					array(33290, "R", "A11 Mischer HK2 zu", "", "int8", "%"),
+					array(33291, "R", "A12 Brenner", "", "int8", "%"),
+					array(33292, "R", "A13 Brenner Stufe 2", "", "int8", "%"),
+					array(33293, "R", "A14 Wärmepumpe", "", "int8", "%"),
 				);
 				$categoryIdent = "A";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -541,7 +541,7 @@ function removeInvalidChars(\$input)
 				}
 
 				// Logging setzen
-				foreach($modelRegister_array AS $modelRegister)
+				foreach ($modelRegister_array as $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
@@ -549,20 +549,20 @@ function removeInvalidChars(\$input)
 					{
 						AC_SetLoggingStatus($archiveId, $varId, $loggingAusgang);
 					}
-				}					
+				}
 
-				foreach($modelRegister_array AS $modelRegister)
+				foreach ($modelRegister_array as $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
-					if(substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
+					if (substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
 					{
 						IPS_SetName($varId, substr($modelRegister[IMR_NAME], 0, 3)." ".IPS_GetName($varId));
 					}
 
 					$profile = "~Switch";
 					$varId = $this->MaintainInstanceVariable("aktiv", substr($modelRegister[IMR_NAME], 0, 3)." aktiv", VARIABLETYPE_BOOLEAN, $profile, 0, true, $instanceId, "false = nicht aktiv, true = aktiv"/*$modelRegister[IMR_DESCRIPTION]*/);
-					if(substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
+					if (substr(IPS_GetName($varId), 0, 3) != substr($modelRegister[IMR_NAME], 0, 3))
 					{
 						IPS_SetName($varId, substr($modelRegister[IMR_NAME], 0, 3)." ".IPS_GetName($varId));
 					}
@@ -579,7 +579,7 @@ function removeInvalidChars(\$input)
 				);
 				$categoryIdent = "Anal";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -588,15 +588,15 @@ function removeInvalidChars(\$input)
 					$this->SendDebug("create instances", "ERROR: category \"".$categoryIdent."\" not found!", 0);
 				}
 
-				foreach($modelRegister_array AS $modelRegister)
+				foreach ($modelRegister_array as $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
 					IPS_SetVariableCustomProfile($varId, "");
 					IPS_SetHidden($varId, true);
-					
+
 					$dataType = 7;
-					$profile = $this->getProfile($modelRegister[(IMR_UNITS+1)], $dataType);
+					$profile = $this->getProfile($modelRegister[(IMR_UNITS + 1)], $dataType);
 					$varId = $this->MaintainInstanceVariable("Value_SF", IPS_GetName($instanceId)." ".IPS_GetName($varId), VARIABLETYPE_FLOAT, $profile, 0, true, $instanceId, $modelRegister[IMR_DESCRIPTION]);
 				}
 
@@ -605,12 +605,12 @@ function removeInvalidChars(\$input)
 					array(33536, "R", "Laufzeit Brennerstufe 1", "", "int16", "h"),	// ToDo: Einheit wirklich in ganze Stunden?
 					array(33537, "R", "Brennerstarts Stufe 1", "", "uint16", ""),
 					array(33538, "R", "Laufzeit Brennerstufe 2", "", "int16", "h"),	// ToDo: Einheit wirklich in ganze Stunden?
-					array(33539, "R", "Wärmeerzeuger SX aktuelle Leistung", "", "int16","W"),
-					array(33540, "R", "Ionisationsstrom mA", "", "int16","mA"),
+					array(33539, "R", "Wärmeerzeuger SX aktuelle Leistung", "", "int16", "W"),
+					array(33540, "R", "Ionisationsstrom mA", "", "int16", "mA"),
 				);
 				$categoryIdent = "Allg";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -620,7 +620,7 @@ function removeInvalidChars(\$input)
 				}
 
 				// Logging setzen
-				foreach($modelRegister_array AS $modelRegister)
+				foreach ($modelRegister_array as $modelRegister)
 				{
 					$instanceId = IPS_GetObjectIDByIdent($modelRegister[IMR_START_REGISTER], $categoryId);
 					$varId = IPS_GetObjectIDByIdent("Value", $instanceId);
@@ -628,64 +628,64 @@ function removeInvalidChars(\$input)
 					{
 						AC_SetLoggingStatus($archiveId, $varId, $loggingSonstiges);
 					}
-				}					
+				}
 
 				$modelRegister_array = array(
-					array(33792, "R", "Meldungen Anzahl", "", "int16",""),
-					array(33793, "R", "Meldung 01 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33792, "R", "Meldungen Anzahl", "", "int16", ""),
+					array(33793, "R", "Meldung 01 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33794, "R", "Meldung 01 UnixZeit H", "", "int16"/*,"secs"*/), // ToDo: Umrechnung unbekannt...
 					array(33795, "R", "Meldung 01 UnixZeit L", "", "int16"/*,"secs"*/), // ToDo: Umrechnung unbekannt...
-					array(33796, "R", "Meldung 01 Par 1", "", "int16",""),
-					array(33797, "R", "Meldung 01 Par 2", "", "int16",""),
-					array(33798, "R", "Meldung 02 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33796, "R", "Meldung 01 Par 1", "", "int16", ""),
+					array(33797, "R", "Meldung 01 Par 2", "", "int16", ""),
+					array(33798, "R", "Meldung 02 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33799, "R", "Meldung 02 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33800, "R", "Meldung 02 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33801, "R", "Meldung 02 Par 1", "", "int16",""),
-					array(33802, "R", "Meldung 02 Par 2", "", "int16",""),
-					array(33803, "R", "Meldung 03 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33801, "R", "Meldung 02 Par 1", "", "int16", ""),
+					array(33802, "R", "Meldung 02 Par 2", "", "int16", ""),
+					array(33803, "R", "Meldung 03 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33804, "R", "Meldung 03 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33805, "R", "Meldung 03 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33806, "R", "Meldung 03 Par 1", "", "int16",""),
-					array(33807, "R", "Meldung 03 Par 2", "", "int16",""),
-					array(33808, "R", "Meldung 04 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33806, "R", "Meldung 03 Par 1", "", "int16", ""),
+					array(33807, "R", "Meldung 03 Par 2", "", "int16", ""),
+					array(33808, "R", "Meldung 04 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33809, "R", "Meldung 04 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33810, "R", "Meldung 04 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33811, "R", "Meldung 04 Par 1", "", "int16",""),
-					array(33812, "R", "Meldung 04 Par 2", "", "int16",""),
-					array(33813, "R", "Meldung 05 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33811, "R", "Meldung 04 Par 1", "", "int16", ""),
+					array(33812, "R", "Meldung 04 Par 2", "", "int16", ""),
+					array(33813, "R", "Meldung 05 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33814, "R", "Meldung 05 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33815, "R", "Meldung 05 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33816, "R", "Meldung 05 Par 1", "", "int16",""),
-					array(33817, "R", "Meldung 05 Par 2", "", "int16",""),
-					array(33818, "R", "Meldung 06 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33816, "R", "Meldung 05 Par 1", "", "int16", ""),
+					array(33817, "R", "Meldung 05 Par 2", "", "int16", ""),
+					array(33818, "R", "Meldung 06 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33819, "R", "Meldung 06 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33820, "R", "Meldung 06 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33821, "R", "Meldung 06 Par 1", "", "int16",""),
-					array(33822, "R", "Meldung 06 Par 2", "", "int16",""),
-					array(33823, "R", "Meldung 07 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33821, "R", "Meldung 06 Par 1", "", "int16", ""),
+					array(33822, "R", "Meldung 06 Par 2", "", "int16", ""),
+					array(33823, "R", "Meldung 07 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33824, "R", "Meldung 07 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33825, "R", "Meldung 07 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33826, "R", "Meldung 07 Par 1", "", "int16",""),
-					array(33827, "R", "Meldung 07 Par 2", "", "int16",""),
-					array(33828, "R", "Meldung 08 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33826, "R", "Meldung 07 Par 1", "", "int16", ""),
+					array(33827, "R", "Meldung 07 Par 2", "", "int16", ""),
+					array(33828, "R", "Meldung 08 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33829, "R", "Meldung 08 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33830, "R", "Meldung 08 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33831, "R", "Meldung 08 Par 1", "", "int16",""),
-					array(33832, "R", "Meldung 08 Par 2", "", "int16",""),
-					array(33833, "R", "Meldung 09 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33831, "R", "Meldung 08 Par 1", "", "int16", ""),
+					array(33832, "R", "Meldung 08 Par 2", "", "int16", ""),
+					array(33833, "R", "Meldung 09 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33834, "R", "Meldung 09 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33835, "R", "Meldung 09 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33836, "R", "Meldung 09 Par 1", "", "int16",""),
-					array(33837, "R", "Meldung 09 Par 2", "", "int16",""),
-					array(33838, "R", "Meldung 10 Code", "", "int16","enumerated_StatsHeizkreis"),
+					array(33836, "R", "Meldung 09 Par 1", "", "int16", ""),
+					array(33837, "R", "Meldung 09 Par 2", "", "int16", ""),
+					array(33838, "R", "Meldung 10 Code", "", "int16", "enumerated_StatsHeizkreis"),
 					array(33839, "R", "Meldung 10 UnixZeit H", "", "int16"/*,"secs"*/),
 					array(33840, "R", "Meldung 10 UnixZeit L", "", "int16"/*,"secs"*/),
-					array(33841, "R", "Meldung 10 Par 1", "", "int16",""),
-					array(33842, "R", "Meldung 10 Par 2", "", "int16",""),
+					array(33841, "R", "Meldung 10 Par 1", "", "int16", ""),
+					array(33842, "R", "Meldung 10 Par 2", "", "int16", ""),
 				);
 				$categoryIdent = "Meld";
 				$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
-				if(false !== $categoryId)
+				if (false !== $categoryId)
 				{
 					$this->createModbusInstances($modelRegister_array, $categoryId, $gatewayId, $pollCycle);
 				}
@@ -701,7 +701,7 @@ function removeInvalidChars(\$input)
 					$portOpen = false;
 					$waitTimeoutInSeconds = 1;
 					// ACHTUNG: Die Solvis Heizung antwortet nicht auf den Port-Check per fsockopen!!!
-                    if (Sys_Ping($hostIp, $waitTimeoutInSeconds*1000) /*$fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)*/)
+					if (Sys_Ping($hostIp, $waitTimeoutInSeconds * 1000) /*$fp = @fsockopen($hostIp, $hostPort, $errCode, $errStr, $waitTimeoutInSeconds)*/)
 					{
 						// It worked
 						$portOpen = true;
@@ -749,12 +749,12 @@ function removeInvalidChars(\$input)
 
 					// Timer deaktivieren
 					/*
-                                    $this->SetTimerInterval("Update-Autarkie-Eigenverbrauch", 0);
-                                    $this->SetTimerInterval("Update-EMS-Status", 0);
-                                    $this->SetTimerInterval("Update-WallBox_X_CTRL", 0);
-                                    $this->SetTimerInterval("Update-ValuesKw", 0);
-                                    $this->SetTimerInterval("Wh-Berechnung", 0);
-                                    $this->SetTimerInterval("HistoryCleanUp", 0);
+									$this->SetTimerInterval("Update-Autarkie-Eigenverbrauch", 0);
+									$this->SetTimerInterval("Update-EMS-Status", 0);
+									$this->SetTimerInterval("Update-WallBox_X_CTRL", 0);
+									$this->SetTimerInterval("Update-ValuesKw", 0);
+									$this->SetTimerInterval("Wh-Berechnung", 0);
+									$this->SetTimerInterval("HistoryCleanUp", 0);
 					 */
 					// inaktiv
 					$this->SetStatus(IS_INACTIVE);
@@ -873,12 +873,12 @@ function removeInvalidChars(\$input)
 					{ // if string --> set length accordingly
 						IPS_SetProperty($instanceId, "Length", $inverterModelRegister[IMR_SIZE]);
 					}
-/*					// set scale factor
-					if (isset($inverterModelRegister[IMR_SF]) && 10000 >= $inverterModelRegister[IMR_SF] && $inverterModelRegister[IMR_SF] != IPS_GetProperty($instanceId, "Factor"))
-					{
-						IPS_SetProperty($instanceId, "Factor", $inverterModelRegister[IMR_SF]);
-					}
-*/
+					/*					// set scale factor
+										if (isset($inverterModelRegister[IMR_SF]) && 10000 >= $inverterModelRegister[IMR_SF] && $inverterModelRegister[IMR_SF] != IPS_GetProperty($instanceId, "Factor"))
+										{
+											IPS_SetProperty($instanceId, "Factor", $inverterModelRegister[IMR_SF]);
+										}
+					 */
 
 					// Read-Settings
 					if ($inverterModelRegister[IMR_START_REGISTER] + MODBUS_REGISTER_TO_ADDRESS_OFFSET != IPS_GetProperty($instanceId, "ReadAddress"))
@@ -956,7 +956,6 @@ function removeInvalidChars(\$input)
 			// 1=Byte (8 bit unsigned)
 			if ("uint8" == strtolower($type)
 				|| "enum8" == strtolower($type)
-				|| "int8" == strtolower($type)
 			) {
 				$datenTyp = MODBUSDATATYPE_BIT;
 			}
@@ -975,8 +974,9 @@ function removeInvalidChars(\$input)
 				$datenTyp = MODBUSDATATYPE_DWORD;
 			}
 			// 4=Char / ShortInt (8 bit signed)
-			elseif ("sunssf" == strtolower($type))
-			{
+			elseif ("sunssf" == strtolower($type)
+			|| "int8" == strtolower($type)
+			) {
 				$datenTyp = MODBUSDATATYPE_CHAR;
 			}
 			// 5=Short / SmallInt (16 bit signed)
@@ -1202,7 +1202,7 @@ function removeInvalidChars(\$input)
 				}
 			}
 
-			return $profile;			
+			return $profile;
 		}
 
 
@@ -1210,14 +1210,32 @@ function removeInvalidChars(\$input)
 		{
 			$deleteProfiles_array = array();
 
-			$this->createVarProfile(MODUL_PREFIX.".TempFehler.Int", VARIABLETYPE_INTEGER, '', 0, 2, 1, 0, 0, array(
+			$this->createVarProfile(
+				MODUL_PREFIX.".TempFehler.Int",
+				VARIABLETYPE_INTEGER,
+				'',
+				0,
+				2,
+				1,
+				0,
+				0,
+				array(
 					array('Name' => "OK", 'Wert' => 0, "OK", 'Farbe' => $this->getRgbColor("green")),
 					array('Name' => "Kurzschluss", 'Wert' => 1, "Kurzschlussfehler", 'Farbe' => $this->getRgbColor("red")),
 					array('Name' => "Unterbrechung", 'Wert' => 2, "Unterbrechungsfehler", 'Farbe' => $this->getRgbColor("red")),
 				)
 			);
 
-			$this->createVarProfile(MODUL_PREFIX.".Betriebsart.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+			$this->createVarProfile(
+				MODUL_PREFIX.".Betriebsart.Int",
+				VARIABLETYPE_INTEGER,
+				'',
+				0,
+				0,
+				0,
+				0,
+				0,
+				array(
 					array('Name' => "Auto PWM", 'Wert' => 0, "Auto PWM", 'Farbe' => $this->getRgbColor("green")),
 					array('Name' => "Hand PWM", 'Wert' => 1, "Hand PWM", 'Farbe' => $this->getRgbColor("yellow")),
 					array('Name' => "Auto analog", 'Wert' => 2, "Auto analog", 'Farbe' => $this->getRgbColor("green")),
@@ -1226,7 +1244,16 @@ function removeInvalidChars(\$input)
 				)
 			);
 
-			$this->createVarProfile(MODUL_PREFIX.".StatsHeizkreis.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+			$this->createVarProfile(
+				MODUL_PREFIX.".StatsHeizkreis.Int",
+				VARIABLETYPE_INTEGER,
+				'',
+				0,
+				0,
+				0,
+				0,
+				0,
+				array(
 					array('Name' => "Aus", 'Wert' => 1, "Aus"),
 					array('Name' => "Automatik", 'Wert' => 2, "Automatik"),
 					array('Name' => "Tagbetrieb", 'Wert' => 3, "Tagbetrieb"),
@@ -1242,7 +1269,16 @@ function removeInvalidChars(\$input)
 				)
 			);
 
-			$this->createVarProfile(MODUL_PREFIX.".Zirkulation.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+			$this->createVarProfile(
+				MODUL_PREFIX.".Zirkulation.Int",
+				VARIABLETYPE_INTEGER,
+				'',
+				0,
+				0,
+				0,
+				0,
+				0,
+				array(
 					array('Name' => "Aus", 'Wert' => 1, "Aus"),
 					array('Name' => "Puls", 'Wert' => 2, "Puls"),
 					array('Name' => "Temp", 'Wert' => 3, "Temp"),
@@ -1250,86 +1286,86 @@ function removeInvalidChars(\$input)
 					array('Name' => "FEHLER", 'Wert' => 255, "FEHLER", 'Farbe' => $this->getRgbColor("red")),
 				)
 			);
-/*
-			$this->createVarProfile("SunSpec.ChaSt.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
-					array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
-					array('Name' => "OFF", 'Wert' => 1, "OFF: Energiespeicher nicht verfügbar"),
-					array('Name' => "EMPTY", 'Wert' => 2, "EMPTY: Energiespeicher vollständig entladen"),
-					array('Name' => "DISCHAGING", 'Wert' => 3, "DISCHARGING: Energiespeicher wird entladen"),
-					array('Name' => "CHARGING", 'Wert' => 4, "CHARGING: Energiespeicher wird geladen"),
-					array('Name' => "FULL", 'Wert' => 5, "FULL: Energiespeicher vollständig geladen"),
-					array('Name' => "HOLDING", 'Wert' => 6, "HOLDING: Energiespeicher wird weder geladen noch entladen"),
-					array('Name' => "TESTING", 'Wert' => 7, "TESTING: Energiespeicher wird getestet"),
-				)
-			);
-			$this->createVarProfile("SunSpec.ID.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
-					array('Name' => "single phase Inv (i)", 'Wert' => 101, "101: single phase Inverter (int)"),
-					array('Name' => "split phase Inv (i)", 'Wert' => 102, "102: split phase Inverter (int)"),
-					array('Name' => "three phase Inv (i)", 'Wert' => 103, "103: three phase Inverter (int)"),
-					array('Name' => "single phase Inv (f)", 'Wert' => 111, "111: single phase Inverter (float)"),
-					array('Name' => "split phase Inv (f)", 'Wert' => 112, "112: split phase Inverter (float)"),
-					array('Name' => "three phase Inv (f)", 'Wert' => 113, "113: three phase Inverter (float)"),
-					array('Name' => "single phase Meter (i)", 'Wert' => 201, "201: single phase Meter (int)"),
-					array('Name' => "split phase Meter (i)", 'Wert' => 202, "202: split phase (int)"),
-					array('Name' => "three phase Meter (i)", 'Wert' => 203, "203: three phase (int)"),
-					array('Name' => "single phase Meter (f)", 'Wert' => 211, "211: single phase Meter (float)"),
-					array('Name' => "split phase Meter (f)", 'Wert' => 212, "212: split phase Meter (float)"),
-					array('Name' => "three phase Meter (f)", 'Wert' => 213, "213: three phase Meter (float)"),
-					array('Name' => "string combiner (i)", 'Wert' => 403, "403: String Combiner (int)"),
-				)
-			);
-			$this->createVarProfile("SunSpec.StateCodes.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
-					array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
-					array('Name' => "OFF", 'Wert' => 1, "Wechselrichter ist aus"),
-					array('Name' => "SLEEPING", 'Wert' => 2, "Auto-Shutdown"),
-					array('Name' => "STARTING", 'Wert' => 3, "Wechselrichter startet"),
-					array('Name' => "MPPT", 'Wert' => 4, "Wechselrichter arbeitet normal", 'Farbe' => $this->getRgbColor("green")),
-					array('Name' => "THROTTLED", 'Wert' => 5, "Leistungsreduktion aktiv", 'Farbe' => $this->getRgbColor("orange")),
-					array('Name' => "SHUTTING_DOWN", 'Wert' => 6, "Wechselrichter schaltet ab"),
-					array('Name' => "FAULT", 'Wert' => 7, "Ein oder mehr Fehler existieren, siehe St *oder Evt * Register", 'Farbe' => $this->getRgbColor("red")),
-					array('Name' => "STANDBY", 'Wert' => 8, "Standby"),
-				)
-			);
-			$this->createVarProfile(MODUL_PREFIX.".StateCodes.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
-					array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
-					array('Name' => "OFF", 'Wert' => 1, "Wechselrichter ist aus"),
-					array('Name' => "SLEEPING", 'Wert' => 2, "Auto-Shutdown"),
-					array('Name' => "STARTING", 'Wert' => 3, "Wechselrichter startet"),
-					array('Name' => "MPPT", 'Wert' => 4, "Wechselrichter arbeitet normal", 'Farbe' => $this->getRgbColor("green")),
-					array('Name' => "THROTTLED", 'Wert' => 5, "Leistungsreduktion aktiv", 'Farbe' => $this->getRgbColor("orange")),
-					array('Name' => "SHUTTING_DOWN", 'Wert' => 6, "Wechselrichter schaltet ab"),
-					array('Name' => "FAULT", 'Wert' => 7, "Ein oder mehr Fehler existieren, siehe St * oder Evt * Register", 'Farbe' => $this->getRgbColor("red")),
-					array('Name' => "STANDBY", 'Wert' => 8, "Standby"),
-					array('Name' => "NO_BUSINIT", 'Wert' => 9, "Keine SolarNet Kommunikation"),
-					array('Name' => "NO_COMM_INV", 'Wert' => 10, "Keine Kommunikation mit Wechselrichter möglich"),
-					array('Name' => "SN_OVERCURRENT", 'Wert' => 11, "Überstrom an SolarNet Stecker erkannt"),
-					array('Name' => "BOOTLOAD", 'Wert' => 12, "Wechselrichter wird gerade upgedatet"),
-					array('Name' => "AFCI", 'Wert' => 13, "AFCI Event (Arc-Erkennung)"),
-				)
-			);
-			$this->createVarProfile(MODUL_PREFIX.".Emergency-Power.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
-					array('Name' => "nicht unterstützt", 'Wert' => 0, "Notstrom wird nicht von Ihrem Gerät unterstützt", 'Farbe' => 16753920),
-					array('Name' => "aktiv", 'Wert' => 1, "Notstrom aktiv (Ausfall des Stromnetzes)", 'Farbe' => $this->getRgbColor("green")),
-					array('Name' => "nicht aktiv", 'Wert' => 2, "Notstrom nicht aktiv", 'Farbe' => -1),
-					array('Name' => "nicht verfügbar", 'Wert' => 3, "Notstrom nicht verfügbar", 'Farbe' => 16753920),
-					array('Name' => "Fehler", 'Wert' => 4, "Der Motorschalter des S10 E befindet sich nicht in der richtigen Position, sondern wurde manuell abgeschaltet oder nicht eingeschaltet.", 'Farbe' => $this->getRgbColor("red")),
-				)
-			);
-			$this->createVarProfile(MODUL_PREFIX.".Powermeter.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
-				array('Name' => "N/A", 'Wert' => 0),
-				array('Name' => "Wurzelleistungsmesser", 'Wert' => 1, "Dies ist der Regelpunkt des Systems. Der Regelpunkt entspricht üblicherweise dem Hausanschlusspunkt."),
-				array('Name' => "Externe Produktion", 'Wert' => 2),
-				array('Name' => "Zweirichtungszähler", 'Wert' => 3),
-				array('Name' => "Externer Verbrauch", 'Wert' => 4),
-				array('Name' => "Farm", 'Wert' => 5),
-				array('Name' => "Wird nicht verwendet", 'Wert' => 6),
-				array('Name' => "Wallbox", 'Wert' => 7),
-				array('Name' => "Externer Leistungsmesser Farm", 'Wert' => 8),
-				array('Name' => "Datenanzeige", 'Wert' => 9, "Wird nicht in die Regelung eingebunden, sondern dient nur der Datenaufzeichnung des Kundenportals."),
-				array('Name' => "Regelungsbypass", 'Wert' => 10, "Die gemessene Leistung wird nicht in die Batterie geladen, aus der Batterie entladen."),
-				)
-			);
-*/
+			/*
+						$this->createVarProfile("SunSpec.ChaSt.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+								array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
+								array('Name' => "OFF", 'Wert' => 1, "OFF: Energiespeicher nicht verfügbar"),
+								array('Name' => "EMPTY", 'Wert' => 2, "EMPTY: Energiespeicher vollständig entladen"),
+								array('Name' => "DISCHAGING", 'Wert' => 3, "DISCHARGING: Energiespeicher wird entladen"),
+								array('Name' => "CHARGING", 'Wert' => 4, "CHARGING: Energiespeicher wird geladen"),
+								array('Name' => "FULL", 'Wert' => 5, "FULL: Energiespeicher vollständig geladen"),
+								array('Name' => "HOLDING", 'Wert' => 6, "HOLDING: Energiespeicher wird weder geladen noch entladen"),
+								array('Name' => "TESTING", 'Wert' => 7, "TESTING: Energiespeicher wird getestet"),
+							)
+						);
+						$this->createVarProfile("SunSpec.ID.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+								array('Name' => "single phase Inv (i)", 'Wert' => 101, "101: single phase Inverter (int)"),
+								array('Name' => "split phase Inv (i)", 'Wert' => 102, "102: split phase Inverter (int)"),
+								array('Name' => "three phase Inv (i)", 'Wert' => 103, "103: three phase Inverter (int)"),
+								array('Name' => "single phase Inv (f)", 'Wert' => 111, "111: single phase Inverter (float)"),
+								array('Name' => "split phase Inv (f)", 'Wert' => 112, "112: split phase Inverter (float)"),
+								array('Name' => "three phase Inv (f)", 'Wert' => 113, "113: three phase Inverter (float)"),
+								array('Name' => "single phase Meter (i)", 'Wert' => 201, "201: single phase Meter (int)"),
+								array('Name' => "split phase Meter (i)", 'Wert' => 202, "202: split phase (int)"),
+								array('Name' => "three phase Meter (i)", 'Wert' => 203, "203: three phase (int)"),
+								array('Name' => "single phase Meter (f)", 'Wert' => 211, "211: single phase Meter (float)"),
+								array('Name' => "split phase Meter (f)", 'Wert' => 212, "212: split phase Meter (float)"),
+								array('Name' => "three phase Meter (f)", 'Wert' => 213, "213: three phase Meter (float)"),
+								array('Name' => "string combiner (i)", 'Wert' => 403, "403: String Combiner (int)"),
+							)
+						);
+						$this->createVarProfile("SunSpec.StateCodes.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+								array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
+								array('Name' => "OFF", 'Wert' => 1, "Wechselrichter ist aus"),
+								array('Name' => "SLEEPING", 'Wert' => 2, "Auto-Shutdown"),
+								array('Name' => "STARTING", 'Wert' => 3, "Wechselrichter startet"),
+								array('Name' => "MPPT", 'Wert' => 4, "Wechselrichter arbeitet normal", 'Farbe' => $this->getRgbColor("green")),
+								array('Name' => "THROTTLED", 'Wert' => 5, "Leistungsreduktion aktiv", 'Farbe' => $this->getRgbColor("orange")),
+								array('Name' => "SHUTTING_DOWN", 'Wert' => 6, "Wechselrichter schaltet ab"),
+								array('Name' => "FAULT", 'Wert' => 7, "Ein oder mehr Fehler existieren, siehe St *oder Evt * Register", 'Farbe' => $this->getRgbColor("red")),
+								array('Name' => "STANDBY", 'Wert' => 8, "Standby"),
+							)
+						);
+						$this->createVarProfile(MODUL_PREFIX.".StateCodes.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+								array('Name' => "N/A", 'Wert' => 0, "Unbekannter Status"),
+								array('Name' => "OFF", 'Wert' => 1, "Wechselrichter ist aus"),
+								array('Name' => "SLEEPING", 'Wert' => 2, "Auto-Shutdown"),
+								array('Name' => "STARTING", 'Wert' => 3, "Wechselrichter startet"),
+								array('Name' => "MPPT", 'Wert' => 4, "Wechselrichter arbeitet normal", 'Farbe' => $this->getRgbColor("green")),
+								array('Name' => "THROTTLED", 'Wert' => 5, "Leistungsreduktion aktiv", 'Farbe' => $this->getRgbColor("orange")),
+								array('Name' => "SHUTTING_DOWN", 'Wert' => 6, "Wechselrichter schaltet ab"),
+								array('Name' => "FAULT", 'Wert' => 7, "Ein oder mehr Fehler existieren, siehe St * oder Evt * Register", 'Farbe' => $this->getRgbColor("red")),
+								array('Name' => "STANDBY", 'Wert' => 8, "Standby"),
+								array('Name' => "NO_BUSINIT", 'Wert' => 9, "Keine SolarNet Kommunikation"),
+								array('Name' => "NO_COMM_INV", 'Wert' => 10, "Keine Kommunikation mit Wechselrichter möglich"),
+								array('Name' => "SN_OVERCURRENT", 'Wert' => 11, "Überstrom an SolarNet Stecker erkannt"),
+								array('Name' => "BOOTLOAD", 'Wert' => 12, "Wechselrichter wird gerade upgedatet"),
+								array('Name' => "AFCI", 'Wert' => 13, "AFCI Event (Arc-Erkennung)"),
+							)
+						);
+						$this->createVarProfile(MODUL_PREFIX.".Emergency-Power.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+								array('Name' => "nicht unterstützt", 'Wert' => 0, "Notstrom wird nicht von Ihrem Gerät unterstützt", 'Farbe' => 16753920),
+								array('Name' => "aktiv", 'Wert' => 1, "Notstrom aktiv (Ausfall des Stromnetzes)", 'Farbe' => $this->getRgbColor("green")),
+								array('Name' => "nicht aktiv", 'Wert' => 2, "Notstrom nicht aktiv", 'Farbe' => -1),
+								array('Name' => "nicht verfügbar", 'Wert' => 3, "Notstrom nicht verfügbar", 'Farbe' => 16753920),
+								array('Name' => "Fehler", 'Wert' => 4, "Der Motorschalter des S10 E befindet sich nicht in der richtigen Position, sondern wurde manuell abgeschaltet oder nicht eingeschaltet.", 'Farbe' => $this->getRgbColor("red")),
+							)
+						);
+						$this->createVarProfile(MODUL_PREFIX.".Powermeter.Int", VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 0, array(
+							array('Name' => "N/A", 'Wert' => 0),
+							array('Name' => "Wurzelleistungsmesser", 'Wert' => 1, "Dies ist der Regelpunkt des Systems. Der Regelpunkt entspricht üblicherweise dem Hausanschlusspunkt."),
+							array('Name' => "Externe Produktion", 'Wert' => 2),
+							array('Name' => "Zweirichtungszähler", 'Wert' => 3),
+							array('Name' => "Externer Verbrauch", 'Wert' => 4),
+							array('Name' => "Farm", 'Wert' => 5),
+							array('Name' => "Wird nicht verwendet", 'Wert' => 6),
+							array('Name' => "Wallbox", 'Wert' => 7),
+							array('Name' => "Externer Leistungsmesser Farm", 'Wert' => 8),
+							array('Name' => "Datenanzeige", 'Wert' => 9, "Wird nicht in die Regelung eingebunden, sondern dient nur der Datenaufzeichnung des Kundenportals."),
+							array('Name' => "Regelungsbypass", 'Wert' => 10, "Die gemessene Leistung wird nicht in die Batterie geladen, aus der Batterie entladen."),
+							)
+						);
+			 */
 //			$this->createVarProfile(MODUL_PREFIX.".Ampere.Int", VARIABLETYPE_INTEGER, ' A');
 //			$this->createVarProfile(MODUL_PREFIX.".AmpereHour.Float", VARIABLETYPE_FLOAT, ' Ah');
 //			$this->createVarProfile(MODUL_PREFIX.".AmpereHour.Int", VARIABLETYPE_INTEGER, ' Ah');
@@ -1400,21 +1436,21 @@ function removeInvalidChars(\$input)
 			return $returnValue;
 		}
 
-/* ToDo:
-## Raumtemperatur per Modbus-Register statt Raumbedienelement 
-Normalerweise wird über das (optionale) Raumbedienelement die Raumtemperatur an die Solvis Control2 (SC2) gemeldet. Dadurch kann die Heizung die Regelung an die erreichte Raumtemperatur anpassen.
+		/* ToDo:
+		## Raumtemperatur per Modbus-Register statt Raumbedienelement
+		Normalerweise wird über das (optionale) Raumbedienelement die Raumtemperatur an die Solvis Control2 (SC2) gemeldet. Dadurch kann die Heizung die Regelung an die erreichte Raumtemperatur anpassen.
 
-Es gibt aber ein Modbus Register 34304 (Raumtemperatur 1), mit welchem die Raumtemperatur über die in IP Symcon ggf. vorhandenen Temperatursensoren per Modbus in das Register zu schreiben.
-Achtung: Schreiben schlägt trotz aktiviertem schreibenden Modbus-Zugriff fehl, wenn SC2/SC3 nicht für ein Raumbedienelement eingerichtet ist!
+		Es gibt aber ein Modbus Register 34304 (Raumtemperatur 1), mit welchem die Raumtemperatur über die in IP Symcon ggf. vorhandenen Temperatursensoren per Modbus in das Register zu schreiben.
+		Achtung: Schreiben schlägt trotz aktiviertem schreibenden Modbus-Zugriff fehl, wenn SC2/SC3 nicht für ein Raumbedienelement eingerichtet ist!
 
-### Voraussetzungen
-- Solvis Control muss mit Raumbedienelement für den Heizkreislauf konfiguriert sein (auch wenn kein Raumbedienelement per Kabel angeschlossen wird)
-- dafür ist ein Zurücksetzen der Solvis Control auf Werkseinstellung nötig, da in der Initialisierung das Raumbedienelement zum Heizkreislauf zugeordnet wird
-- Anschließend muss im Installateur-Menü unter `Sonstiges --> Remote --> Seite 3 --> Raumfühler HK1` auf `Modbus` umgestellt werden
-![Remote-HKR1-Raumfühler-Modbus](../doc/Solvis_SC2_Sonstiges_Remote_3.png)
-- und der Modbus-Modus muss auf `senden` was dem schreibenden Zugriff entspricht umgestellt werden, falls noch nicht geschehen
+		### Voraussetzungen
+		- Solvis Control muss mit Raumbedienelement für den Heizkreislauf konfiguriert sein (auch wenn kein Raumbedienelement per Kabel angeschlossen wird)
+		- dafür ist ein Zurücksetzen der Solvis Control auf Werkseinstellung nötig, da in der Initialisierung das Raumbedienelement zum Heizkreislauf zugeordnet wird
+		- Anschließend muss im Installateur-Menü unter `Sonstiges --> Remote --> Seite 3 --> Raumfühler HK1` auf `Modbus` umgestellt werden
+		![Remote-HKR1-Raumfühler-Modbus](../doc/Solvis_SC2_Sonstiges_Remote_3.png)
+		- und der Modbus-Modus muss auf `senden` was dem schreibenden Zugriff entspricht umgestellt werden, falls noch nicht geschehen
 
-!!! info "Hinweis"
-    Die Temperatur muss ca. alle 60 Sekunden per Modbus in das Register geschrieben werden, sonst "verschwindet" die Temperatur in der Anzeige und zeigt nur noch "--"
-*/
+		!!! info "Hinweis"
+			Die Temperatur muss ca. alle 60 Sekunden per Modbus in das Register geschrieben werden, sonst "verschwindet" die Temperatur in der Anzeige und zeigt nur noch "--"
+		 */
 	}
