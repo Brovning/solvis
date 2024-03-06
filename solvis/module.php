@@ -52,93 +52,8 @@ if (!defined('IMR_START_REGISTER'))
 			$this->RegisterPropertyBoolean('loggingAusgang', 'false');
 			$this->RegisterPropertyBoolean('loggingSonstiges', 'false');
 
-			// Temp-Values
-			$this->RegisterTimer("calc_SF", 0, "\$parentId = ".$this->InstanceID.";
-// S01 - S18: Temperature values - SF Variables
-\$modelRegister_array = array(33024, 33025, 33026, 33027, 33028, 33029, 33031, 33032, 33033, 33034, 33035, 33036, 33037, 33038, 33039);
-\$categoryIdent = \"S\";
-\$categoryId = @IPS_GetObjectIDByIdent(removeInvalidChars(\$categoryIdent), \$parentId);
-foreach(\$modelRegister_array AS \$modelRegister)
-{
-	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$categoryId);
-	\$targetId = @IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
-	\$targetStatusId = @IPS_GetObjectIDByIdent(\"status\", \$instanceId);
-	if(false !== \$instanceId && false !== \$targetId)
-	{
-		\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-		\$sfValue = -1;
-		\$newValue = \$sourceValue * pow(10, \$sfValue);
-
-		if(-300 == \$sourceValue)
-		{
-			\$newStatusValue = 1;
-		}
-		else if(2200 == \$sourceValue)
-		{
-			\$newStatusValue = 2;
-		}
-		else
-		{
-			\$newStatusValue = 0;
-		}
-
-		if(GetValue(\$targetId) != \$newValue)
-		{
-			SetValue(\$targetId, \$newValue);
-		}
-
-		if(GetValue(\$targetStatusId) != \$newStatusValue)
-		{
-			SetValue(\$targetStatusId, \$newStatusValue);
-		}
-	}
-}
-
-// Analog IN/Out: V values - SF Variables
-\$modelRegister_array = array(33042, 33043, 33044, 33294, 33295, 33296, 33297, 33298, 33299);
-\$categoryIdent = \"Anal\";
-\$categoryId = @IPS_GetObjectIDByIdent(removeInvalidChars(\$categoryIdent), \$parentId);
-foreach(\$modelRegister_array AS \$modelRegister)
-{
-	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$categoryId);
-	\$targetId = @IPS_GetObjectIDByIdent(\"Value_SF\", \$instanceId);
-	if(false !== \$instanceId && false !== \$targetId)
-	{
-		\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-		\$sfValue = -1;
-		\$newValue = \$sourceValue * pow(10, \$sfValue);
-
-		if(GetValue(\$targetId) != \$newValue)
-		{
-			SetValue(\$targetId, \$newValue);
-		}
-	}
-}
-
-// A0-A14 values - SF Variables
-\$modelRegister_array = array(33280, 33281, 33282, 33283, 33284, 33285, 33286, 33287, 33288, 33289, 33290, 33291, 33292, 33293);
-\$categoryIdent = \"A\";
-\$categoryId = @IPS_GetObjectIDByIdent(removeInvalidChars(\$categoryIdent), \$parentId);
-foreach(\$modelRegister_array AS \$modelRegister)
-{
-	\$instanceId = @IPS_GetObjectIDByIdent(\$modelRegister, \$categoryId);
-	\$targetId = @IPS_GetObjectIDByIdent(\"aktiv\", \$instanceId);
-	if(false !== \$instanceId && false !== \$targetId)
-	{
-		\$sourceValue = GetValue(IPS_GetObjectIDByIdent(\"Value\", \$instanceId));
-		\$newValue = (\$sourceValue > 0);
-
-		if(GetValue(\$targetId) != \$newValue)
-		{
-			SetValue(\$targetId, \$newValue);
-		}
-	}
-}
-
-function removeInvalidChars(\$input)
-{
-	return preg_replace( '/[^a-z0-9]/i', '', \$input);
-}");
+			// cyclic update of calculated values
+			$this->RegisterTimer("cyclicDataUpdate", 0, MODUL_PREFIX."_CyclicDataUpdate(".$this->InstanceID.");");
 
 			// *** Erstelle Variablen-Profile ***
 			$this->checkProfiles();
@@ -276,7 +191,7 @@ function removeInvalidChars(\$input)
 			$loggingSonstiges = $this->ReadPropertyBoolean('loggingSonstiges');
 
 			// activate Timer
-			$this->SetTimerInterval("calc_SF", 5000);
+			$this->SetTimerInterval("cyclicDataUpdate", 5000);
 
 			$categoryArray = array(
 				"Allg" => array("Name" => "Allgemeines", 'Position' => 1),
@@ -777,6 +692,92 @@ function removeInvalidChars(\$input)
 					$this->deleteInstanceNotInUse($interfaceId_Old, MODBUS_INSTANCES);
 
 					$this->SendDebug("ClientSocket-Status", "ClientSocket deleted (".$interfaceId_Old.")", 0);
+				}
+			}
+		}
+
+		public function CyclicDataUpdate()
+		{
+			$parentId = $this->InstanceID;
+
+			// S01 - S18: Temperature values - SF Variables
+			$modelRegister_array = array(33024, 33025, 33026, 33027, 33028, 33029, 33031, 33032, 33033, 33034, 33035, 33036, 33037, 33038, 33039);
+			$categoryIdent = "S";
+			$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+			foreach($modelRegister_array AS $modelRegister)
+			{
+				$instanceId = @IPS_GetObjectIDByIdent($modelRegister, $categoryId);
+				$targetId = @IPS_GetObjectIDByIdent("Value_SF", $instanceId);
+				$targetStatusId = @IPS_GetObjectIDByIdent("status", $instanceId);
+				if(false !== $instanceId && false !== $targetId)
+				{
+					$sourceValue = GetValue(IPS_GetObjectIDByIdent("Value", $instanceId));
+					$sfValue = -1;
+					$newValue = $sourceValue * pow(10, $sfValue);
+
+					if(-300 == $sourceValue)
+					{
+						$newStatusValue = 1;
+					}
+					else if(2200 == $sourceValue)
+					{
+						$newStatusValue = 2;
+					}
+					else
+					{
+						$newStatusValue = 0;
+					}
+
+					if(GetValue($targetId) != $newValue)
+					{
+						SetValue($targetId, $newValue);
+					}
+
+					if(GetValue($targetStatusId) != $newStatusValue)
+					{
+						SetValue($targetStatusId, $newStatusValue);
+					}
+				}
+			}
+
+			// Analog IN/Out: V values - SF Variables
+			$modelRegister_array = array(33042, 33043, 33044, 33294, 33295, 33296, 33297, 33298, 33299);
+			$categoryIdent = "Anal";
+			$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+			foreach($modelRegister_array AS $modelRegister)
+			{
+				$instanceId = @IPS_GetObjectIDByIdent($modelRegister, $categoryId);
+				$targetId = @IPS_GetObjectIDByIdent("Value_SF", $instanceId);
+				if(false !== $instanceId && false !== $targetId)
+				{
+					$sourceValue = GetValue(IPS_GetObjectIDByIdent("Value", $instanceId));
+					$sfValue = -1;
+					$newValue = $sourceValue * pow(10, $sfValue);
+
+					if(GetValue($targetId) != $newValue)
+					{
+						SetValue($targetId, $newValue);
+					}
+				}
+			}
+
+			// A0-A14 values - SF Variables
+			$modelRegister_array = array(33280, 33281, 33282, 33283, 33284, 33285, 33286, 33287, 33288, 33289, 33290, 33291, 33292, 33293);
+			$categoryIdent = "A";
+			$categoryId = @IPS_GetObjectIDByIdent($this->removeInvalidChars($categoryIdent), $parentId);
+			foreach($modelRegister_array AS $modelRegister)
+			{
+				$instanceId = @IPS_GetObjectIDByIdent($modelRegister, $categoryId);
+				$targetId = @IPS_GetObjectIDByIdent("aktiv", $instanceId);
+				if(false !== $instanceId && false !== $targetId)
+				{
+					$sourceValue = GetValue(IPS_GetObjectIDByIdent("Value", $instanceId));
+					$newValue = ($sourceValue > 0);
+
+					if(GetValue($targetId) != $newValue)
+					{
+						SetValue($targetId, $newValue);
+					}
 				}
 			}
 		}
