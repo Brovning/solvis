@@ -6,7 +6,7 @@ class ValidationTest extends TestCaseSymconValidation
 {
 	public function testValidateCoreStubs(): void
 	{
-		$this->validateLibrary(__DIR__.'/../');
+//		$this->validateLibrary(__DIR__.'/../');
 	}
 
 	public function testValidateDNSSDControl(): void
@@ -18,7 +18,7 @@ class ValidationTest extends TestCaseSymconValidation
 			if (file_exists($dir."/module.php"))
 			{
 				echo "\nvalidateModule(): ".$dir;
-//				$this->validateModule($dir);
+				$this->validateModule($dir);
 			}
 		}
 	}
