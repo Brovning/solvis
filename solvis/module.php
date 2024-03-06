@@ -9,7 +9,7 @@ define("DEVELOPMENT", false);
 // Modul Prefix
 if (!defined('MODUL_PREFIX'))
 {
-	define("MODUL_PREFIX", "Solvis");
+	define("MODUL_PREFIX", "SOLVIS");
 }
 
 // Offset von Register (erster Wert 1) zu Adresse (erster Wert 0) ist -1
