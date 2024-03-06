@@ -21,5 +21,5 @@ jobs:
     - name: Install latest PHPUnit
       run: wget https://phar.phpunit.de/phpunit-9.phar
 
-    - name: Run Tests
+# deactivated    - name: Run Tests
 # deactivated      run: phpdbg -qrr phpunit-9.phar tests
