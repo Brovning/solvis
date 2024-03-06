@@ -19,7 +19,7 @@ jobs:
           php-version: 8.2
 
     - name: Install latest PHPUnit
-      run: wget https://phar.phpunit.de/phpunit.phar
+      run: wget https://phar.phpunit.de/phpunit-9.phar
 
     - name: Run Tests
       run: phpdbg -qrr phpunit.phar tests
