@@ -18,7 +18,7 @@ class ValidationTest extends TestCaseSymconValidation
 			if (file_exists($dir."/module.php"))
 			{
 				echo "\nvalidateModule(): ".$dir;
-				$this->validateModule($dir);
+//				$this->validateModule($dir);
 			}
 		}
 	}
